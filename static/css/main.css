@@ -1,0 +1,29 @@
+/**
+ * css main style file for all html files
+ */
+
+ .navbar-brand {
+   color: #FFFFFF;
+ }
+/* navbar */
+ .navbar-dark {
+     background-color: #48D489;
+}
+
+table,
+thead,
+tr,
+tbody,
+td {
+  text-align: center;
+}
+
+.input-forms td {
+  text-align: center;
+}
+
+ body {
+     background-color:;
+     color:;
+     font-family:;
+}
