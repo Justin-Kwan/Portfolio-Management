@@ -5,11 +5,22 @@ public class Index {
     public static void main(String[] args) {
 
       get("/", (request, response) -> {
-        return "Hey!";
-      });
 
-      get("/", (request, response) -> {
-        return "Hey!";
+        RequestHandler requestHandler = new RequestHandler();
+
+        String userSecurityToken = request.cookie("security_token");
+
+        requestHandler.handleAddingCoin(userSecurityToken);
+
+
+
+
+
+
+
+          System.out.println("***" + userCookie);
+          return "GET" + userCookie;
+
       });
 
 
