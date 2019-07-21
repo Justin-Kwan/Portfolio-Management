@@ -2,40 +2,44 @@
 
 public class Coin {
 
-  private final String coinTicker;
+  private String coinTicker;
   private double coinAmount = 0;
   private double latestCoinPrice;
   private double coinHoldingValueUsd;
 
   // ctor
-  public Coin(coinTicker, coinAmount) {
+  public Coin(String coinTicker, double coinAmount) {
     this.updateCoinTicker(coinTicker);
-    this.updateCoinAmount(coinAmounts);
+    this.updateCoinAmount(coinAmount);
   }
 
-  private void updateCoinTicker(coinTicker) {
+  private void updateCoinTicker(String coinTicker) {
     this.coinTicker = coinTicker;
   }
 
-  private void incrementCoinAmount(coinAmount) {
+  private void updateCoinAmount(double coinAmount) {
+    this.coinAmount = coinAmount;
+  }
+
+  private void incrementCoinAmount(double coinAmount) {
     this.coinAmount += coinAmount;
   }
 
-  public double fetchAndUpdateLatestCoinPrice(String coinTicker) {
+  public void fetchAndUpdateLatestCoinPrice(String coinTicker) {
     coinTicker = this.getCoinTicker();
-    // http GET req latest price
-    this.latestCoinPrice = this.fetchLatestCoinPrice(coinTicker);
-  }
 
-  private double calculateCoinHoldingValue() {
+    // this.latestCoinPrice = // http GET req latest price;
+  }
+  
+  private void calculateCoinHoldingValue() {
     coinAmount = this.getCoinAmount();
     latestCoinPrice = this.getLatestCoinPrice();
 
     this.coinHoldingValueUsd = coinAmount * latestCoinPrice;
   }
 
-  private double getCoinHoldingValue() {
-    return coinHoldingValue;
+  private double getCoinHoldingValueUsd() {
+    return coinHoldingValueUsd;
   }
 
   public String getCoinTicker() {

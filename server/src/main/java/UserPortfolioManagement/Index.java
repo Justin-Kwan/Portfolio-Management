@@ -13,13 +13,8 @@ public class Index {
         requestHandler.handleAddingCoin(userSecurityToken);
 
 
-
-
-
-
-
-          System.out.println("***" + userCookie);
-          return "GET" + userCookie;
+          System.out.println("***" + userSecurityToken);
+          return "GET" + userSecurityToken;
 
       });
 

@@ -1,9 +1,9 @@
 
-public class RequestHandler() {
+public class RequestHandler {
 
-  public void handleAddingCoin(userSecurityToken) {
+  public void handleAddingCoin(String userSecurityToken) {
 
-  
+
 
 
 

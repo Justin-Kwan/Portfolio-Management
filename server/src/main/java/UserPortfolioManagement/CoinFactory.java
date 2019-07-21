@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 public class CoinFactory {
 
@@ -10,27 +10,27 @@ public class CoinFactory {
 
   public ArrayList createCoinList() {
 
-    private ArrayList<Coin> coins = new ArrayList<Coin>();
+    ArrayList<Coin> coins = new ArrayList<Coin>();
 
-    for(int i = 0; i < ...; i++) {
-
-
-
-    }
+    // for(int i = 0; i < ...; i++) {
 
 
 
-  }
+    // }
 
-  private addCoinsToListFromDb(ArrayList<Coin> coins) {
+    return coins;
 
   }
 
-  private addCoinsToListFromRequest(ArrayList<Coin> coins) {
+  private void addCoinsToListFromDb(ArrayList<Coin> coins) {
 
   }
 
-  private getNewCoin(coinTicker) {
+  private void addCoinsToListFromRequest(ArrayList<Coin> coins) {
+
+  }
+
+  private Coin getNewCoin(String coinTicker, double coinAmount) {
     Coin coin = new Coin(coinTicker, coinAmount);
     return coin;
   }

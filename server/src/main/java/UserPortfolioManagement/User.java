@@ -1,5 +1,5 @@
 // only use "this" for var reassignment
-
+import java.util.ArrayList;
 
 public class User {
 
@@ -10,12 +10,11 @@ public class User {
   private ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
-  public User() {
+  public User(String username, String userId, String securityToken) {
 
-    this.updateUsername();
-    this.updateUserId();
-    this.updateSecurityToken();
-    this.updateCoins();
+    this.updateUsername(username);
+    this.updateUserId(userId);
+    this.updateSecurityToken(securityToken);
 
   }
 
