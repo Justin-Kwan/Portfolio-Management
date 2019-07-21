@@ -1,4 +1,5 @@
 // only use "this" for var reassignment
+package UserPortfolioManagement;
 import java.util.ArrayList;
 
 public class User {
@@ -42,11 +43,11 @@ public class User {
     return coins;
   }
 
-  public boolean authenticateRequest() {
-
-    // JWT auth logic here
-
-  }
+  // public boolean authenticateRequest() {
+  //
+  //   // JWT auth logic here
+  //
+  // }
 
 
 

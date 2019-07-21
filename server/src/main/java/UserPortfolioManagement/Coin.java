@@ -1,4 +1,4 @@
-
+package UserPortfolioManagement;
 
 public class Coin {
 
@@ -30,7 +30,7 @@ public class Coin {
 
     // this.latestCoinPrice = // http GET req latest price;
   }
-  
+
   private void calculateCoinHoldingValue() {
     coinAmount = this.getCoinAmount();
     latestCoinPrice = this.getLatestCoinPrice();
