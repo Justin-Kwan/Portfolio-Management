@@ -66,7 +66,7 @@ public class User {
   //
   //
   //
-  // }l
+  // }
 
   public void calculatePortfolioValue() {
     for(int i = 0; i < coins.size(); i++) {
