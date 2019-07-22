@@ -1,9 +1,7 @@
-// only use "this" for var reassignment
 package UserPortfolioManagement;
 import java.util.ArrayList;
 
 public class User {
-
 
   private String username;
   private String userId;
@@ -12,9 +10,7 @@ public class User {
   private ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
-  public User(String username, String userId, String securityToken) {
-    this.updateUsername(username);
-    this.updateUserId(userId);
+  public User(String securityToken) {
     this.updateSecurityToken(securityToken);
   }
 
@@ -26,13 +22,18 @@ public class User {
     this.userId = userId;
   }
 
+  /* test!! */
+  public void updateUserInfo(String username, String userId) {
+    this.updateUsername(username);
+    this.updateUserId(userId);
+  }
+
   private void updateSecurityToken(String securityToken) {
     this.securityToken = securityToken;
   }
 
   public void addCoin(Coin coin) {
     (this.coins).add(coin);
-    System.out.println("COIN VAR2 " + coins.get(0).getHoldingValueUsd());
   }
 
   public String getUsername() {
@@ -51,24 +52,27 @@ public class User {
     return coins;
   }
 
-  /*test!!*/
   public double getPortfolioValueUsd() {
     return portfolioValueUsd;
   }
 
   // public boolean authenticateRequest() {
+  //    JWT auth logic here
+  //    call getSecurityTokenInfo()
+  //    return True/False
+  // }
+
+  // public Array getSecurityTokenInfo() {
   //
-  //   // JWT auth logic here
+  //
   //
   // }
 
-  /*test!!*/
   public void calculatePortfolioValue() {
     for(int i = 0; i < coins.size(); i++) {
       double currentCoinHoldingValue = coins.get(i).getHoldingValueUsd();
       this.portfolioValueUsd += currentCoinHoldingValue;
     }
   }
-
 
 }

@@ -68,33 +68,33 @@ public class UserTest {
 
   @Test
   public void test_getSecurityToken() {
-    User user1 = new User("", "", "09876 *&_9");
+    User user1 = new User("09876 *&_9");
     assertEquals("09876 *&_9", user1.getSecurityToken());
 
-    User user2 = new User("", "", "_____");
+    User user2 = new User("_____");
     assertEquals("_____", user2.getSecurityToken());
 
-    User user3 = new User("", "", "");
+    User user3 = new User("");
     assertEquals("", user3.getSecurityToken());
   }
 
   @Test
   public void test_addCoin() {
-    User user1 = new User("", "", "");
+    User user1 = new User("");
     Coin mockCoin1 = new MockCoin(346.5);
     user1.addCoin(mockCoin1);
     ArrayList<Coin> userCoins1 = user1.getCoins();
     double coinHoldingValueUsd1 = userCoins1.get(0).getHoldingValueUsd();
     assertEquals(346.5, coinHoldingValueUsd1, 1e-8);
 
-    User user2 = new User("", "", "");
+    User user2 = new User("");
     Coin mockCoin2 = new MockCoin(3.642235324);
     user2.addCoin(mockCoin2);
     ArrayList<Coin> userCoins2 = user2.getCoins();
     double coinHoldingValueUsd2 = userCoins2.get(0).getHoldingValueUsd();
     assertEquals(3.642235324, coinHoldingValueUsd2, 1e-8);
 
-    User user3 = new User("", "", "");
+    User user3 = new User("");
     Coin mockCoin3 = new MockCoin(0);
     user3.addCoin(mockCoin3);
     ArrayList<Coin> userCoins3 = user3.getCoins();
@@ -103,9 +103,23 @@ public class UserTest {
   }
 
   @Test
+  public void test_getPortfolioValueUsd() {
+    User user1 = new User("");
+    Coin mockCoin1 = new MockCoin(80.9876);
+    user1.addCoin(mockCoin1);
+    user1.calculatePortfolioValue();
+    assertEquals(80.9876, user1.getPortfolioValueUsd(), 1e-8);
+
+    User user2 = new User("");
+    Coin mockCoin2 = new MockCoin(1);
+    user2.addCoin(mockCoin2);
+    user2.calculatePortfolioValue();
+    assertEquals(1, user2.getPortfolioValueUsd(), 1e-8);
+  }
+
+  @Test
   public void test_calculatePortfolioValue() {
-    User user1 = new User("", "", "");
-    //ArrayList<Object> mockCoins = new ArrayList<Object>();
+    User user1 = new User("");
 
     for(int i = 0; i < 7; i++) {
       Coin mockCoin = new MockCoin(24.5679);
@@ -114,7 +128,26 @@ public class UserTest {
 
     user1.calculatePortfolioValue();
     assertEquals(171.9753, user1.getPortfolioValueUsd(), 1e-8);
-  }
 
+    User user2 = new User("");
+
+    for(int i = 0; i < 3; i++) {
+      Coin mockCoin = new MockCoin(41029.23122213);
+      user2.addCoin(mockCoin);
+    }
+
+    user2.calculatePortfolioValue();
+    assertEquals(123087.69366639, user2.getPortfolioValueUsd(), 1e-8);
+
+    User user3 = new User("");
+
+    for(int i = 0; i < 3; i++) {
+      Coin mockCoin = new MockCoin(2);
+      user3.addCoin(mockCoin);
+    }
+
+    user3.calculatePortfolioValue();
+    assertEquals(6, user3.getPortfolioValueUsd(), 1e-8);
+  }
 
 }

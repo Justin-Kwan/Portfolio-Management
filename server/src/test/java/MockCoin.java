@@ -9,13 +9,12 @@ class MockCoin extends Coin {
     super("", 0);
     this.observerCoinHoldingValueUsd = coinHoldingValueUsd;
   }
-  
+
   // alter function for subclass mock
   @Override
   public double getHoldingValueUsd() {
-    //observerCoinHoldingValueUsd = super.getHoldingValueUsd(); //Call getHoldingValueUsd of Coin
-    //If you want to print or to everything a mock want to do...
-    return observerCoinHoldingValueUsd; //Or return super.observerCoinHoldingValueUsd
+    //observerCoinHoldingValueUsd = super.getHoldingValueUsd();
+    return observerCoinHoldingValueUsd;
   }
 
 }
