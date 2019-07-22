@@ -8,15 +8,14 @@ public class User {
   private String username;
   private String userId;
   private String securityToken;
+  private double portfolioValueUsd;
   private ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
   public User(String username, String userId, String securityToken) {
-
     this.updateUsername(username);
     this.updateUserId(userId);
     this.updateSecurityToken(securityToken);
-
   }
 
   private void updateUsername(String username) {
@@ -31,6 +30,11 @@ public class User {
     this.securityToken = securityToken;
   }
 
+  public void addCoin(Coin coin) {
+    (this.coins).add(coin);
+    System.out.println("COIN VAR2 " + coins.get(0).getHoldingValueUsd());
+  }
+
   public String getUsername() {
     return username;
   }
@@ -39,8 +43,17 @@ public class User {
     return userId;
   }
 
+  public String getSecurityToken() {
+    return securityToken;
+  }
+
   public ArrayList getCoins() {
     return coins;
+  }
+
+  /*test!!*/
+  public double getPortfolioValueUsd() {
+    return portfolioValueUsd;
   }
 
   // public boolean authenticateRequest() {
@@ -49,17 +62,13 @@ public class User {
   //
   // }
 
-
-
-
-
-  // private void incrementPortfolioValue(double coinHoldingValue) {
-  //   portfolioValue += coinHoldingValue;
-  // }
-
-  // public double calculatePortfolioValue() {
-  //
-  // }
+  /*test!!*/
+  public void calculatePortfolioValue() {
+    for(int i = 0; i < coins.size(); i++) {
+      double currentCoinHoldingValue = coins.get(i).getHoldingValueUsd();
+      this.portfolioValueUsd += currentCoinHoldingValue;
+    }
+  }
 
 
 }

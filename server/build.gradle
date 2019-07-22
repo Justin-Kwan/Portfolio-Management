@@ -20,10 +20,8 @@ repositories {
     jcenter()
 }
 
-task copyTestResources(type: Copy) {
-    from "$src/main/java/UserPortfolioManagement"
-    into "$src/test"
-}
+// this turns logging on in tests:
+test.testLogging.showStandardStreams = true
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
