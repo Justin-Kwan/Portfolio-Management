@@ -35,4 +35,7 @@ dependencies {
 
     // Use Spark Java framework
     compile "com.sparkjava:spark-core:2.8.0"
+
+    // Use JWT library
+    implementation 'com.auth0:java-jwt:3.8.1'
 }

@@ -8,61 +8,73 @@ public class UserTest {
 
   @Test
   public void test_updateUsername() {
-    User user1 = new User("Username1", "", "");
+    User user1 = new User("");
+    user1.updateUserInfo("Username1", "");
     assertEquals("Username1", user1.getUsername());
 
-    User user2 = new User("Username2", "", "");
+    User user2 = new User("");
+    user2.updateUserInfo("Username2", "");
     assertEquals("Username2", user2.getUsername());
 
-    User user3 = new User("Username3", "", "");
+    User user3 = new User("");
+    user3.updateUserInfo("Username3", "");
     assertEquals("Username3", user3.getUsername());
   }
 
   @Test
   public void test_updateUserId() {
-    User user1 = new User("", "UserId1", "");
+    User user1 = new User("");
+    user1.updateUserInfo("", "UserId1");
     assertEquals("UserId1", user1.getUserId());
 
-    User user2 = new User("", "UserId2", "");
+    User user2 = new User("");
+    user2.updateUserInfo("", "UserId2");
     assertEquals("UserId2", user2.getUserId());
 
-    User user3 = new User("", "UserId3", "");
+    User user3 = new User("");
+    user3.updateUserInfo("", "UserId3");
     assertEquals("UserId3", user3.getUserId());
   }
 
   @Test
   public void test_updateSecurityToken() {
-    User user1 = new User("", "", "securityToken_1*");
+    User user1 = new User("securityToken_1*");
     assertEquals("securityToken_1*", user1.getSecurityToken());
 
-    User user2 = new User("", "", "securityToken_2*");
+    User user2 = new User("securityToken_2*");
     assertEquals("securityToken_2*", user2.getSecurityToken());
 
-    User user3 = new User("", "UserId3", "securityToken_3*");
+    User user3 = new User("securityToken_3*");
     assertEquals("securityToken_3*", user3.getSecurityToken());
   }
 
   @Test
   public void test_getUsername() {
-    User user1 = new User("User123", "", "");
+    User user1 = new User("");
+    user1.updateUserInfo("User123", "");
     assertEquals("User123", user1.getUsername());
 
-    User user2 = new User("User234", "", "");
+    User user2 = new User("");
+    user2.updateUserInfo("User234", "");
     assertEquals("User234", user2.getUsername());
 
-    User user3 = new User(" ", "", "");
-    assertEquals(" ", user3.getUsername());
+    User user3 = new User("");
+    user3.updateUserInfo("User345", "");
+    assertEquals("User345", user3.getUsername());
   }
 
   @Test
   public void test_getUserId() {
-    User user1 = new User("", "#123$", "");
+    User user1 = new User("");
+    user1.updateUserInfo("", "#123$");
     assertEquals("#123$", user1.getUserId());
 
-    User user2 = new User("", "098_ef", "");
+    User user2 = new User("");
+    user2.updateUserInfo("", "098_ef");
     assertEquals("098_ef", user2.getUserId());
 
-    User user3 = new User("", "  ", "");
+    User user3 = new User("");
+    user3.updateUserInfo("", "  ");
     assertEquals("  ", user3.getUserId());
   }
 
@@ -115,6 +127,58 @@ public class UserTest {
     user2.addCoin(mockCoin2);
     user2.calculatePortfolioValue();
     assertEquals(1, user2.getPortfolioValueUsd(), 1e-8);
+  }
+
+  @Test
+  public void test_authorizeRequest() {
+
+    // good token, username: randomuser123, id: ff4406fc-67b2-4f86-b2dd-4f9b35c64202
+    String user1SecurityToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJhbmRvbXVzZXIxMjMiLCJ1c2VyIGlkIjoiZmY0NDA2ZmMtNjdiMi00Zjg2LWIyZGQtNGY5YjM1YzY0MjAyIn0.i2jAkld6y2KkRtgpzFYK449E1EGScB3DeZpLi4BqxVs";
+    User user1 = new User(user1SecurityToken);
+    boolean isRequestAuthorized1 = user1.authorizeRequest();
+    assertEquals(true, isRequestAuthorized1);
+
+    // good token, useername: user109, id: e8e16b6f-cd81-4136-9d54-4c292469c5ee
+    String user2SecurityToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIxMDkiLCJ1c2VyIGlkIjoiZThlMTZiNmYtY2Q4MS00MTM2LTlkNTQtNGMyOTI0NjljNWVlIn0.Ywz3tXTHf5A5i00VSJAUzLKL0F47N37tFv-UtGP_3gU";
+    User user2 = new User(user1SecurityToken);
+    boolean isRequestAuthorized2 = user2.authorizeRequest();
+    assertEquals(true, isRequestAuthorized2);
+
+    // bad token, wrong secret key
+    String user3SecurityToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imp1c3Rpbmt3YW4xMjMiLCJ1c2VyIGlkIjoiNzFkODczN2YtZGMwNy00NzkxLWJlNTktMmM1NDAxNDhkMmFkIn0.ym0qRcy0yyu30xB8a_9MydVe4DIn_x0nlbepMiOId-E";
+    User user3 = new User(user3SecurityToken);
+    boolean isRequestAuthorized3 = user3.authorizeRequest();
+    assertEquals(false, isRequestAuthorized3);
+
+    // bad token
+    String user4SecurityToken = "ey";
+    User user4 = new User(user4SecurityToken);
+    boolean isRequestAuthorized4 = user4.authorizeRequest();
+    assertEquals(false, isRequestAuthorized4);
+
+    // bad token
+    String user5SecurityToken = " ";
+    User user5 = new User(user5SecurityToken);
+    boolean isRequestAuthorized5 = user5.authorizeRequest();
+    assertEquals(false, isRequestAuthorized5);
+
+    // bad token
+    String user6SecurityToken = "^";
+    User user6 = new User(user6SecurityToken);
+    boolean isRequestAuthorized6 = user6.authorizeRequest();
+    assertEquals(false, isRequestAuthorized6);
+
+    // bad token
+    String user7SecurityToken = null;
+    User user7 = new User(user7SecurityToken);
+    boolean isRequestAuthorized7 = user7.authorizeRequest();
+    assertEquals(false, isRequestAuthorized7);
+
+    // bad token
+    String user8SecurityToken = "";
+    User user8 = new User(user7SecurityToken);
+    boolean isRequestAuthorized8 = user8.authorizeRequest();
+    assertEquals(false, isRequestAuthorized8);
   }
 
   @Test

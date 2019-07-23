@@ -1,5 +1,11 @@
 package UserPortfolioManagement;
 import java.util.ArrayList;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.algorithms.Algorithm;
+import java.util.Base64;
 
 public class User {
 
@@ -56,11 +62,23 @@ public class User {
     return portfolioValueUsd;
   }
 
-  // public boolean authenticateRequest() {
-  //    JWT auth logic here
-  //    call getSecurityTokenInfo()
-  //    return True/False
-  // }
+  public boolean authorizeRequest() {
+
+    boolean REQUEST_AUTHORIZED = true;
+    boolean REQUEST_UNAUTHORIZED = false;
+
+    try {
+      Algorithm algorithm = Algorithm.HMAC256("fake_secret_key");
+      JWTVerifier verifier = JWT.require(algorithm).build();
+      DecodedJWT jwt = verifier.verify(this.securityToken);
+      return REQUEST_AUTHORIZED;
+    }
+    catch (JWTVerificationException exception){
+      System.out.println("exception: " + exception);
+      return REQUEST_UNAUTHORIZED;
+    }
+
+  }
 
   // public Array getSecurityTokenInfo() {
   //
