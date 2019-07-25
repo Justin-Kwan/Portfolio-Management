@@ -1,14 +1,15 @@
 {
   "name": "routes",
-  "version": "1.0.0",
-  "description": "",
-  "main": "StaticPageRouter.js",
+  "version": "1.4.0",
+  "description": "frontend server",
+  "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cookie-parser": "^1.4.4"
-  }
+  "license": "MIT",
+  "devDependencies": {
+		"chai": "3.2.0",
+		"mocha": "2.2.5"
+	}
 }

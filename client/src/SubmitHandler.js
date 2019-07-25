@@ -19,6 +19,6 @@ class SubmitHandler {
 
 $("#submit-portfolio-button").click(function(event) {
   console.log("SUBMIT!");
-  addCoinSubmitHandler = new SubmitHandler();
-  addCoinSubmitHandler.handleAddCoinJsonPrep();
+  const submitHandler = new SubmitHandler();
+  submitHandler.handleAddCoinJsonPrep();
 });
