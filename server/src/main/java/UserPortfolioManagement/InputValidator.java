@@ -1,23 +1,27 @@
+package UserPortfolioManagement;
 
-class InputValidator {
+public class InputValidator {
 
-  public boolean handleSecurityTokenValidation(String userSecurityToken) {
+  public boolean handleSecurityTokenValidation(String securityToken) {
+    boolean SECURITY_TOKEN_VALID = true;
+    boolean SECURITY_TOKEN_INVALID = false;
 
-    boolean USER_SECURITY_TOKEN_FORM_INVALID = false;
-    boolean isSecurityTokenEmpty = this.checkSecurityTokenEmpty(userSecurityToken);
+    boolean isSecurityTokenEmpty = this.checkInputEmpty(securityToken);
 
     if(isSecurityTokenEmpty) {
-      return USER_SECURITY_TOKEN_FORM_INVALID;
+      return SECURITY_TOKEN_INVALID;
     }
+    return SECURITY_TOKEN_VALID;
+
 
   }
 
-  public boolean checkSecurityTokenEmpty(String userSecurityToken) {
-    boolean isSecurityTokenEmpty = userSecurityToken.isEmpty() || userSecurityToken == null;
-    return isSecurityTokenEmpty;
+
+
+  public boolean checkInputEmpty(String input) {
+    boolean isInputEmpty = (input == null || input.isEmpty());
+    return isInputEmpty;
   }
-
-
 
 
 

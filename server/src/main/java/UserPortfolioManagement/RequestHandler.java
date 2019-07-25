@@ -6,20 +6,20 @@ public class RequestHandler {
   InputValidator inputValidator = new InputValidator();
 
 
-  public void handleAddingCoin(String userSecurityToken) {
+  public String handleAddingCoins(String securityToken, String userCoinRequest) {
 
-    boolean isSecurityTokenFormatValid = inputValidator.handleSecurityTokenValidation(userSecurityToken);
+    boolean isSecurityTokenFormatValid = inputValidator.handleSecurityTokenValidation(securityToken);
 
     if(isSecurityTokenFormatValid == false)
       return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
 
-    User user = new User(userSecurityToken);
+    User user = new User(securityToken);
     boolean isRequestAuthorized = user.authorizeRequest();
 
     if(isRequestAuthorized == false)
       return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
 
-
+    // set user info and request
 
 
 
@@ -33,17 +33,25 @@ public class RequestHandler {
     // update DB
     // return JSON of user's coins to client
 
-  }
-
-  public void handleUpdatingPortfolio() {
-
-
-
-
+    return "Good";
 
   }
 
-  public void handleDeletingCoin() {
+  public void handleGettingCoins() {
+
+
+
+  }
+
+  public void handleUpdatingCoins() {
+
+
+
+
+
+  }
+
+  public void handleDeletingCoins() {
 
 
 

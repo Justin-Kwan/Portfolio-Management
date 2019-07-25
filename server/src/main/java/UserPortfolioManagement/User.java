@@ -67,6 +67,10 @@ public class User {
     boolean REQUEST_AUTHORIZED = true;
     boolean REQUEST_UNAUTHORIZED = false;
 
+    if(this.securityToken == null) {
+      return REQUEST_UNAUTHORIZED;
+    }
+
     try {
       Algorithm algorithm = Algorithm.HMAC256("fake_secret_key");
       JWTVerifier verifier = JWT.require(algorithm).build();
@@ -74,7 +78,6 @@ public class User {
       return REQUEST_AUTHORIZED;
     }
     catch (JWTVerificationException exception){
-      System.out.println("exception: " + exception);
       return REQUEST_UNAUTHORIZED;
     }
 

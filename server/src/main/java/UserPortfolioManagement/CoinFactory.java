@@ -24,11 +24,11 @@ public class CoinFactory {
 
   }
 
-  private void addCoinsToListFromDb(ArrayList<Coin> coins) {
+  private void addCoinsToCollectionFromDb(ArrayList<Coin> coins) {
 
   }
 
-  private void addCoinsToListFromRequest(ArrayList<Coin> coins) {
+  private void addCoinsToCollectionFromRequest(ArrayList<Coin> coins) {
 
   }
 
