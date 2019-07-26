@@ -4,20 +4,22 @@ public class RequestHandler {
 
   ResultCodes resultCodes = new ResultCodes();
   InputValidator inputValidator = new InputValidator();
+  TokenChecker tokenChecker = new TokenChecker();
+  DatabaseAccessor DBA = new DatabaseAccessor();
 
 
   public String handleAddingCoins(String securityToken, String userCoinRequest) {
 
     boolean isSecurityTokenFormatValid = inputValidator.handleSecurityTokenValidation(securityToken);
+    boolean isRequestAuthorized = tokenChecker.checkSecurityToken(securityToken);
 
-    if(isSecurityTokenFormatValid == false)
+    if(isSecurityTokenFormatValid == false || isRequestAuthorized == false)
       return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
 
     User user = new User(securityToken);
-    boolean isRequestAuthorized = user.authorizeRequest();
+    
 
-    if(isRequestAuthorized == false)
-      return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
+
 
     // set user info and request
 
@@ -56,6 +58,17 @@ public class RequestHandler {
 
 
   }
+
+  // public void handleCheckUserExists(String securityToken) {
+  //   boolean isSecurityTokenFormatValid = inputValidator.handleSecurityTokenValidation(securityToken);
+  //
+  //   if(isSecurityTokenFormatValid == false)
+  //     return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
+  //
+  //   User user = new User(securityToken);
+  //   DBA.checkUserExists(user);
+  //
+  // }
 
 
 

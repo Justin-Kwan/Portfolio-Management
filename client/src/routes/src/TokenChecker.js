@@ -3,14 +3,14 @@
 const jwt = require('jsonwebtoken');
 
 
-class RequestAuthorizer {
+class TokenChecker {
 
   constructor() {
     this.REQUEST_AUTHORIZED = true;
     this.REQUEST_UNAUTHORIZED = false;
   }
 
-  authorizeSecurityToken(securityToken) {
+  checkSecurityToken(securityToken) {
     try {
       const decodedSecurityToken = jwt.verify(securityToken, 'fake_secret_key');
       return this.REQUEST_AUTHORIZED;
@@ -22,4 +22,4 @@ class RequestAuthorizer {
 
 }
 
-module.exports = RequestAuthorizer;
+module.exports = TokenChecker;

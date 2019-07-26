@@ -4,7 +4,7 @@
 
 'use strict';
 
-const RequestAuthorizer     = require('./RequestAuthorizer.js');
+const RequestAuthorizer     = require('./TokenChecker.js');
 const express               = require('express');
 const app                   = express();
 const path                  = require('path');
@@ -35,15 +35,15 @@ const requestAuthorizer = new RequestAuthorizer();
  *  get bounce you to create if you're new and create bounce you to get if you exist
  */
 
- // app.get('/getPortfolio', function(request, response) {
- //   // call server to see if user exists
- //
- //
- // });
+ app.get('/getPortfolio', function(request, response) {
+   // call server to see if user exists
+
+
+ });
 
 app.get('/createPortfolio', function(request, response) {
   const securityToken = request.cookies['security_token'];
-  const isRequestAuthorized = requestAuthorizer.authorizeSecurityToken(securityToken);
+  const isRequestAuthorized = tokenChecker.checkSecurityToken(securityToken);
 
   if(isRequestAuthorized) {
     response.sendFile(createPortfolioPagePath);

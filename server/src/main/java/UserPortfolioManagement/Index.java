@@ -10,6 +10,7 @@ public class Index {
   private static void initServer() {
     ipAddress(LOCAL_HOST_IP_ADDRESS);
     port(PORT_NUMBER);
+    enableCors();
     System.out.println("Backend server started at " + LOCAL_HOST_IP_ADDRESS + ":" + PORT_NUMBER + "...");
   }
 
@@ -22,7 +23,6 @@ public class Index {
   public static void main(String[] args) {
 
     initServer();
-    enableCors();
 
     post("/createPortfolio", (request, response) -> {
 
@@ -30,15 +30,22 @@ public class Index {
       String securityToken = request.cookie("security_token");
       String jsonRequest = request.body();
 
-
       System.out.println("SECURITY TOKEN: " + securityToken);
       System.out.println("JSON REQUEST: " + jsonRequest);
 
       // requestHandler.handleAddingCoins(securityToken, "");
       return "GET" + securityToken;
-
     });
 
+    // get("/checkUserExists", (request, response) -> {
+    //   RequestHandler requestHandler = new RequestHandler();
+    //   String securityToken = request.cookie("security_token");
+    //   requestHandler.handleCheckUserExists(securityToken);
+    //
+    // });
+
   }
+
+
 
 }

@@ -12,11 +12,7 @@ public class InputValidator {
       return SECURITY_TOKEN_INVALID;
     }
     return SECURITY_TOKEN_VALID;
-
-
   }
-
-
 
   public boolean checkInputEmpty(String input) {
     boolean isInputEmpty = (input == null || input.isEmpty());

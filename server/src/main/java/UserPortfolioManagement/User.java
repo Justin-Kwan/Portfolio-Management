@@ -1,18 +1,12 @@
 package UserPortfolioManagement;
 import java.util.ArrayList;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.JWTVerifier;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.algorithms.Algorithm;
-import java.util.Base64;
 
 public class User {
 
   protected String username;
   protected String userId;
   protected String securityToken;
-  protected double portfolioValueUsd;
+  protected double portfolioValueUsd = 0;
   protected ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
@@ -62,38 +56,14 @@ public class User {
     return portfolioValueUsd;
   }
 
-  public boolean authorizeRequest() {
-
-    boolean REQUEST_AUTHORIZED = true;
-    boolean REQUEST_UNAUTHORIZED = false;
-
-    if(this.securityToken == null) {
-      return REQUEST_UNAUTHORIZED;
-    }
-
-    try {
-      Algorithm algorithm = Algorithm.HMAC256("fake_secret_key");
-      JWTVerifier verifier = JWT.require(algorithm).build();
-      DecodedJWT jwt = verifier.verify(this.securityToken);
-      return REQUEST_AUTHORIZED;
-    }
-    catch (JWTVerificationException exception){
-      return REQUEST_UNAUTHORIZED;
-    }
-
-  }
-
-  // public Array getSecurityTokenInfo() {
-  //
-  //
-  //
-  // }
-
   public void calculatePortfolioValue() {
-    for(int i = 0; i < coins.size(); i++) {
-      double currentCoinHoldingValue = coins.get(i).getHoldingValueUsd();
+    this.portfolioValueUsd = 0;
+
+    for(int currentCoin = 0; currentCoin < coins.size(); currentCoin++) {
+      double currentCoinHoldingValue = coins.get(currentCoin).getHoldingValueUsd();
       this.portfolioValueUsd += currentCoinHoldingValue;
     }
+    
   }
 
 }

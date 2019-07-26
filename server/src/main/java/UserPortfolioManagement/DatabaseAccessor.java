@@ -3,20 +3,26 @@ import java.net.UnknownHostException;
 import com.mongodb.MongoException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.DB;
 import com.mongodb.DBObject;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DB;
 import com.mongodb.util.JSON;
 import com.google.gson.Gson;
 
 public class DatabaseAccessor {
 
-  private final String MONGODB_HOST = "127.0.0.1";
-  private final int MONGODB_PORT    = 27017;
+  private final String  MONGODB_HOST    = "127.0.0.1";
+  private final int     MONGODB_PORT    = 27017;
 
-  private MongoClient mongoClient;
-  private DB userPortfoliosDb;
-  private DBCollection userCollection;
+  private final String  USER_ID_FIELD   = "userId";
+
+  private MongoClient   mongoClient;
+  private DB            userPortfoliosDb;
+  private DBCollection  userCollection;
+
+  Gson gson = new Gson();
 
   public void createConnection() throws UnknownHostException {
     this.mongoClient = new MongoClient(MONGODB_HOST, MONGODB_PORT);
@@ -24,8 +30,8 @@ public class DatabaseAccessor {
     this.userCollection = userPortfoliosDb.getCollection("Users");
   }
 
-  public void insertNewUser(User user)  {
-    String userJsonObject = this.convertUserToJsonObject(user);
+  public void insertNewUser(User user) {
+    String userJsonObject = gson.toJson(user);
     DBObject userDbObject = (DBObject) JSON.parse(userJsonObject);
     userCollection.insert(userDbObject);
   }
@@ -33,17 +39,22 @@ public class DatabaseAccessor {
   // public void updateUser(User user) {
   //
   // }
-  //
-  // public void checkUserExists(user) {
-  //
-  // }
 
-  public String convertUserToJsonObject(User user) {
-    Gson gson = new Gson();
-    String userJsonObject = gson.toJson(user);
-    return userJsonObject;
+  public boolean checkUserExists(User user) {
+    String userId = user.getUserId();
+    DBObject query = new BasicDBObject(USER_ID_FIELD, userId);
+    DBCursor cursor = userCollection.find(query);
+    DBObject userDbObject = cursor.one();
+    boolean doesUserExist = (userDbObject != null);
+    return doesUserExist;
   }
 
-  // MongoClient.close()
+  public void clearDatabase() {
+    userPortfoliosDb.getCollection("Users").remove(new BasicDBObject());
+  }
+
+  public void closeConnection() {
+    mongoClient.close();
+  }
 
 }
