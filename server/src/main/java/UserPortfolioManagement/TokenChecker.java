@@ -11,25 +11,25 @@ public class TokenChecker {
   private final boolean REQUEST_AUTHORIZED = true;
   private final boolean REQUEST_UNAUTHORIZED = false;
 
-  public boolean checkSecurityToken(String securityToken) {
+  public boolean checkAuthToken(String authToken) {
     try{
-      DecodedJWT decodedSecurityToken = this.decodeSecurityToken(securityToken);
+      DecodedJWT decodedAuthToken = this.decodeAuthToken(authToken);
     }catch(Exception error) {
       return REQUEST_UNAUTHORIZED;
     }
     return REQUEST_AUTHORIZED;
   }
 
-  // public Array getSecurityTokenInfo(String securityToken) {
-  //   DecodedJWT jwt = decodeSecurityToken(securityToken);
+  // public Array getauthTokenInfo(String authToken) {
+  //   DecodedJWT jwt = decodeAuthToken(authToken);
   //
   // }
 
-  public DecodedJWT decodeSecurityToken(String securityToken) throws JWTVerificationException {
+  public DecodedJWT decodeAuthToken(String authToken) throws JWTVerificationException {
     Algorithm algorithm = Algorithm.HMAC256("fake_secret_key");
     JWTVerifier verifier = JWT.require(algorithm).build();
-    DecodedJWT decodedSecurityToken = verifier.verify(securityToken);
-    return decodedSecurityToken;
+    DecodedJWT decodedAuthToken = verifier.verify(authToken);
+    return decodedAuthToken;
   }
 
 }

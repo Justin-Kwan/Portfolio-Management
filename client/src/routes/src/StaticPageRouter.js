@@ -42,8 +42,8 @@ const requestAuthorizer = new RequestAuthorizer();
  });
 
 app.get('/createPortfolio', function(request, response) {
-  const securityToken = request.cookies['security_token'];
-  const isRequestAuthorized = tokenChecker.checkSecurityToken(securityToken);
+  const authToken = request.cookies['auth_token'];
+  const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
 
   if(isRequestAuthorized) {
     response.sendFile(createPortfolioPagePath);

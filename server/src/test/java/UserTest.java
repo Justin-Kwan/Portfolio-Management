@@ -35,17 +35,17 @@ public class UserTest {
   }
 
   @Test
-  public void test_updateSecurityToken() {
+  public void test_updateAuthToken() {
     User user;
 
-    user = new User("securityToken_1*");
-    assertEquals("securityToken_1*", user.getSecurityToken());
+    user = new User("authToken_1*");
+    assertEquals("authToken_1*", user.getAuthToken());
 
-    user = new User("securityToken_2*");
-    assertEquals("securityToken_2*", user.getSecurityToken());
+    user = new User("authToken_2*");
+    assertEquals("authToken_2*", user.getAuthToken());
 
-    user = new User("securityToken_3*");
-    assertEquals("securityToken_3*", user.getSecurityToken());
+    user = new User("authToken_3*");
+    assertEquals("authToken_3*", user.getAuthToken());
   }
 
   @Test
@@ -77,17 +77,17 @@ public class UserTest {
   }
 
   @Test
-  public void test_getSecurityToken() {
+  public void test_getAuthToken() {
     User user;
 
     user = new User("09876 *&_9");
-    assertEquals("09876 *&_9", user.getSecurityToken());
+    assertEquals("09876 *&_9", user.getAuthToken());
 
     user = new User("_____");
-    assertEquals("_____", user.getSecurityToken());
+    assertEquals("_____", user.getAuthToken());
 
     user = new User("");
-    assertEquals("", user.getSecurityToken());
+    assertEquals("", user.getAuthToken());
   }
 
   @Test

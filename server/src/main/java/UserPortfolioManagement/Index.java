@@ -27,20 +27,20 @@ public class Index {
     post("/createPortfolio", (request, response) -> {
 
       RequestHandler requestHandler = new RequestHandler();
-      String securityToken = request.cookie("security_token");
+      String authToken = request.cookie("auth_token");
       String jsonRequest = request.body();
 
-      System.out.println("SECURITY TOKEN: " + securityToken);
+      System.out.println("AUTH TOKEN: " + authToken);
       System.out.println("JSON REQUEST: " + jsonRequest);
 
-      // requestHandler.handleAddingCoins(securityToken, "");
-      return "GET" + securityToken;
+      // requestHandler.handleAddingCoins(authToken, "");
+      return "GET" + authToken;
     });
 
     // get("/checkUserExists", (request, response) -> {
     //   RequestHandler requestHandler = new RequestHandler();
-    //   String securityToken = request.cookie("security_token");
-    //   requestHandler.handleCheckUserExists(securityToken);
+    //   String AuthToken = request.cookie("auth_token");
+    //   requestHandler.handleCheckUserExists(authToken);
     //
     // });
 
