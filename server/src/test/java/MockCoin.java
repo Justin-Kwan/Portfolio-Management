@@ -6,8 +6,8 @@ class MockCoin extends Coin {
   public MockCoin(String coinTicker, double coinAmount, double latestCoinPrice, double coinHoldingValueUsd) {
     super("", 0);
 
-    this.updateTicker(coinTicker);
-    this.updateAmount(coinAmount);
+    this.setTicker(coinTicker);
+    this.setAmount(coinAmount);
     this.latestCoinPrice = latestCoinPrice;
     this.coinHoldingValueUsd = coinHoldingValueUsd;
   }

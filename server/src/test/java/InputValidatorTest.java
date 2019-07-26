@@ -5,34 +5,34 @@ import UserPortfolioManagement.InputValidator;
 public class InputValidatorTest {
 
   private InputValidator inputValidator = new InputValidator();
-  private boolean isSecurityTokenEmpty;
-  private boolean isSecurityTokenValid;
+  private boolean isAuthTokenEmpty;
+  private boolean isAuthTokenValid;
 
   @Test
   public void test_checkInputEmpty() {
-    isSecurityTokenEmpty = inputValidator.checkInputEmpty("securityToken_1*");
-    assertEquals(false, isSecurityTokenEmpty);
+    isAuthTokenEmpty = inputValidator.checkInputEmpty("authToken_1*");
+    assertEquals(false, isAuthTokenEmpty);
 
-    isSecurityTokenEmpty = inputValidator.checkInputEmpty(" ");
-    assertEquals(false, isSecurityTokenEmpty);
+    isAuthTokenEmpty = inputValidator.checkInputEmpty(" ");
+    assertEquals(false, isAuthTokenEmpty);
 
-    isSecurityTokenEmpty = inputValidator.checkInputEmpty("");
-    assertEquals(true, isSecurityTokenEmpty);
+    isAuthTokenEmpty = inputValidator.checkInputEmpty("");
+    assertEquals(true, isAuthTokenEmpty);
 
-    isSecurityTokenEmpty = inputValidator.checkInputEmpty(null);
-    assertEquals(true, isSecurityTokenEmpty);
+    isAuthTokenEmpty = inputValidator.checkInputEmpty(null);
+    assertEquals(true, isAuthTokenEmpty);
   }
 
   @Test
-  public void test_handleSecurityTokenValidation() {
-    isSecurityTokenValid = inputValidator.handleSecurityTokenValidation("securityToken_1*");
-    assertEquals(true, isSecurityTokenValid);
+  public void test_handleAuthTokenValidation() {
+    isAuthTokenValid = inputValidator.handleAuthTokenValidation("authToken_1*");
+    assertEquals(true, isAuthTokenValid);
 
-    isSecurityTokenValid = inputValidator.handleSecurityTokenValidation("");
-    assertEquals(false, isSecurityTokenValid);
+    isAuthTokenValid = inputValidator.handleAuthTokenValidation("");
+    assertEquals(false, isAuthTokenValid);
 
-    isSecurityTokenValid = inputValidator.handleSecurityTokenValidation(null);
-    assertEquals(false, isSecurityTokenValid);
+    isAuthTokenValid = inputValidator.handleAuthTokenValidation(null);
+    assertEquals(false, isAuthTokenValid);
   }
 
 }

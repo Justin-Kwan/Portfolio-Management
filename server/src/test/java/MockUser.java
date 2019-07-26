@@ -3,10 +3,10 @@ import UserPortfolioManagement.User;
 public class MockUser extends User {
 
   // ctor
-  public MockUser(String username, String userId, String securityToken, double portfolioValueUsd) {
+  public MockUser(String username, String userId, String authToken, double portfolioValueUsd) {
     super("");
-    this.updateInfo(username, userId);
-    this.updateSecurityToken(securityToken);
+    this.setInfo(username, userId);
+    this.setAuthToken(authToken);
     this.portfolioValueUsd = portfolioValueUsd;
   }
 

@@ -10,14 +10,13 @@ class TokenChecker {
     this.REQUEST_UNAUTHORIZED = false;
   }
 
-  checkSecurityToken(securityToken) {
+  checkAuthToken(authToken) {
     try {
-      const decodedSecurityToken = jwt.verify(securityToken, 'fake_secret_key');
-      return this.REQUEST_AUTHORIZED;
-    }
-    catch(error) {
+      const decodedAuthToken = jwt.verify(authToken, 'fake_secret_key');
+    }catch(error) {
       return this.REQUEST_UNAUTHORIZED;
     }
+    return this.REQUEST_AUTHORIZED;
   }
 
 }

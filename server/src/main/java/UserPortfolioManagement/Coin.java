@@ -9,15 +9,15 @@ public class Coin {
 
   // ctor
   public Coin(String coinTicker, double coinAmount) {
-    this.updateTicker(coinTicker);
-    this.updateAmount(coinAmount);
+    this.setTicker(coinTicker);
+    this.setAmount(coinAmount);
   }
 
-  protected void updateTicker(String coinTicker) {
+  protected void setTicker(String coinTicker) {
     this.coinTicker = coinTicker;
   }
 
-  protected void updateAmount(double coinAmount) {
+  protected void setAmount(double coinAmount) {
     this.coinAmount = coinAmount;
   }
 
@@ -25,7 +25,7 @@ public class Coin {
     this.coinAmount += coinAmount;
   }
 
-  public void fetchAndUpdateLatestPrice(String coinTicker) {
+  public void fetchAndSetLatestPrice(String coinTicker) {
     coinTicker = this.getTicker();
 
     // this.latestCoinPrice = // http GET req latest price;
