@@ -7,35 +7,35 @@ import UserPortfolioManagement.Coin;
 public class UserTest {
 
   @Test
-  public void test_setUsername() {
+  public void test_updateUsername() {
     User user = new User("");
 
-    user.setInfo("Username1", "");
+    user.updateInfo("Username1", "");
     assertEquals("Username1", user.getUsername());
 
-    user.setInfo("Username2", "");
+    user.updateInfo("Username2", "");
     assertEquals("Username2", user.getUsername());
 
-    user.setInfo("Username3", "");
+    user.updateInfo("Username3", "");
     assertEquals("Username3", user.getUsername());
   }
 
   @Test
-  public void test_setUserId() {
+  public void test_updateUserId() {
     User user = new User("");
 
-    user.setInfo("", "UserId1");
+    user.updateInfo("", "UserId1");
     assertEquals("UserId1", user.getUserId());
 
-    user.setInfo("", "UserId2");
+    user.updateInfo("", "UserId2");
     assertEquals("UserId2", user.getUserId());
 
-    user.setInfo("", "UserId3");
+    user.updateInfo("", "UserId3");
     assertEquals("UserId3", user.getUserId());
   }
 
   @Test
-  public void test_setAuthToken() {
+  public void test_updateAuthToken() {
     User user;
 
     user = new User("authToken_1*");
@@ -52,13 +52,13 @@ public class UserTest {
   public void test_getUsername() {
     User user = new User("");
 
-    user.setInfo("User123", "");
+    user.updateInfo("User123", "");
     assertEquals("User123", user.getUsername());
 
-    user.setInfo("User234", "");
+    user.updateInfo("User234", "");
     assertEquals("User234", user.getUsername());
 
-    user.setInfo("User345", "");
+    user.updateInfo("User345", "");
     assertEquals("User345", user.getUsername());
   }
 
@@ -66,13 +66,13 @@ public class UserTest {
   public void test_getUserId() {
     User user = new User("");
 
-    user.setInfo("", "#123$");
+    user.updateInfo("", "#123$");
     assertEquals("#123$", user.getUserId());
 
-    user.setInfo("", "098_ef");
+    user.updateInfo("", "098_ef");
     assertEquals("098_ef", user.getUserId());
 
-    user.setInfo("", "  ");
+    user.updateInfo("", "  ");
     assertEquals("  ", user.getUserId());
   }
 
