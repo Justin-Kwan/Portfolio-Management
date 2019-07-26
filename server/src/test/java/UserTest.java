@@ -9,30 +9,30 @@ public class UserTest {
   @Test
   public void test_updateUsername() {
     User user1 = new User("");
-    user1.updateUserInfo("Username1", "");
+    user1.updateInfo("Username1", "");
     assertEquals("Username1", user1.getUsername());
 
     User user2 = new User("");
-    user2.updateUserInfo("Username2", "");
+    user2.updateInfo("Username2", "");
     assertEquals("Username2", user2.getUsername());
 
     User user3 = new User("");
-    user3.updateUserInfo("Username3", "");
+    user3.updateInfo("Username3", "");
     assertEquals("Username3", user3.getUsername());
   }
 
   @Test
   public void test_updateUserId() {
     User user1 = new User("");
-    user1.updateUserInfo("", "UserId1");
+    user1.updateInfo("", "UserId1");
     assertEquals("UserId1", user1.getUserId());
 
     User user2 = new User("");
-    user2.updateUserInfo("", "UserId2");
+    user2.updateInfo("", "UserId2");
     assertEquals("UserId2", user2.getUserId());
 
     User user3 = new User("");
-    user3.updateUserInfo("", "UserId3");
+    user3.updateInfo("", "UserId3");
     assertEquals("UserId3", user3.getUserId());
   }
 
@@ -51,30 +51,30 @@ public class UserTest {
   @Test
   public void test_getUsername() {
     User user1 = new User("");
-    user1.updateUserInfo("User123", "");
+    user1.updateInfo("User123", "");
     assertEquals("User123", user1.getUsername());
 
     User user2 = new User("");
-    user2.updateUserInfo("User234", "");
+    user2.updateInfo("User234", "");
     assertEquals("User234", user2.getUsername());
 
     User user3 = new User("");
-    user3.updateUserInfo("User345", "");
+    user3.updateInfo("User345", "");
     assertEquals("User345", user3.getUsername());
   }
 
   @Test
   public void test_getUserId() {
     User user1 = new User("");
-    user1.updateUserInfo("", "#123$");
+    user1.updateInfo("", "#123$");
     assertEquals("#123$", user1.getUserId());
 
     User user2 = new User("");
-    user2.updateUserInfo("", "098_ef");
+    user2.updateInfo("", "098_ef");
     assertEquals("098_ef", user2.getUserId());
 
     User user3 = new User("");
-    user3.updateUserInfo("", "  ");
+    user3.updateInfo("", "  ");
     assertEquals("  ", user3.getUserId());
   }
 
@@ -93,21 +93,21 @@ public class UserTest {
   @Test
   public void test_addCoin() {
     User user1 = new User("");
-    Coin mockCoin1 = new MockCoin(346.5);
+    Coin mockCoin1 = new MockCoin("", 0, 0, 346.5); // holding value usd
     user1.addCoin(mockCoin1);
     ArrayList<Coin> userCoins1 = user1.getCoins();
     double coinHoldingValueUsd1 = userCoins1.get(0).getHoldingValueUsd();
     assertEquals(346.5, coinHoldingValueUsd1, 1e-8);
 
     User user2 = new User("");
-    Coin mockCoin2 = new MockCoin(3.642235324);
+    Coin mockCoin2 = new MockCoin("", 0, 0, 3.642235324);
     user2.addCoin(mockCoin2);
     ArrayList<Coin> userCoins2 = user2.getCoins();
     double coinHoldingValueUsd2 = userCoins2.get(0).getHoldingValueUsd();
     assertEquals(3.642235324, coinHoldingValueUsd2, 1e-8);
 
     User user3 = new User("");
-    Coin mockCoin3 = new MockCoin(0);
+    Coin mockCoin3 = new MockCoin("", 0, 0, 0);
     user3.addCoin(mockCoin3);
     ArrayList<Coin> userCoins3 = user3.getCoins();
     double coinHoldingValueUsd3 = userCoins3.get(0).getHoldingValueUsd();
@@ -117,13 +117,13 @@ public class UserTest {
   @Test
   public void test_getPortfolioValueUsd() {
     User user1 = new User("");
-    Coin mockCoin1 = new MockCoin(80.9876);
+    Coin mockCoin1 = new MockCoin("", 0, 0, 80.9876);
     user1.addCoin(mockCoin1);
     user1.calculatePortfolioValue();
     assertEquals(80.9876, user1.getPortfolioValueUsd(), 1e-8);
 
     User user2 = new User("");
-    Coin mockCoin2 = new MockCoin(1);
+    Coin mockCoin2 = new MockCoin("", 0, 0, 1);
     user2.addCoin(mockCoin2);
     user2.calculatePortfolioValue();
     assertEquals(1, user2.getPortfolioValueUsd(), 1e-8);
@@ -186,7 +186,7 @@ public class UserTest {
     User user1 = new User("");
 
     for(int i = 0; i < 7; i++) {
-      Coin mockCoin = new MockCoin(24.5679);
+      Coin mockCoin = new MockCoin("", 0, 0, 24.5679);
       user1.addCoin(mockCoin);
     }
 
@@ -196,7 +196,7 @@ public class UserTest {
     User user2 = new User("");
 
     for(int i = 0; i < 3; i++) {
-      Coin mockCoin = new MockCoin(41029.23122213);
+      Coin mockCoin = new MockCoin("", 0, 0, 41029.23122213);
       user2.addCoin(mockCoin);
     }
 
@@ -206,7 +206,7 @@ public class UserTest {
     User user3 = new User("");
 
     for(int i = 0; i < 3; i++) {
-      Coin mockCoin = new MockCoin(2);
+      Coin mockCoin = new MockCoin("", 0, 0, 2);
       user3.addCoin(mockCoin);
     }
 

@@ -13,7 +13,11 @@ const cookieParser          = require('cookie-parser');
 const LOCAL_HOST_IP_ADDRESS = '127.0.0.1';
 const PORT_NUMBER           = 8000;
 
+// static page paths
 let createPortfolioPagePath = path.join(__dirname, '../../pages/CreatePortfolio.html');
+let getPortfolioPagePath = path.join(__dirname, '../../pages/GetPortfolio.html');
+
+// folder paths
 let clientFolderPath = express.static(path.join(__dirname, '../../'));
 let assetsFolderPath = express.static(path.join(__dirname, '../../assets'));
 
@@ -27,7 +31,15 @@ const requestAuthorizer = new RequestAuthorizer();
  *  Should have another route for /getPortfolio and calls UserPortfolioManagement
  *  to see if user exists or is new, if not redirect to /create portfolio, otherwise
  *  display portfolio
+ *
+ *  get bounce you to create if you're new and create bounce you to get if you exist
  */
+
+ // app.get('/getPortfolio', function(request, response) {
+ //   // call server to see if user exists
+ //
+ //
+ // });
 
 app.get('/createPortfolio', function(request, response) {
   const securityToken = request.cookies['security_token'];

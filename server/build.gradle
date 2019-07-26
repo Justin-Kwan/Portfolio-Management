@@ -30,12 +30,18 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:27.1-jre'
 
+    // Use JWT library
+    implementation 'com.auth0:java-jwt:3.8.1'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 
     // Use Spark Java framework
     compile "com.sparkjava:spark-core:2.8.0"
 
-    // Use JWT library
-    implementation 'com.auth0:java-jwt:3.8.1'
+    // Use MongoDb
+    compile 'org.mongodb:mongo-java-driver:2.12.3'
+
+    // Use Object to JSON conversion library
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

@@ -9,32 +9,32 @@ import java.util.Base64;
 
 public class User {
 
-  private String username;
-  private String userId;
-  private String securityToken;
-  private double portfolioValueUsd;
-  private ArrayList<Coin> coins = new ArrayList<Coin>();
+  protected String username;
+  protected String userId;
+  protected String securityToken;
+  protected double portfolioValueUsd;
+  protected ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
   public User(String securityToken) {
     this.updateSecurityToken(securityToken);
   }
 
-  private void updateUsername(String username) {
+  protected void updateUsername(String username) {
     this.username = username;
   }
 
-  private void updateUserId(String userId) {
+  protected void updateUserId(String userId) {
     this.userId = userId;
   }
 
   /* test!! */
-  public void updateUserInfo(String username, String userId) {
+  public void updateInfo(String username, String userId) {
     this.updateUsername(username);
     this.updateUserId(userId);
   }
 
-  private void updateSecurityToken(String securityToken) {
+  protected void updateSecurityToken(String securityToken) {
     this.securityToken = securityToken;
   }
 

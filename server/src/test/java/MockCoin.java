@@ -2,18 +2,20 @@ import UserPortfolioManagement.Coin;
 
 class MockCoin extends Coin {
 
-  private double observerCoinHoldingValueUsd = 0;
-
   // ctor
-  public MockCoin(double coinHoldingValueUsd) {
+  public MockCoin(String coinTicker, double coinAmount, double latestCoinPrice, double coinHoldingValueUsd) {
     super("", 0);
-    this.observerCoinHoldingValueUsd = coinHoldingValueUsd;
+
+    this.updateTicker(coinTicker);
+    this.updateAmount(coinAmount);
+    this.latestCoinPrice = latestCoinPrice;
+    this.coinHoldingValueUsd = coinHoldingValueUsd;
   }
 
   // alter function for purpose of subclass mock
   @Override
   public double getHoldingValueUsd() {
-    return observerCoinHoldingValueUsd;
+    return this.coinHoldingValueUsd;
   }
 
 }
