@@ -59,16 +59,12 @@ public class RequestHandler {
 
   }
 
-  // public void handleCheckUserExists(String authToken) {
-  //   boolean isAuthTokenFormatValid = inputValidator.handleAuthTokenValidation(authToken);
-  //
-  //   if(isAuthTokenFormatValid == false)
-  //     return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
-  //
-  //   User user = new User(authToken);
-  //   DBA.checkUserExists(user);
-  //
-  // }
+  public void handleCheckUserExists(String authToken) {
+    
+    User user = new User(authToken);
+    DBA.checkUserExists(user);
+
+  }
 
 
 

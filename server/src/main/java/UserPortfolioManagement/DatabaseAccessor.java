@@ -13,10 +13,10 @@ import com.google.gson.Gson;
 
 public class DatabaseAccessor {
 
-  private final String  MONGODB_HOST    = "127.0.0.1";
-  private final int     MONGODB_PORT    = 27017;
+  private final String  MONGODB_HOST  = "127.0.0.1";
+  private final int     MONGODB_PORT  = 27017;
 
-  private final String  USER_ID_FIELD   = "userId";
+  private final String  USER_ID_FIELD = "userId";
 
   private MongoClient   mongoClient;
   private DB            userPortfoliosDb;

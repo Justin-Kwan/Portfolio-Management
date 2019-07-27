@@ -37,12 +37,11 @@ public class Index {
       return "GET" + authToken;
     });
 
-    // get("/checkUserExists", (request, response) -> {
-    //   RequestHandler requestHandler = new RequestHandler();
-    //   String AuthToken = request.cookie("auth_token");
-    //   requestHandler.handleCheckUserExists(authToken);
-    //
-    // });
+    get("/checkUserExists", (request, response) -> {
+      RequestHandler requestHandler = new RequestHandler();
+      requestHandler.handleCheckUserExists();
+
+    });
 
   }
 

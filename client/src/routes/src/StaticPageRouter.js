@@ -4,7 +4,7 @@
 
 'use strict';
 
-const RequestAuthorizer     = require('./TokenChecker.js');
+const TokenChecker          = require('./TokenChecker.js');
 const express               = require('express');
 const app                   = express();
 const path                  = require('path');
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(clientFolderPath);
 app.use(assetsFolderPath);
 
-const requestAuthorizer = new RequestAuthorizer();
+const tokenChecker = new TokenChecker();
 
 /**
  *  Should have another route for /getPortfolio and calls UserPortfolioManagement
@@ -36,8 +36,16 @@ const requestAuthorizer = new RequestAuthorizer();
  */
 
  app.get('/getPortfolio', function(request, response) {
-   // call server to see if user exists
+   const authToken = request.cookies['auth_token'];
+   const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
 
+   if(isRequestAuthorized == false) {
+     response.send("403 Unauthorized Access");
+   }
+
+   const userId = tokenChecker.getAuthTokenUserId(authToken);
+
+   response.send(userId);
 
  });
 
@@ -48,7 +56,8 @@ app.get('/createPortfolio', function(request, response) {
   if(isRequestAuthorized) {
     response.sendFile(createPortfolioPagePath);
   }
-  response.send("403 Unauthorized Access Denied");
+
+  response.send("403 Unauthorized Access");
 });
 
 app.listen(PORT_NUMBER, function() {

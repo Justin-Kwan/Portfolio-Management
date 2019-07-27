@@ -2,10 +2,10 @@ package UserPortfolioManagement;
 
 public class InputValidator {
 
-  public boolean handleAuthTokenValidation(String authToken) {
-    boolean AUTH_TOKEN_VALID = true;
-    boolean AUTH_TOKEN_INVALID = false;
+  private final boolean AUTH_TOKEN_VALID = true;
+  private final boolean AUTH_TOKEN_INVALID = false;
 
+  public boolean handleAuthTokenValidation(String authToken) {
     boolean isAuthTokenEmpty = this.checkInputEmpty(authToken);
 
     if(isAuthTokenEmpty) {

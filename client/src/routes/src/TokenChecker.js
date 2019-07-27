@@ -2,7 +2,6 @@
 
 const jwt = require('jsonwebtoken');
 
-
 class TokenChecker {
 
   constructor() {
@@ -17,6 +16,12 @@ class TokenChecker {
       return this.REQUEST_UNAUTHORIZED;
     }
     return this.REQUEST_AUTHORIZED;
+  }
+
+  getAuthTokenUserId(authToken) {
+    const userInfoPayload = jwt.decode(authToken);
+    const userId = userInfoPayload['user id'];
+    return userId;
   }
 
 }

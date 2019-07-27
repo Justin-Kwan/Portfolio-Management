@@ -97,4 +97,24 @@ public class TokenCheckerTest {
     assertNull(decodedAuthToken);
   }
 
+  @Test
+  public void test_getAuthTokenInfo() {
+    final int USERNAME = 0;
+    final int USER_ID  = 1;
+
+    String[] userInfoPayload;
+
+    // good token, username: randomuser123, id: ff4406fc-67b2-4f86-b2dd-4f9b35c64202
+    authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJhbmRvbXVzZXIxMjMiLCJ1c2VyIGlkIjoiZmY0NDA2ZmMtNjdiMi00Zjg2LWIyZGQtNGY5YjM1YzY0MjAyIn0.i2jAkld6y2KkRtgpzFYK449E1EGScB3DeZpLi4BqxVs";
+    userInfoPayload = tokenChecker.getauthTokenInfo(authToken);
+    assertEquals("randomuser123", userInfoPayload[USERNAME]);
+    assertEquals("ff4406fc-67b2-4f86-b2dd-4f9b35c64202", userInfoPayload[USER_ID]);
+
+    // good token, username: user109, id: e8e16b6f-cd81-4136-9d54-4c292469c5ee
+    authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIxMDkiLCJ1c2VyIGlkIjoiZThlMTZiNmYtY2Q4MS00MTM2LTlkNTQtNGMyOTI0NjljNWVlIn0.Ywz3tXTHf5A5i00VSJAUzLKL0F47N37tFv-UtGP_3gU";
+    userInfoPayload = tokenChecker.getauthTokenInfo(authToken);
+    assertEquals("user109", userInfoPayload[USERNAME]);
+    assertEquals("e8e16b6f-cd81-4136-9d54-4c292469c5ee", userInfoPayload[USER_ID]);
+  }
+
 }
