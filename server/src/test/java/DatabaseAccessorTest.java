@@ -11,6 +11,7 @@ public class DatabaseAccessorTest {
     DatabaseAccessor DBA = new DatabaseAccessor();
     try {
       DBA.createConnection();
+      DBA.clearDatabase();
     }
     catch(Exception error) {
       System.out.println(error);
@@ -39,22 +40,23 @@ public class DatabaseAccessorTest {
     User user;
     boolean doesUserExist;
 
+    doesUserExist = DBA.checkUserExists("id12345");
+    assertEquals(false, doesUserExist);
+
     user = new MockUser("Robert123", "id#123*", "authtoken_123", 231321);
     DBA.insertNewUser(user);
-    doesUserExist = DBA.checkUserExists(user);
+    doesUserExist = DBA.checkUserExists("id#123*");
     assertEquals(true, doesUserExist);
 
     user = new MockUser("John91", "id#901%", "authtoken_821", 20999);
     DBA.insertNewUser(user);
-    doesUserExist = DBA.checkUserExists(user);
+    doesUserExist = DBA.checkUserExists("id#901%");
     assertEquals(true, doesUserExist);
 
-    user = new MockUser("Jane231", "id#7281", "authtoken_231", 312412);
-    doesUserExist = DBA.checkUserExists(user);
+    doesUserExist = DBA.checkUserExists("id#7281");
     assertEquals(false, doesUserExist);
 
-    user = new MockUser("", "", "", 0);
-    doesUserExist = DBA.checkUserExists(user);
+    doesUserExist = DBA.checkUserExists("");
     assertEquals(false, doesUserExist);
 
     this.afterTest(DBA);

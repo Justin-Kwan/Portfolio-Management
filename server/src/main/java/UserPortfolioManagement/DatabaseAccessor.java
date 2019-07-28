@@ -24,10 +24,14 @@ public class DatabaseAccessor {
 
   Gson gson = new Gson();
 
-  public void createConnection() throws UnknownHostException {
-    this.mongoClient = new MongoClient(MONGODB_HOST, MONGODB_PORT);
-    this.userPortfoliosDb = mongoClient.getDB("User_Portfolios");
-    this.userCollection = userPortfoliosDb.getCollection("Users");
+  public void createConnection() {
+    try {
+      this.mongoClient = new MongoClient(MONGODB_HOST, MONGODB_PORT);
+      this.userPortfoliosDb = mongoClient.getDB("User_Portfolios");
+      this.userCollection = userPortfoliosDb.getCollection("Users");
+    }catch(UnknownHostException error) {
+      System.out.println(error);
+    }
   }
 
   public void insertNewUser(User user) {
@@ -40,8 +44,7 @@ public class DatabaseAccessor {
   //
   // }
 
-  public boolean checkUserExists(User user) {
-    String userId = user.getUserId();
+  public boolean checkUserExists(String userId) {
     DBObject query = new BasicDBObject(USER_ID_FIELD, userId);
     DBCursor cursor = userCollection.find(query);
     DBObject userDbObject = cursor.one();

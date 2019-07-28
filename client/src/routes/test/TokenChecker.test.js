@@ -50,7 +50,7 @@ describe('AuthToken Authorization Function Tests', function() {
     let result = tokenChecker.checkAuthToken(123);
     expect(result).to.be.false;
   });
-  
+
 });
 
 describe('Get AuthToken Payload User Id Function Tests', function() {
@@ -61,7 +61,7 @@ describe('Get AuthToken Payload User Id Function Tests', function() {
   });
 
   it('should return the correct user id from payload', function() {
-    let result = tokenChecker.getAuthTokenUserId('seyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIxMDkiLCJ1c2VyIGlkIjoiZThlMTZiNmYtY2Q4MS00MTM2LTlkNTQtNGMyOTI0NjljNWVlIn0.Ywz3tXTHf5A5i00VSJAUzLKL0F47N37tFv-UtGP_3gU');
+    let result = tokenChecker.getAuthTokenUserId('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIxMDkiLCJ1c2VyIGlkIjoiZThlMTZiNmYtY2Q4MS00MTM2LTlkNTQtNGMyOTI0NjljNWVlIn0.Ywz3tXTHf5A5i00VSJAUzLKL0F47N37tFv-UtGP_3gU');
     expect(result).to.equal('e8e16b6f-cd81-4136-9d54-4c292469c5ee');
   });
 

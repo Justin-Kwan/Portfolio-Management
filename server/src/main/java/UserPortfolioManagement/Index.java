@@ -4,14 +4,16 @@ import spark.Filter;
 
 public class Index {
 
-  private static final String LOCAL_HOST_IP_ADDRESS = "127.0.0.1";
-  private static final int PORT_NUMBER = 8001;
+  private static final String LOCAL_HOST = "127.0.0.1";
+  private static final int    PORT       = 8001;
+
+  private static RequestHandler requestHandler = new RequestHandler();
 
   private static void initServer() {
-    ipAddress(LOCAL_HOST_IP_ADDRESS);
-    port(PORT_NUMBER);
+    ipAddress(LOCAL_HOST);
+    port(PORT);
     enableCors();
-    System.out.println("Backend server started at " + LOCAL_HOST_IP_ADDRESS + ":" + PORT_NUMBER + "...");
+    System.out.println("Backend server started at " + LOCAL_HOST + ":" + PORT + "...");
   }
 
   private static void enableCors() {
@@ -25,22 +27,20 @@ public class Index {
     initServer();
 
     post("/createPortfolio", (request, response) -> {
-
-      RequestHandler requestHandler = new RequestHandler();
       String authToken = request.cookie("auth_token");
       String jsonRequest = request.body();
 
       System.out.println("AUTH TOKEN: " + authToken);
       System.out.println("JSON REQUEST: " + jsonRequest);
 
-      // requestHandler.handleAddingCoins(authToken, "");
+      // requestHandler.handleAddCoins(authToken, "");
       return "GET" + authToken;
     });
 
-    get("/checkUserExists", (request, response) -> {
-      RequestHandler requestHandler = new RequestHandler();
-      requestHandler.handleCheckUserExists();
-
+    get("/checkUserExists/", "application/json", (request, response) -> {
+      String userId = request.queryParams("userId");
+      boolean doesUserExist = requestHandler.handleCheckUserExists(userId);
+      return doesUserExist;
     });
 
   }

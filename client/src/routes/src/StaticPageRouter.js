@@ -4,62 +4,67 @@
 
 'use strict';
 
-const TokenChecker          = require('./TokenChecker.js');
-const express               = require('express');
-const app                   = express();
-const path                  = require('path');
-const cookieParser          = require('cookie-parser');
+const TokenChecker       = require('./TokenChecker.js');
+const RemoteCrudApi      = require('./RemoteCrudApi.js');
+const express            = require('express');
+const app                = express();
+const path               = require('path');
+const cookieParser       = require('cookie-parser');
 
-const LOCAL_HOST_IP_ADDRESS = '127.0.0.1';
-const PORT_NUMBER           = 8000;
+const LOCAL_HOST         = '127.0.0.1';
+const PORT               = 8000;
 
 // static page paths
-let createPortfolioPagePath = path.join(__dirname, '../../pages/CreatePortfolio.html');
-let getPortfolioPagePath = path.join(__dirname, '../../pages/GetPortfolio.html');
+const createPortfolioPagePath = path.join(__dirname, '../../pages/CreatePortfolio.html');
+const getPortfolioPagePath = path.join(__dirname, '../../pages/GetPortfolio.html');
 
 // folder paths
-let clientFolderPath = express.static(path.join(__dirname, '../../'));
-let assetsFolderPath = express.static(path.join(__dirname, '../../assets'));
+const clientFolderPath = express.static(path.join(__dirname, '../../'));
+const assetsFolderPath = express.static(path.join(__dirname, '../../assets'));
 
 app.use(cookieParser());
 app.use(clientFolderPath);
 app.use(assetsFolderPath);
 
-const tokenChecker = new TokenChecker();
+const tokenChecker       = new TokenChecker();
+const remoteCrudApi      = new RemoteCrudApi();
 
-/**
- *  Should have another route for /getPortfolio and calls UserPortfolioManagement
- *  to see if user exists or is new, if not redirect to /create portfolio, otherwise
- *  display portfolio
- *
- *  get bounce you to create if you're new and create bounce you to get if you exist
- */
-
- app.get('/getPortfolio', function(request, response) {
-   const authToken = request.cookies['auth_token'];
-   const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
-
-   if(isRequestAuthorized == false) {
-     response.send("403 Unauthorized Access");
-   }
-
-   const userId = tokenChecker.getAuthTokenUserId(authToken);
-
-   response.send(userId);
-
- });
-
-app.get('/createPortfolio', function(request, response) {
+function onGetPortfolio(request, response) {
   const authToken = request.cookies['auth_token'];
   const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
 
-  if(isRequestAuthorized) {
-    response.sendFile(createPortfolioPagePath);
-  }
+  if(isRequestAuthorized == false)
+    response.send("403 Unauthorized Access");
 
-  response.send("403 Unauthorized Access");
-});
+  const doesUserExist = handleUserStatusCheck(authToken);
 
-app.listen(PORT_NUMBER, function() {
-  console.log('Frontend server started at ' + LOCAL_HOST_IP_ADDRESS + ':' + PORT_NUMBER + '...');
+  if(doesUserExist == 'false')
+    response.redirect('http://127.0.0.1:8000/createPortfolio');
+
+  response.sendFile(getPortfolioPagePath);
+}
+
+function onCreatePortfolio(request, response) {
+  const authToken = request.cookies['auth_token'];
+  const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
+
+  if(isRequestAuthorized == false)
+    response.send("403 Unauthorized Access");
+
+  response.sendFile(createPortfolioPagePath);
+}
+
+function handleUserStatusCheck(authToken) {
+  const userId = tokenChecker.getAuthTokenUserId(authToken);
+  const userStatusEndpoint = remoteCrudApi.generateUserStatusEndpoint(userId);
+  const doesUserExist = remoteCrudApi.fetchUserStatus(userStatusEndpoint);
+  return doesUserExist;
+}
+
+// routes
+app.get('/getPortfolio', onGetPortfolio);
+app.get('/createPortfolio', onCreatePortfolio);
+
+app.listen(PORT, function() {
+  console.log('Frontend server started at ' + LOCAL_HOST + ':' + PORT + '...');
 });
