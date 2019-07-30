@@ -40,7 +40,9 @@ dependencies {
     compile "com.sparkjava:spark-core:2.8.0"
 
     // Use MongoDb
-    compile 'org.mongodb:mongo-java-driver:2.12.3'
+    compile 'org.mongodb:mongodb-driver:3.6.0'
+
+    compile 'org.json:json:20171018'
 
     // Use Object to JSON conversion library
     implementation 'com.google.code.gson:gson:2.8.5'

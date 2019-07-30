@@ -20,7 +20,7 @@ public class TokenChecker {
     return REQUEST_AUTHORIZED;
   }
 
-  public String[] getauthTokenInfo(String authToken) {
+  public String[] getAuthTokenInfo(String authToken) {
     DecodedJWT decodedAuthToken = decodeAuthToken(authToken);
     String username = decodedAuthToken.getClaim("username").asString();
     String userId = decodedAuthToken.getClaim("user id").asString();

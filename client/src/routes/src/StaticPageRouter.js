@@ -26,8 +26,8 @@ app.use(cookieParser());
 app.use(clientFolderPath);
 app.use(assetsFolderPath);
 
-const tokenChecker       = new TokenChecker();
-const remoteCrudApi      = new RemoteCrudApi();
+const tokenChecker  = new TokenChecker();
+const remoteCrudApi = new RemoteCrudApi();
 
 function onGetPortfolio(request, response) {
   const authToken = request.cookies['auth_token'];

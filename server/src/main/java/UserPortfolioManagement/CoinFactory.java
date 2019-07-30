@@ -1,31 +1,37 @@
 package UserPortfolioManagement;
 import java.util.ArrayList;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
+import com.google.gson.Gson;
 
 public class CoinFactory {
 
-  private final String BTC_TICKER = "BTC";
-  private final String LTC_TICKER = "LTC";
-  private final String ETH_TICKER = "ETH";
-  private final String NEO_TICKER = "NEO";
-  private final String BAT_TICKER = "BAT";
+  DatabaseAccessor DBA = new DatabaseAccessor();
 
-  public ArrayList createCoinList() {
+
+  public ArrayList createCoinCollection(User user, boolean doesUserExist) {
 
     ArrayList<Coin> coins = new ArrayList<Coin>();
 
-    // for(int i = 0; i < ...; i++) {
+    if(doesUserExist) {
+      addCoinsToCollectionFromDb(user, coins);
+    }
 
-
-
-    // }
+    addCoinsToCollectionFromRequest();
 
     return coins;
-
   }
 
-  private void addCoinsToCollectionFromDb(ArrayList<Coin> coins) {
+  private ArrayList<Coin> addCoinsToCollectionFromDb(User user, ArrayList<Coin> coins) {
+    DBA.createConnection();
+    JSONArray coinsJsonArray = DBA.selectUserCoins(user);
 
+    for(int currentJsonCoin = 0; currentJsonCoin < coinsJsonArray.length(); currentJsonCoin++) {
+      Coin coin = gson.fromJson(coinsJsonArray.get(currentJsonCoin).toString(), Coin.class);
+      coins.add(coin);
+    }
+
+    return coins;
   }
 
   private void addCoinsToCollectionFromRequest(ArrayList<Coin> coins) {

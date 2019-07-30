@@ -4,8 +4,13 @@ import org.junit.Test;
 import UserPortfolioManagement.DatabaseAccessor;
 import UserPortfolioManagement.User;
 import UserPortfolioManagement.Coin;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import com.google.gson.Gson;
 
 public class DatabaseAccessorTest {
+
+  Gson gson = new Gson();
 
   private DatabaseAccessor beforeTest() {
     DatabaseAccessor DBA = new DatabaseAccessor();
@@ -31,6 +36,28 @@ public class DatabaseAccessorTest {
     user = new MockUser("username1", "userid1", "authtoken1", 543.32);
     DBA.insertNewUser(user);
 
+
+  }
+
+  @Test
+  public void test_selectUserCoins() {
+    DatabaseAccessor DBA = this.beforeTest();
+    User user;
+
+    user = new MockUser("username___1", "userid___1", "authtoken___1", 543.32);
+
+    for(int i = 0; i < 5; i++) {
+      Coin coin = new MockCoin("BTC", 0.34, 234, 50);
+      user.addCoin(coin);
+    }
+
+    DBA.insertNewUser(user);
+    JSONArray coinsJsonArray = DBA.selectUserCoins(user);
+
+    for(int i = 0; i < coinsJsonArray.length(); i++) {
+      Coin coin = gson.fromJson(coinsJsonArray.get(i).toString(), Coin.class);
+      System.out.println("COIN AMOUNT: " + coin.getAmount());
+    }
 
   }
 
