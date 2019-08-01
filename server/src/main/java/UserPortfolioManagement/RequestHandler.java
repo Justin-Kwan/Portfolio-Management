@@ -21,7 +21,7 @@ public class RequestHandler {
     User user = new User(authToken);
     user.setInfo(userInfoPayload[0], userInfoPayload[1]);
 
-    boolean doesUserExist = DBA.checkUserExists(userId);
+    boolean doesUserExist = DBA.checkUserExists(userInfoPayload[1]);
 
     coinFactory.createCoinCollection(user, doesUserExist);
 

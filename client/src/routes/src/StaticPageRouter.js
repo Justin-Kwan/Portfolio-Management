@@ -56,8 +56,8 @@ function onCreatePortfolio(request, response) {
 
 function handleUserStatusCheck(authToken) {
   const userId = tokenChecker.getAuthTokenUserId(authToken);
-  const userStatusEndpoint = remoteCrudApi.generateUserStatusEndpoint(userId);
-  const doesUserExist = remoteCrudApi.fetchUserStatus(userStatusEndpoint);
+  const userStatusUrl = remoteCrudApi.generateUserStatusUrl(userId);
+  const doesUserExist = remoteCrudApi.fetchUserStatus(userStatusUrl);
   return doesUserExist;
 }
 

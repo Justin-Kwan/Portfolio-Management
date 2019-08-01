@@ -7,19 +7,22 @@ import com.google.gson.Gson;
 public class CoinFactory {
 
   DatabaseAccessor DBA = new DatabaseAccessor();
+  Gson gson = new Gson();
 
-
-  public ArrayList createCoinCollection(User user, boolean doesUserExist) {
-
+  public void createCoinCollection(User user, boolean doesUserExist) {
     ArrayList<Coin> coins = new ArrayList<Coin>();
 
     if(doesUserExist) {
       addCoinsToCollectionFromDb(user, coins);
     }
 
-    addCoinsToCollectionFromRequest();
+    addCoinsToCollectionFromRequest(coins);
 
-    return coins;
+    for(int currentCoin = 0; currentCoin < coins.size(); currentCoin++) {
+      user.addCoin(coins.get(currentCoin));
+    }
+
+
   }
 
   private ArrayList<Coin> addCoinsToCollectionFromDb(User user, ArrayList<Coin> coins) {
@@ -34,6 +37,7 @@ public class CoinFactory {
     return coins;
   }
 
+  // here need to check for duplicate coins
   private void addCoinsToCollectionFromRequest(ArrayList<Coin> coins) {
 
   }
@@ -42,16 +46,5 @@ public class CoinFactory {
     Coin coin = new Coin(coinTicker, coinAmount);
     return coin;
   }
-
-
-
-
-
-
-
-
-
-
-
 
 }

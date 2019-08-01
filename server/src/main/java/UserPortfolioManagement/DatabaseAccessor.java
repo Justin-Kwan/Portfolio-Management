@@ -1,33 +1,21 @@
 package UserPortfolioManagement;
-
 import java.net.UnknownHostException;
 import java.util.Arrays;
-
 import com.mongodb.MongoException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
-
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Projections;
-
 import org.bson.Document;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mongodb.ServerAddress;
-import com.mongodb.Block;
-import com.mongodb.client.MongoCursor;
-import static com.mongodb.client.model.Filters.*;
-import com.mongodb.client.result.DeleteResult;
-import static com.mongodb.client.model.Updates.*;
-import com.mongodb.client.result.UpdateResult;
-
 
 public class DatabaseAccessor {
 
@@ -64,17 +52,19 @@ public class DatabaseAccessor {
 
     // get single field from document
     Document coinsDocument = userCollection
-                        .find(new BasicDBObject(USER_ID_FIELD, userId))
-                        .projection(Projections.fields(Projections.include(USER_COINS_FIELD), Projections.excludeId())).first();
+    .find(new BasicDBObject(USER_ID_FIELD, userId))
+    .projection(Projections.fields(Projections.include(USER_COINS_FIELD), Projections.excludeId()))
+    .first();
 
     JSONObject coinsJsonObject = new JSONObject(coinsDocument);
     JSONArray coinsJsonArray = coinsJsonObject.getJSONArray("coins");
-
     return coinsJsonArray;
   }
 
   public boolean checkUserExists(String userId) {
-    FindIterable<Document> iterable = userPortfoliosDb.getCollection("Users").find(new Document(USER_ID_FIELD, userId));
+    FindIterable<Document> iterable = userPortfoliosDb.getCollection("Users")
+                                    .find(new Document(USER_ID_FIELD, userId));
+                                    
     boolean doesUserExist = iterable.first() != null;
     return doesUserExist;
   }
