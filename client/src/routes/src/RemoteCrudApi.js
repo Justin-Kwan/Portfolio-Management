@@ -8,10 +8,9 @@ class RemoteCrudApi {
     this.SYNC_REQUEST = false;
   }
 
-
   fetchUserStatus(userStatusUrl) {
     const httpRequest = new XMLHttpRequest();
-    httpRequest.open('GET', userStatusUrl, SYNC_REQUEST); // false for synchronous request
+    httpRequest.open('GET', userStatusUrl, this.SYNC_REQUEST); // false for synchronous request
     httpRequest.send(null);
     const doesUserExist = httpRequest.responseText;
     return doesUserExist;

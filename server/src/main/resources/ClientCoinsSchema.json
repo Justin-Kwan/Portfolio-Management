@@ -1,0 +1,32 @@
+
+
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "coins": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "coinTicker": {
+              "type": "string"
+            },
+            "coinAmount": {
+              "type": "number",
+              "minimum": 0.0001
+            }
+          },
+          "required": [
+            "coinTicker",
+            "coinAmount"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "coins"
+  ]
+}

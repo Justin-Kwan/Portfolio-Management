@@ -1,5 +1,6 @@
 package UserPortfolioManagement;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 import java.util.Arrays;
 import com.mongodb.MongoException;
 import com.mongodb.BasicDBObject;
@@ -14,8 +15,14 @@ import org.bson.Document;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.mongodb.ServerAddress;
+
+/**
+ *  database accessing and interaction class for mongodb
+ *
+ *  @author justin kwan
+ *  @version 1.0.0
+ */
 
 public class DatabaseAccessor {
 
@@ -64,7 +71,7 @@ public class DatabaseAccessor {
   public boolean checkUserExists(String userId) {
     FindIterable<Document> iterable = userPortfoliosDb.getCollection("Users")
                                     .find(new Document(USER_ID_FIELD, userId));
-                                    
+
     boolean doesUserExist = iterable.first() != null;
     return doesUserExist;
   }

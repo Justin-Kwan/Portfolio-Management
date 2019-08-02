@@ -63,7 +63,7 @@ public class User {
       double currentCoinHoldingValue = coins.get(currentCoin).getHoldingValueUsd();
       this.portfolioValueUsd += currentCoinHoldingValue;
     }
-
+    
   }
 
 }

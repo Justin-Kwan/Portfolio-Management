@@ -2,6 +2,13 @@ package UserPortfolioManagement;
 import static spark.Spark.*;
 import spark.Filter;
 
+/**
+ *  server API routes for user cryptocurrency portfolio management service
+ *
+ *  @author justin kwan
+ *  @version 1.0.0
+ */
+
 public class Index {
 
   private static final String LOCAL_HOST = "127.0.0.1";

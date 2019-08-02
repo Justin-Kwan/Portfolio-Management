@@ -14,10 +14,13 @@ plugins {
 
 mainClassName = 'UserPortfolioManagement.Index'
 
-repositories {
-    // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+allprojects {
+    repositories {
+        // Use jcenter for resolving dependencies.
+        // You can declare any Maven/Ivy/file repository here.
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 // this turns logging on in tests:
@@ -51,6 +54,20 @@ dependencies {
     // Use Unirest http request library
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
 
+    // Use Manifold library and @JailBreak
+    compile group: 'systems.manifold', name: 'manifold', version: '2019.1.10'
+
+    // Support for extension methods, structural typing, string interpolation, @Jailbreak, @Self, @Precompile
+    compile group: 'systems.manifold', name: 'manifold-ext', version: '2019.1.10'
+
+    // Use JSON validation library
+    implementation 'com.github.mrwilby.json-schema:org.everit.json.schema:1.5.1'
+
     // Use JSON assertion library
     testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+}
+
+tasks.withType(JavaCompile) {
+  options.compilerArgs += '-Xplugin:Manifold strings exceptions'
+  options.fork = true
 }

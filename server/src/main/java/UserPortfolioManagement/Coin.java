@@ -1,9 +1,10 @@
 package UserPortfolioManagement;
+import java.io.IOException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
-
 
 public class Coin {
 
@@ -31,41 +32,37 @@ public class Coin {
   }
 
   public void fetchAndSetLatestPrice() {
-    System.out.println("######################################################");
-    String fetchPriceUrl = generateFetchPriceUrl();
+    String fetchCoinPriceUrl = generateFetchPriceUrl();
 
     try {
+      HttpResponse<JsonNode> response = Unirest.get(fetchCoinPriceUrl)
+                                     .header("accept", "application/json")
+                                     .asJson();
 
-      HttpResponse<JsonNode> response = Unirest.get(fetchPriceUrl)
-                                          .header("accept", "application/json")
-                                          .asJson();
+      JSONObject coinJson = response.getBody().getObject();
+      this.latestCoinPrice = coinJson.getJSONObject("RAW").getJSONObject(getTicker())
+                                     .getJSONObject("USD").getDouble("PRICE");
 
-      JSONObject myObj = response.getBody().getObject();
+      System.out.println("LATEST PRICE: " + getLatestPrice());
 
-      double price = myObj.getJSONObject("RAW").getJSONObject("BTC").getJSONObject("USD").getDouble("PRICE");
-
-      System.out.println("*****COIN FETCH RESPONSE: " + price);
-
-      System.out.println("*****COIN FETCH RESPONSE: " + myObj);
-
-
-    }catch(Exception error) {
+    }catch(UnirestException error) {
       error.printStackTrace();
     }
-
+    
   }
 
   protected String generateFetchPriceUrl() {
+    final String urlStart = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=";
+    final String urlEnd   = "&tsyms=USD";
+
     String coinTicker = this.getTicker();
-    String fetchPriceUrl = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=" + coinTicker + "&tsyms=USD";
-    return fetchPriceUrl;
+    String fetchCoinPriceUrl = urlStart + coinTicker + urlEnd;
+
+    return fetchCoinPriceUrl;
   }
 
-  protected void calculateHoldingValue() {
-    coinAmount = this.getAmount();
-    latestCoinPrice = this.getLatestPrice();
-
-    this.coinHoldingValueUsd = coinAmount * latestCoinPrice;
+  public void calculateAndSetHoldingValue() {
+    this.coinHoldingValueUsd = this.getAmount() * this.getLatestPrice();
   }
 
   public String getTicker() {

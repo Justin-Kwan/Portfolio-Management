@@ -23,7 +23,7 @@ public class RequestHandler {
 
     boolean doesUserExist = DBA.checkUserExists(userInfoPayload[1]);
 
-    coinFactory.createCoinCollection(user, doesUserExist);
+    coinFactory.createUserCoinCollection(user, doesUserExist);
 
 
     return "Good";

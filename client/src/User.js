@@ -8,8 +8,6 @@ class User {
 
   appendCoin(coin) {
     this.coins.push(coin);
-    console.log(coin.ticker);
-    console.log("CTICKER" + this.coins[0].ticker);
   }
 
   createCoinCollection() {

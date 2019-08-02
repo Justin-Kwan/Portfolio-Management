@@ -3,8 +3,8 @@
 class Coin {
 
   constructor(coinTicker, coinAmount) {
-    this.ticker = coinTicker;
-    this.amount = coinAmount;
+    this.coinTicker = coinTicker;
+    this.coinAmount = coinAmount;
   }
 
 }
