@@ -48,6 +48,9 @@ dependencies {
     // Use MongoDb
     compile 'org.mongodb:mongodb-driver:3.6.0'
 
+    // https://mvnrepository.com/artifact/org.glassfish/javax.json
+    compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'  
+
     // Use Json conversion library
     compile 'org.json:json:20171018'
 
@@ -60,8 +63,20 @@ dependencies {
     // Support for extension methods, structural typing, string interpolation, @Jailbreak, @Self, @Precompile
     compile group: 'systems.manifold', name: 'manifold-ext', version: '2019.1.10'
 
+    // convert input stream to string
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+
     // Use JSON validation library
+    compile(group: "com.github.java-json-tools", name: "json-schema-validator", version: "2.2.10");
+
+    // Use a second JSON validation library
     implementation 'com.github.mrwilby.json-schema:org.everit.json.schema:1.5.1'
+
+
+    // Third JSON validation library
+    compile group: 'org.leadpony.justify', name: 'justify', version: '1.0.0'
+
+
 
     // Use JSON assertion library
     testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'

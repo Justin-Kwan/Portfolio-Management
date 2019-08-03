@@ -4,7 +4,7 @@ class Coin {
 
   constructor(coinTicker, coinAmount) {
     this.coinTicker = coinTicker;
-    this.coinAmount = coinAmount;
+    this.coinAmount = parseFloat(coinAmount);
   }
 
 }

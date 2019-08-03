@@ -1,32 +1,45 @@
-
-
 {
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "coins": {
-      "type": "array",
-      "items": [
-        {
-          "type": "object",
-          "properties": {
-            "coinTicker": {
-              "type": "string"
-            },
-            "coinAmount": {
-              "type": "number",
-              "minimum": 0.0001
+   "definitions":{},
+   "type":"object",
+   "additionalProperties":false,
+   "title":"The Root Schema",
+   "required":[
+      "coins"
+   ],
+   "properties":{
+      "coins":{
+         "$id":"#/properties/coins",
+         "type":"array",
+         "title":"The Coins Schema",
+         "items":{
+            "$id":"#/properties/coins/items",
+            "type":"object",
+            "title":"The Items Schema",
+            "required":[
+               "coinTicker",
+               "coinAmount"
+            ],
+            "properties":{
+               "coinTicker":{
+                  "$id":"#/properties/coins/items/properties/coinTicker",
+                  "type":"string",
+                  "title":"The Cointicker Schema",
+                  "examples":[
+                     "BTC"
+                  ],
+                  "pattern":"^(.*)$"
+               },
+               "coinAmount":{
+                  "$id":"#/properties/coins/items/properties/coinAmount",
+                  "type":"number",
+                  "minimum":0.0001,
+                  "title":"The Coinamount Schema",
+                  "examples":[
+                     123
+                  ]
+               }
             }
-          },
-          "required": [
-            "coinTicker",
-            "coinAmount"
-          ]
-        }
-      ]
-    }
-  },
-  "required": [
-    "coins"
-  ]
+         }
+      }
+   }
 }

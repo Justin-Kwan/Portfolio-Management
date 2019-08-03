@@ -35,46 +35,69 @@ public class InputValidatorTest {
     assertEquals(false, isAuthTokenValid);
   }
 
-  @Test
-  public void test_validateTypeIsJson() {
-    String mockJsonRequest;
-    boolean isJsonRequestValid;
-
-    // bad JSON, malformed JSON
-    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, malformed JSON
-    mockJsonRequest = "{\"coins\":{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, malformed JSON
-    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\"\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, malformed JSON
-    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123}{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, malformed JSON
-    mockJsonRequest = "{\"coins\":[{\"coinTicker:\"\"BTC\",\"coinAmount\":123}{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}]}";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, not JSON
-    mockJsonRequest = "random";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, not JSON
-    mockJsonRequest = "";
-    isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-  }
+  // @Test
+  // public void test_validateTypeIsJson() {
+  //   String mockJsonRequest;
+  //   boolean isJsonRequestValid;
+  //
+  //   // bad JSON, malformed JSON
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, malformed JSON
+  //   mockJsonRequest = "{\"coins\":{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, malformed JSON
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\"\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, malformed JSON
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123}{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, malformed JSON
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker:\"\"BTC\",\"coinAmount\":123}{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}]}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, not JSON
+  //   mockJsonRequest = "random";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, not JSON
+  //   mockJsonRequest = "";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, missing value
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":1}]}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, missing value
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":2},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":,\"coinAmount\":1}]}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, missing key
+  //   mockJsonRequest = "{\"coins\":[{:\"BTC\",\"coinAmount\":23},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":1}]}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //   // bad JSON, missing key
+  //   mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":2},{\"coinTicker\":\"NEO\",:23.41},{\"coinTicker\":\"ETH\",\"coinAmount\":1}]}";
+  //   isJsonRequestValid = inputValidator.validateTypeIsJson(mockJsonRequest);
+  //   assertEquals(false, isJsonRequestValid);
+  //
+  //
+  //
+  // }
 
   @Test
   public void test_validateRequestJson() {
@@ -107,13 +130,8 @@ public class InputValidatorTest {
     isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
 
-    // bad JSON, coinAmount keys are strings
+    // bad JSON, coinAmount values are strings
     mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":\"1s23\"},{\"coinTicker\":\"NEO\",\"coinAmount\":\"23.41\"},{\"coinTicker\":\"LTC\",\"coinAmount\":\"31.49123\"}]}";
-    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
-    assertEquals(false, isJsonRequestValid);
-
-    // bad JSON, coinTicker key is number
-    mockJsonRequest = "{\"coins\":[{1:\"BTC\",\"coinAmount\":0.00001},{\"coinTicker\":\"LTC\",\"coinAmount\":0.00001},{\"coinTicker\":\"ETH\",\"coinAmount\":0.00001}]}";
     isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
 
@@ -127,8 +145,38 @@ public class InputValidatorTest {
     isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
 
-    // bad JSON, bad key "coins"
+    // bad JSON, wrong key instead of "coins"
     mockJsonRequest = "{\"coinss\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":31.49123}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, number key
+    mockJsonRequest = "{\"coins\":[{123:\"BTC\",\"coinAmount\":23},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, number key
+    mockJsonRequest = "{\"coins\":[{1:\"BTC\",\"coinAmount\":0.00001},{\"coinTicker\":\"LTC\",\"coinAmount\":0.00001},{\"coinTicker\":\"ETH\",\"coinAmount\":0.00001}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, bad key
+    mockJsonRequest = "{\"coinss\":[{\"coinTicker\":\"BTC\",coinAmount:123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":31.49123}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, random key with no quotes
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":2},{\"coinTicker\":\"NEO\",randomstuff:23.41},{\"coinTicker\":\"ETH\",\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, random value with no quotes
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":randomstuff},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"ETH\",\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, random value with no quotes and escape character
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":randomstuff\\,\"coinAmount\":23.41},{\"coinTicker\":\"ETH\",\"coinAmount\":1}]}";
     isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
 
@@ -137,8 +185,88 @@ public class InputValidatorTest {
     isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
 
+    // bad JSON, unallowed additional fields
+    mockJsonRequest = "{\"cars\":\"five\",\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":31.49123}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, unallowed boolean value
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":false,\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":12}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, unallowed null value
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":null}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, unallowed null value
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":null,\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":87}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, random value with no quotes and bad escape character "\"
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":2},{\"coinTicker\":\"NEO\",randomstuff\\:23.41},{\"coinTicker\":\"ETH\",\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
     // bad JSON, random JSON
     mockJsonRequest = "{\"name\":\"John\", \"age\":30, \"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123}], \"car\":null}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, malformed JSON
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, malformed JSON
+    mockJsonRequest = "{\"coins\":{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, malformed JSON
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\"\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, malformed JSON
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123}{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, malformed JSON
+    mockJsonRequest = "{\"coins\":[{\"coinTicker:\"\"BTC\",\"coinAmount\":123}{\"coinTicker\":\"NEO\",\"coinAmount\":23.41}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, not JSON
+    mockJsonRequest = "random";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, not JSON
+    mockJsonRequest = "";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, missing value
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, missing value
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":2},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":,\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, missing key
+    mockJsonRequest = "{\"coins\":[{:\"BTC\",\"coinAmount\":23},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":1}]}";
+    isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, missing key
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":2},{\"coinTicker\":\"NEO\",:23.41},{\"coinTicker\":\"ETH\",\"coinAmount\":1}]}";
     isJsonRequestValid = inputValidator.validateRequestJson(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
   }
