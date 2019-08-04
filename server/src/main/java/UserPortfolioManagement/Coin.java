@@ -39,8 +39,8 @@ public class Coin {
                                      .header("accept", "application/json")
                                      .asJson();
 
-      JSONObject coinJson = response.getBody().getObject();
-      this.latestCoinPrice = coinJson.getJSONObject("RAW").getJSONObject(getTicker())
+      JSONObject jsonCoin  = response.getBody().getObject();
+      this.latestCoinPrice = jsonCoin.getJSONObject("RAW").getJSONObject(getTicker())
                                      .getJSONObject("USD").getDouble("PRICE");
 
       System.out.println("LATEST PRICE: " + getLatestPrice());
@@ -48,7 +48,7 @@ public class Coin {
     }catch(UnirestException error) {
       error.printStackTrace();
     }
-    
+
   }
 
   protected String generateFetchPriceUrl() {

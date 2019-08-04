@@ -10,13 +10,13 @@ public class UserTest {
   public void test_setUsername() {
     User user = new User("");
 
-    user.setInfo("Username1", "");
+    user.setInfo("Username1", "", "");
     assertEquals("Username1", user.getUsername());
 
-    user.setInfo("Username2", "");
+    user.setInfo("Username2", "", "");
     assertEquals("Username2", user.getUsername());
 
-    user.setInfo("Username3", "");
+    user.setInfo("Username3", "", "");
     assertEquals("Username3", user.getUsername());
   }
 
@@ -24,13 +24,13 @@ public class UserTest {
   public void test_setUserId() {
     User user = new User("");
 
-    user.setInfo("", "UserId1");
+    user.setInfo("", "UserId1", "");
     assertEquals("UserId1", user.getUserId());
 
-    user.setInfo("", "UserId2");
+    user.setInfo("", "UserId2", "");
     assertEquals("UserId2", user.getUserId());
 
-    user.setInfo("", "UserId3");
+    user.setInfo("", "UserId3", "");
     assertEquals("UserId3", user.getUserId());
   }
 
@@ -49,16 +49,57 @@ public class UserTest {
   }
 
   @Test
+  public void test_setJsonRequest() {
+    User user;
+
+    String mockJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"BAT\",\"coinAmount\":3.41}]}";
+    String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":31.49123}]}";
+    String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"LTC\",\"coinAmount\":1223}]}";
+
+    user = new User("");
+    user.setInfo("", "", mockJsonRequest1);
+    assertEquals(mockJsonRequest1, user.getJsonRequest());
+
+    user = new User("");
+    user.setInfo("", "", mockJsonRequest2);
+    assertEquals(mockJsonRequest2, user.getJsonRequest());
+
+    user = new User("");
+    user.setInfo("", "", mockJsonRequest3);
+    assertEquals(mockJsonRequest3, user.getJsonRequest());
+  }
+
+  @Test
+  public void test_setInfo() {
+    User user = new User("");
+
+    user.setInfo("Username1", "userId1", "jsonrequest1");
+    assertEquals("Username1", user.getUsername());
+    assertEquals("userId1", user.getUserId());
+    assertEquals("jsonrequest1", user.getJsonRequest());
+
+    user.setInfo("Username2", "userId2", "jsonrequest2");
+    assertEquals("Username2", user.getUsername());
+    assertEquals("userId2", user.getUserId());
+    assertEquals("jsonrequest2", user.getJsonRequest());
+
+    user.setInfo("Username3", "userId3", "jsonrequest3");
+    assertEquals("Username3", user.getUsername());
+    assertEquals("userId3", user.getUserId());
+    assertEquals("jsonrequest3", user.getJsonRequest());
+  }
+
+  @Test
   public void test_getUsername() {
     User user = new User("");
 
-    user.setInfo("User123", "");
+    user.setInfo("User123", "", "");
     assertEquals("User123", user.getUsername());
 
-    user.setInfo("User234", "");
+    user.setInfo("User234", "", "");
     assertEquals("User234", user.getUsername());
 
-    user.setInfo("User345", "");
+    user.setInfo("User345", "", "");
     assertEquals("User345", user.getUsername());
   }
 
@@ -66,13 +107,13 @@ public class UserTest {
   public void test_getUserId() {
     User user = new User("");
 
-    user.setInfo("", "#123$");
+    user.setInfo("", "#123$", "");
     assertEquals("#123$", user.getUserId());
 
-    user.setInfo("", "098_ef");
+    user.setInfo("", "098_ef", "");
     assertEquals("098_ef", user.getUserId());
 
-    user.setInfo("", "  ");
+    user.setInfo("", "  ", "");
     assertEquals("  ", user.getUserId());
   }
 
@@ -88,6 +129,27 @@ public class UserTest {
 
     user = new User("");
     assertEquals("", user.getAuthToken());
+  }
+
+  @Test
+  public void test_getJsonRequest() {
+    User user;
+
+    String mockJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"EOS\",\"coinAmount\":1223},{\"coinTicker\":\"BAS\",\"coinAmount\":3.42}]}";
+    String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.42},{\"coinTicker\":\"LTC\",\"coinAmount\":35.49123}]}";
+    String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"XRP\",\"coinAmount\":12.23}]}";
+
+    user = new User("");
+    user.setInfo("", "", mockJsonRequest1);
+    assertEquals(mockJsonRequest1, user.getJsonRequest());
+
+    user = new User("");
+    user.setInfo("", "", mockJsonRequest2);
+    assertEquals(mockJsonRequest2, user.getJsonRequest());
+
+    user = new User("");
+    user.setInfo("", "", mockJsonRequest3);
+    assertEquals(mockJsonRequest3, user.getJsonRequest());
   }
 
   @Test

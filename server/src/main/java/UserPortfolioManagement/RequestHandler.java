@@ -9,7 +9,7 @@ public class RequestHandler {
   DatabaseAccessor DBA            = new DatabaseAccessor();
 
 
-  public String handleAddCoins(String authToken, String userCoinRequest) {
+  public String handleAddCoins(String authToken, String jsonRequest) {
 
     boolean isAuthTokenFormatValid = inputValidator.handleAuthTokenValidation(authToken);
     boolean isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
@@ -17,9 +17,10 @@ public class RequestHandler {
     if(!isAuthTokenFormatValid || !isRequestAuthorized)
       return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
 
+
     String[] userInfoPayload = tokenChecker.getAuthTokenInfo(authToken);
     User user = new User(authToken);
-    user.setInfo(userInfoPayload[0], userInfoPayload[1]);
+    user.setInfo(userInfoPayload[0], userInfoPayload[1], jsonRequest);
 
     boolean doesUserExist = DBA.checkUserExists(userInfoPayload[1]);
 

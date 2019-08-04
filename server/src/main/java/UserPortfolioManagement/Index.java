@@ -34,7 +34,7 @@ public class Index {
     initServer();
 
     post("/createPortfolio", (request, response) -> {
-      String authToken = request.cookie("auth_token");
+      String authToken   = request.cookie("auth_token");
       String jsonRequest = request.body();
 
       System.out.println("AUTH TOKEN: " + authToken);

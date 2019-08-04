@@ -45,8 +45,8 @@ public class DatabaseAccessor {
   }
 
   public void insertNewUser(User user) {
-    String userJsonObject = gson.toJson(user);
-    Document userDocument = Document.parse(userJsonObject.toString());
+    String jsonUserObj = gson.toJson(user);
+    Document userDocument = Document.parse(jsonUserObj.toString());
     userCollection.insertOne(userDocument);
   }
 
@@ -63,9 +63,9 @@ public class DatabaseAccessor {
     .projection(Projections.fields(Projections.include(USER_COINS_FIELD), Projections.excludeId()))
     .first();
 
-    JSONObject coinsJsonObject = new JSONObject(coinsDocument);
-    JSONArray coinsJsonArray = coinsJsonObject.getJSONArray("coins");
-    return coinsJsonArray;
+    JSONObject jsonCoinsObj = new JSONObject(coinsDocument);
+    JSONArray jsonCoins = jsonCoinsObj.getJSONArray("coins");
+    return jsonCoins;
   }
 
   public boolean checkUserExists(String userId) {

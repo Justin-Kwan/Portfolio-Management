@@ -1,17 +1,5 @@
 package UserPortfolioManagement;
-
-// old lib
 import java.io.InputStream;
-// import org.everit.json.schema.Schema;
-// import org.everit.json.schema.loader.SchemaLoader;
-// import org.everit.json.schema.ValidationException;
-//
-import org.json.JSONObject;
-// import org.json.JSONArray;
-import org.json.JSONException;
-// import org.json.JSONTokener;
-//
-// // second lib
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -21,31 +9,30 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import org.apache.commons.io.IOUtils;
 
-
-// third lib
-// import java.nio.file.Path;
-// import java.nio.file.Paths;
-//
-// import javax.json.stream.JsonParser;
-//
-// import org.leadpony.justify.api.JsonSchema;
-// import org.leadpony.justify.api.JsonValidationService;
-// import org.leadpony.justify.api.ProblemHandler;
-
+/**
+ *  class responsible for validating received client json requests and auth
+ *  tokens
+ *
+ *  @author justin kwan
+ *  @version 1.0.0
+ */
 
 public class InputValidator {
 
-  private final boolean AUTH_TOKEN_VALID     = true;
-  private final boolean AUTH_TOKEN_INVALID   = false;
-  private final boolean JSON_REQUEST_VALID   = true;
-  private final boolean JSON_REQUEST_INVALID = false;
+  private final boolean AUTH_TOKEN_VALID             = true;
+  private final boolean AUTH_TOKEN_INVALID           = false;
+  private final boolean JSON_REQUEST_VALID           = true;
+  private final boolean JSON_REQUEST_INVALID         = false;
+  private final String  CLIENT_ADD_JSON_COINS_SCHEMA = "/ClientCoinsSchema.json";
+
+  private final ObjectMapper mapper                  = new ObjectMapper();
+
 
   public boolean handleAuthTokenValidation(String authToken) {
     boolean isAuthTokenEmpty = this.checkInputEmpty(authToken);
 
-    if(isAuthTokenEmpty) {
-      return AUTH_TOKEN_INVALID;
-    }
+    if(isAuthTokenEmpty) return AUTH_TOKEN_INVALID;
+    
     return AUTH_TOKEN_VALID;
   }
 
@@ -54,39 +41,17 @@ public class InputValidator {
     return isInputEmpty;
   }
 
-  public boolean validateTypeIsJson(String requestJsonString) {
+  // use strategy pattern for schema loading and json validation?
+  public boolean validateJsonRequest(String jsonRequest) {
+    JsonNode jsonClientSchemaObj = getJsonClientSchema();
 
     try {
-      new JSONObject(requestJsonString);
-    }catch(JSONException error) {
-      return JSON_REQUEST_INVALID;
-    }
+      JsonNode jsonRequestObj           = mapper.readTree(jsonRequest);
+      final JsonSchemaFactory factory   = JsonSchemaFactory.byDefault();
+      final JsonSchema metaSchema       = factory.getJsonSchema(jsonClientSchemaObj);
+      ProcessingReport validationReport = metaSchema.validate(jsonRequestObj);
 
-    return JSON_REQUEST_VALID;
-  }
-
-
-  public boolean validateRequestJson(String requestJsonString) {
-
-    ObjectMapper mapper      = new ObjectMapper();
-    // get stream of json meta schema
-    InputStream inputStream  = getClass().getResourceAsStream("/ClientCoinsSchema.json");
-    // convert meta schema stream to string
-    String coinsSchemaString = IOUtils.toString(inputStream, "utf-8");
-    // convert meta schema string to json Node
-    JsonNode coinsSchema     = mapper.readTree(coinsSchemaString);
-
-    try {
-      // create json node instance of request json string
-      JsonNode requestJsonObject = mapper.readTree(requestJsonString);
-      final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
-      final JsonSchema schema = factory.getJsonSchema(coinsSchema);
-      ProcessingReport report;
-      report = schema.validate(requestJsonObject);
-
-      if(report.isSuccess() == false) {
-        return JSON_REQUEST_INVALID;
-      }
+      if(!validationReport.isSuccess()) return JSON_REQUEST_INVALID;
 
     }catch(Exception error) {
       return JSON_REQUEST_INVALID;
@@ -95,8 +60,11 @@ public class InputValidator {
     return JSON_REQUEST_VALID;
   }
 
-
-
-
+  private JsonNode getJsonClientSchema() {
+    InputStream inputStream = getClass().getResourceAsStream(CLIENT_ADD_JSON_COINS_SCHEMA);
+    String jsonClientSchema = IOUtils.toString(inputStream, "utf-8");
+    JsonNode jsonClientSchemaObj = mapper.readTree(jsonClientSchema);
+    return jsonClientSchemaObj;
+  }
 
 }

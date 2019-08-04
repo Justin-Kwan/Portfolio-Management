@@ -6,12 +6,19 @@ public class User {
   protected String username;
   protected String userId;
   protected String authToken;
+  protected String jsonRequest;
   protected double portfolioValueUsd = 0;
   protected ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
   public User(String authToken) {
     this.setAuthToken(authToken);
+  }
+
+  public void setInfo(String username, String userId, String jsonRequest) {
+    this.setUsername(username);
+    this.setUserId(userId);
+    this.setJsonRequest(jsonRequest);
   }
 
   protected void setUsername(String username) {
@@ -22,14 +29,12 @@ public class User {
     this.userId = userId;
   }
 
-  /* test!! */
-  public void setInfo(String username, String userId) {
-    this.setUsername(username);
-    this.setUserId(userId);
-  }
-
   protected void setAuthToken(String authToken) {
     this.authToken = authToken;
+  }
+
+  protected void setJsonRequest(String jsonRequest) {
+    this.jsonRequest = jsonRequest;
   }
 
   public void addCoin(Coin coin) {
@@ -48,6 +53,10 @@ public class User {
     return authToken;
   }
 
+  public String getJsonRequest() {
+    return jsonRequest;
+  }
+
   public ArrayList getCoins() {
     return coins;
   }
@@ -63,7 +72,7 @@ public class User {
       double currentCoinHoldingValue = coins.get(currentCoin).getHoldingValueUsd();
       this.portfolioValueUsd += currentCoinHoldingValue;
     }
-    
+
   }
 
 }

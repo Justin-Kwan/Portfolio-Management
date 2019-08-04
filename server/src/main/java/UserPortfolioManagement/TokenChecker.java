@@ -8,12 +8,12 @@ import java.util.Base64;
 
 public class TokenChecker {
 
-  private final boolean REQUEST_AUTHORIZED = true;
+  private final boolean REQUEST_AUTHORIZED   = true;
   private final boolean REQUEST_UNAUTHORIZED = false;
 
   public boolean checkAuthToken(String authToken) {
     try{
-      DecodedJWT decodedAuthToken = this.decodeAuthToken(authToken);
+      decodeAuthToken(authToken);
     }catch(Exception error) {
       return REQUEST_UNAUTHORIZED;
     }
