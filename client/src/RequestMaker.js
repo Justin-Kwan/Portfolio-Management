@@ -11,7 +11,14 @@ class RequestMaker {
 
     console.log(userJson);
 
-    $.post("http://127.0.0.1:8001/createPortfolio", userJson, function(data, status) {
+    $.ajaxSetup({
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
+      }
+    });
+
+    $.post("http://127.0.0.1:8001/addCoinsToPortfolio", userJson, function(data, status) {
 
       // alert("Data: " + data + "\nStatus: " + status);
     });

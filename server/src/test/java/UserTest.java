@@ -7,45 +7,56 @@ import UserPortfolioManagement.Coin;
 public class UserTest {
 
   @Test
-  public void test_setUsername() {
-    User user = new User("");
+  public void test_setAuthToken() {
+    User user;
 
-    user.setInfo("Username1", "", "");
+    user = new User("authToken_1*", "", "", null, "");
+    assertEquals("authToken_1*", user.getAuthToken());
+
+    user = new User("authToken_2*", "", "", null, "");
+    assertEquals("authToken_2*", user.getAuthToken());
+
+    user = new User("authToken_3*", "", "", null, "");
+    assertEquals("authToken_3*", user.getAuthToken());
+  }
+
+  @Test
+  public void test_setUsername() {
+    User user;
+
+    user = new User("", "Username1", "", null, "");
     assertEquals("Username1", user.getUsername());
 
-    user.setInfo("Username2", "", "");
+    user = new User("", "Username2", "", null, "");
     assertEquals("Username2", user.getUsername());
 
-    user.setInfo("Username3", "", "");
+    user = new User("", "Username3", "", null, "");
     assertEquals("Username3", user.getUsername());
   }
 
   @Test
   public void test_setUserId() {
-    User user = new User("");
+    User user;
 
-    user.setInfo("", "UserId1", "");
+    user = new User("", "", "UserId1", null, "");
     assertEquals("UserId1", user.getUserId());
 
-    user.setInfo("", "UserId2", "");
+    user = new User("", "", "UserId2", null, "");
     assertEquals("UserId2", user.getUserId());
 
-    user.setInfo("", "UserId3", "");
+    user = new User("", "", "UserId3", null, "");
     assertEquals("UserId3", user.getUserId());
   }
 
   @Test
-  public void test_setAuthToken() {
+  public void test_setStatus() {
     User user;
 
-    user = new User("authToken_1*");
-    assertEquals("authToken_1*", user.getAuthToken());
+    user = new User("", "", "", true, "");
+    assertEquals(true, user.getStatus());
 
-    user = new User("authToken_2*");
-    assertEquals("authToken_2*", user.getAuthToken());
-
-    user = new User("authToken_3*");
-    assertEquals("authToken_3*", user.getAuthToken());
+    user = new User("", "", "", false, "");
+    assertEquals(false, user.getStatus());
   }
 
   @Test
@@ -56,79 +67,67 @@ public class UserTest {
     String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":31.49123}]}";
     String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"LTC\",\"coinAmount\":1223}]}";
 
-    user = new User("");
-    user.setInfo("", "", mockJsonRequest1);
+    user = new User("", "", "", null, mockJsonRequest1);
     assertEquals(mockJsonRequest1, user.getJsonRequest());
 
-    user = new User("");
-    user.setInfo("", "", mockJsonRequest2);
+    user = new User("", "", "", null, mockJsonRequest2);
     assertEquals(mockJsonRequest2, user.getJsonRequest());
 
-    user = new User("");
-    user.setInfo("", "", mockJsonRequest3);
+    user = new User("", "", "", null, mockJsonRequest3);
     assertEquals(mockJsonRequest3, user.getJsonRequest());
-  }
-
-  @Test
-  public void test_setInfo() {
-    User user = new User("");
-
-    user.setInfo("Username1", "userId1", "jsonrequest1");
-    assertEquals("Username1", user.getUsername());
-    assertEquals("userId1", user.getUserId());
-    assertEquals("jsonrequest1", user.getJsonRequest());
-
-    user.setInfo("Username2", "userId2", "jsonrequest2");
-    assertEquals("Username2", user.getUsername());
-    assertEquals("userId2", user.getUserId());
-    assertEquals("jsonrequest2", user.getJsonRequest());
-
-    user.setInfo("Username3", "userId3", "jsonrequest3");
-    assertEquals("Username3", user.getUsername());
-    assertEquals("userId3", user.getUserId());
-    assertEquals("jsonrequest3", user.getJsonRequest());
-  }
-
-  @Test
-  public void test_getUsername() {
-    User user = new User("");
-
-    user.setInfo("User123", "", "");
-    assertEquals("User123", user.getUsername());
-
-    user.setInfo("User234", "", "");
-    assertEquals("User234", user.getUsername());
-
-    user.setInfo("User345", "", "");
-    assertEquals("User345", user.getUsername());
-  }
-
-  @Test
-  public void test_getUserId() {
-    User user = new User("");
-
-    user.setInfo("", "#123$", "");
-    assertEquals("#123$", user.getUserId());
-
-    user.setInfo("", "098_ef", "");
-    assertEquals("098_ef", user.getUserId());
-
-    user.setInfo("", "  ", "");
-    assertEquals("  ", user.getUserId());
   }
 
   @Test
   public void test_getAuthToken() {
     User user;
 
-    user = new User("09876 *&_9");
+    user = new User("09876 *&_9", "", "", null, "");
     assertEquals("09876 *&_9", user.getAuthToken());
 
-    user = new User("_____");
+    user = new User("_____", "", "", null, "");
     assertEquals("_____", user.getAuthToken());
 
-    user = new User("");
+    user = new User("", "", "", null, "");
     assertEquals("", user.getAuthToken());
+  }
+
+  @Test
+  public void test_getUsername() {
+    User user;
+
+    user = new User("", "User123", "", null, "");
+    assertEquals("User123", user.getUsername());
+
+    user = new User("", "User234", "", null, "");
+    assertEquals("User234", user.getUsername());
+
+    user = new User("", "User345", "", null, "");
+    assertEquals("User345", user.getUsername());
+  }
+
+  @Test
+  public void test_getUserId() {
+    User user;
+
+    user = new User("", "", "#123$", null, "");
+    assertEquals("#123$", user.getUserId());
+
+    user = new User("", "", "098_ef", null, "");
+    assertEquals("098_ef", user.getUserId());
+
+    user = new User("", "", "  ", null, "");
+    assertEquals("  ", user.getUserId());
+  }
+
+  @Test
+  public void test_getStatus() {
+    User user;
+
+    user = new User("", "", "", false, "");
+    assertEquals(false, user.getStatus());
+
+    user = new User("", "", "", true, "");
+    assertEquals(true, user.getStatus());
   }
 
   @Test
@@ -139,22 +138,19 @@ public class UserTest {
     String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.42},{\"coinTicker\":\"LTC\",\"coinAmount\":35.49123}]}";
     String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"XRP\",\"coinAmount\":12.23}]}";
 
-    user = new User("");
-    user.setInfo("", "", mockJsonRequest1);
+    user = new User("", "", "", null, mockJsonRequest1);
     assertEquals(mockJsonRequest1, user.getJsonRequest());
 
-    user = new User("");
-    user.setInfo("", "", mockJsonRequest2);
+    user = new User("", "", "", null, mockJsonRequest2);
     assertEquals(mockJsonRequest2, user.getJsonRequest());
 
-    user = new User("");
-    user.setInfo("", "", mockJsonRequest3);
+    user = new User("", "", "", null, mockJsonRequest3);
     assertEquals(mockJsonRequest3, user.getJsonRequest());
   }
 
   @Test
   public void test_addCoin() {
-    User user = new User("");
+    User user = new User("", "", "", null, "");
     ArrayList<Coin> userCoins;
     double coinHoldingValueUsd;
     Coin mockCoin;
@@ -186,7 +182,7 @@ public class UserTest {
   public void test_calculatePortfolioValue() {
     User user;
 
-    user = new User("");
+    user = new User("", "", "", null, "");
     for(int i = 0; i < 7; i++) {
       Coin mockCoin = new MockCoin("", 0, 0, 24.5679);
       user.addCoin(mockCoin);
@@ -194,7 +190,7 @@ public class UserTest {
     user.calculatePortfolioValue();
     assertEquals(171.9753, user.getPortfolioValueUsd(), 1e-8);
 
-    user = new User("");
+    user = new User("", "", "", null, "");
     for(int i = 0; i < 3; i++) {
       Coin mockCoin = new MockCoin("", 0, 0, 41029.23122213);
       user.addCoin(mockCoin);
@@ -202,7 +198,7 @@ public class UserTest {
     user.calculatePortfolioValue();
     assertEquals(123087.69366639, user.getPortfolioValueUsd(), 1e-8);
 
-    user = new User("");
+    user = new User("", "", "", null, "");
     for(int i = 0; i < 3; i++) {
       Coin mockCoin = new MockCoin("", 0, 0, 2);
       user.addCoin(mockCoin);
@@ -213,7 +209,7 @@ public class UserTest {
 
   @Test
   public void test_getPortfolioValueUsd() {
-    User user = new User("");
+    User user = new User("", "", "", null, "");
     Coin mockCoin;
 
     mockCoin = new MockCoin("", 0, 0, 80.9876);

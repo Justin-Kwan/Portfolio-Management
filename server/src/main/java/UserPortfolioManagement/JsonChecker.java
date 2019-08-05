@@ -10,39 +10,22 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import org.apache.commons.io.IOUtils;
 
 /**
- *  class responsible for validating received client json requests and auth
- *  tokens
+ *  class responsible for checking and validating received client json requests
  *
  *  @author justin kwan
  *  @version 1.0.0
  */
 
-public class InputValidator {
+public class JsonChecker {
 
-  private final boolean AUTH_TOKEN_VALID             = true;
-  private final boolean AUTH_TOKEN_INVALID           = false;
-  private final boolean JSON_REQUEST_VALID           = true;
-  private final boolean JSON_REQUEST_INVALID         = false;
-  private final String  CLIENT_ADD_JSON_COINS_SCHEMA = "/ClientCoinsSchema.json";
+  private final String       CLIENT_ADD_JSON_COINS_SCHEMA = "/ClientCoinsSchema.json";
+  private final ObjectMapper mapper                       = new ObjectMapper();
 
-  private final ObjectMapper mapper                  = new ObjectMapper();
-
-
-  public boolean handleAuthTokenValidation(String authToken) {
-    boolean isAuthTokenEmpty = this.checkInputEmpty(authToken);
-
-    if(isAuthTokenEmpty) return AUTH_TOKEN_INVALID;
-    
-    return AUTH_TOKEN_VALID;
-  }
-
-  public boolean checkInputEmpty(String input) {
-    boolean isInputEmpty = (input == null || input.isEmpty());
-    return isInputEmpty;
-  }
+  private final boolean JSON_REQUEST_VALID   = true;
+  private final boolean JSON_REQUEST_INVALID = false;
 
   // use strategy pattern for schema loading and json validation?
-  public boolean validateJsonRequest(String jsonRequest) {
+  public boolean checkJsonRequestValid(String jsonRequest) {
     JsonNode jsonClientSchemaObj = getJsonClientSchema();
 
     try {

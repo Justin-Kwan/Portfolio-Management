@@ -9,9 +9,4 @@ class MockCoin extends Coin {
     super.coinHoldingValueUsd = coinHoldingValueUsd;
   }
 
-  // public String observableGenerateFetchPriceUrl() {
-  //   String fetchPriceUrl = super.generateFetchPriceUrl();
-  //   return fetchPriceUrl;
-  // }
-
 }

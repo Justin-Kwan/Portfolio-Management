@@ -26,6 +26,7 @@ public class Index {
   private static void enableCors() {
     after((Filter) (request, response) -> {
       response.header("Access-Control-Allow-Origin", "*");
+      response.header("Access-Control-Allow-Credentials", "true");
     });
   }
 
@@ -33,15 +34,18 @@ public class Index {
 
     initServer();
 
-    post("/createPortfolio", (request, response) -> {
+    post("/addCoinsToPortfolio", (request, response) -> {
       String authToken   = request.cookie("auth_token");
       String jsonRequest = request.body();
 
       System.out.println("AUTH TOKEN: " + authToken);
       System.out.println("JSON REQUEST: " + jsonRequest);
 
-      // requestHandler.handleAddCoins(authToken, "");
-      return "GET" + authToken;
+      String result = requestHandler.handleAddCoins(authToken, jsonRequest);
+
+      System.out.println("RESULT: " + result);
+
+      return result;
     });
 
     get("/checkUserExists/", "application/json", (request, response) -> {

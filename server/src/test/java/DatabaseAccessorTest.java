@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.ArrayList;
 import org.skyscreamer.jsonassert.JSONAssert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class DatabaseAccessorTest {
     Coin coin;
     boolean doesUserExist;
 
-    user = new MockUser("username1", "userid1", "authtoken1", "jsonrequest1", 543.32);
+    user = new MockUser("authtoken1", "username1", "userid1", null, "jsonrequest1", 543.32);
     coin = new MockCoin("BTC", 123, 234, 567.2);
     user.addCoin(coin);
     coin = new MockCoin("NANO", 121, 235, 41);
@@ -48,7 +49,7 @@ public class DatabaseAccessorTest {
     doesUserExist = DBA.checkUserExists(user.getUserId());
     assertEquals(true, doesUserExist);
 
-    user = new MockUser("username2", "userid2", "authtoken2", "jsonrequest2", 543.32);
+    user = new MockUser("authtoken2", "username2", "userid2", null, "jsonrequest2", 543.32);
     coin = new MockCoin("BTP", 123, 234, 567.2);
     user.addCoin(coin);
     DBA.insertNewUser(user);
@@ -56,6 +57,28 @@ public class DatabaseAccessorTest {
     assertEquals(true, doesUserExist);
 
     this.afterTest(DBA);
+  }
+
+  @Test
+  public void test_updateUser() {
+    DatabaseAccessor DBA = this.beforeTest();
+    User user;
+    User newUser;
+    boolean doesUserExist;
+
+    user = new MockUser("authtoken1", "username1", "userid1", false, "jsonrequest", 543.32);
+    DBA.insertNewUser(user);
+
+    newUser = new MockUser("new_authtoken", "username1", "userid1", false, "new_jsonrequest", 543.32);
+    DBA.updateUser(newUser);
+
+    doesUserExist = DBA.checkUserExists(newUser.getUserId());
+
+    assertEquals(true, doesUserExist);
+
+    afterTest(DBA);
+
+
   }
 
   @Test
@@ -69,7 +92,7 @@ public class DatabaseAccessorTest {
     final int SECOND_COIN = 1;
     final int THIRD_COIN  = 2;
 
-    user = new MockUser("username___1", "userid___1", "authtoken___1", "jsonrequest___1", 543.32);
+    user = new MockUser("authtoken___1", "username___1", "userid___1", null, "jsonrequest___1", 543.32);
     coin = new MockCoin("BTC", 0.34, 234, 50);
     user.addCoin(coin);
     coin = new MockCoin("ETH", 0.35, 235, 51);
@@ -83,7 +106,7 @@ public class DatabaseAccessorTest {
     JSONAssert.assertEquals("{coinTicker:\"LTC\", coinAmount:0.36, latestCoinPrice:236, coinHoldingValueUsd:52}", coinsJsonArray.get(THIRD_COIN).toString(), true);
     assertEquals(3, coinsJsonArray.length());
 
-    user = new MockUser("username___2", "userid___2", "authtoken___2", "jsonrequest___2", 543.33);
+    user = new MockUser("authtoken___2", "username___2", "userid___2", null, "jsonrequest___2", 543.33);
     coin = new MockCoin("NEO", 0.20331231231, 8891, 20);
     user.addCoin(coin);
     coin = new MockCoin("STRAT", 123.2, 231, 89);
@@ -107,12 +130,14 @@ public class DatabaseAccessorTest {
     doesUserExist = DBA.checkUserExists("id12345");
     assertEquals(false, doesUserExist);
 
-    user = new MockUser("Robert123", "id#123*", "authtoken_123", "jsonrequest___123", 231321);
+    user = new MockUser("authtoken_123", "Robert123", "id#123*", null, "jsonrequest___123", 231321);
     DBA.insertNewUser(user);
     doesUserExist = DBA.checkUserExists("id#123*");
     assertEquals(true, doesUserExist);
 
-    user = new MockUser("John91", "id#901%", "authtoken_821", "jsonrequest___123", 20999);
+    //bec55608-3ad1-42df-bdf1-1a6785969d83
+
+    user = new MockUser("authtoken_821", "John91", "id#901%", null, "jsonrequest___123", 20999);
     DBA.insertNewUser(user);
     doesUserExist = DBA.checkUserExists("id#901%");
     assertEquals(true, doesUserExist);

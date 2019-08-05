@@ -17,26 +17,21 @@ public class CoinFactory {
   DatabaseAccessor DBA = new DatabaseAccessor();
   Gson gson = new Gson();
 
-  public void createUserCoinCollection(User user, boolean doesUserExist) {
-    ArrayList<Coin> dbCoins;
-    ArrayList<Coin> requestCoins;
+  public void createUserCoinCollection(User user) {
+    ArrayList<Coin> dbCoins      = new ArrayList<Coin>();
+    ArrayList<Coin> requestCoins = new ArrayList<Coin>();
+    ArrayList<Coin> mergedCoins  = new ArrayList<Coin>();
 
+    boolean doesUserExist = user.getStatus();
 
-    if(doesUserExist) {
-      dbCoins = getCoinsFromLocation(user, "DATABASE");
-    }
+    if(doesUserExist) dbCoins = getCoinsFromLocation(user, "DATABASE");
+    requestCoins = getCoinsFromLocation(user, "JSON_REQUEST");
 
-    //requestCoins = getCoinsFromRequest(requestCoins);
-
-    // for(int currentCoin = 0; currentCoin < coins.size(); currentCoin++) {
-    //   user.addCoin(coins.get(currentCoin));
-    // }
-
+    mergedCoins = mergeCoins(dbCoins, requestCoins);
+    loadCoinsToUser(user, mergedCoins);
   }
 
-
   private ArrayList<Coin> getCoinsFromLocation(User user, String coinLocation) {
-
     ArrayList<Coin> coins = new ArrayList<Coin>();
     JSONArray jsonCoins   = new JSONArray();
 
@@ -49,8 +44,8 @@ public class CoinFactory {
       jsonCoins = jsonCoinsObj.getJSONArray("coins");
     }
 
-    for(int currentJsonCoin = 0; currentJsonCoin < jsonCoins.length(); currentJsonCoin++) {
-      Coin coin = gson.fromJson(jsonCoins.get(currentJsonCoin).toString(), Coin.class);
+    for(int i = 0; i < jsonCoins.length(); i++) {
+      Coin coin = gson.fromJson(jsonCoins.get(i).toString(), Coin.class);
       coins.add(coin);
     }
 
@@ -59,36 +54,29 @@ public class CoinFactory {
 
   private ArrayList<Coin> mergeCoins(ArrayList<Coin> dbCoins, ArrayList<Coin> requestCoins) {
 
-    for(int i = 0; i < requestCoins.size(); i++) {
-
+    for(Coin currentRequestCoin: requestCoins) {
       // assume each request coin is unique until proven otherwise
       boolean isCoinUnique = true;
-      Coin currentRequestCoin = requestCoins.get(i);
 
-      for(int j = 0; j < dbCoins.size(); j++) {
-
-        Coin currentDbCoin = dbCoins.get(j);
+      for(Coin currentDbCoin: dbCoins) {
 
         if(currentRequestCoin.getTicker().equals(currentDbCoin.getTicker())) {
-          System.out.println(currentRequestCoin.getTicker() + "&" + currentDbCoin.getTicker() + "MATCH!");
           currentDbCoin.incrementAmount(currentRequestCoin.getAmount());
           isCoinUnique = false;
           break;
         }
 
       }
-
-      if(isCoinUnique) {
-        System.out.println("*UNIQUE COIN!*");
-        dbCoins.add(currentRequestCoin);
-      }
-
+      if(isCoinUnique) dbCoins.add(currentRequestCoin);
     }
     // all coins merged into dbCoins
     return dbCoins;
   }
 
-
-
+  private void loadCoinsToUser(User user, ArrayList<Coin> mergedCoins) {
+    for(Coin currentCoin: mergedCoins) {
+      user.addCoin(currentCoin);
+    }
+  }
 
 }

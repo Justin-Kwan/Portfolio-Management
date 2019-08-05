@@ -2,6 +2,7 @@ package UserPortfolioManagement;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
 import java.util.Arrays;
+import java.util.ArrayList;
 import com.mongodb.MongoException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
@@ -12,6 +13,8 @@ import com.mongodb.client.FindIterable;
 import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Projections;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import static com.mongodb.client.model.Filters.eq;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,9 +53,15 @@ public class DatabaseAccessor {
     userCollection.insertOne(userDocument);
   }
 
-  // public void updateUser(User user) {
-  //
-  // }
+  public void updateUser(User user) {
+    ArrayList<Coin> userCoins = user.getCoins();
+    String jsonUserObj = gson.toJson(user);
+    Document userDocument = Document.parse(jsonUserObj.toString());
+
+    Bson filter = eq(USER_ID_FIELD, user.getUserId());
+    // replaces user object at the specified field with new user object
+    userCollection.replaceOne(filter, userDocument);
+  }
 
   public JSONArray selectUserCoins(User user) {
     String userId = user.getUserId();

@@ -36,13 +36,13 @@ public class RequestHandlerTest {
     doesUserExist = requestHandler.handleCheckUserExists("random_id");
     assertEquals(false, doesUserExist);
 
-    user = new MockUser("username1", "user__id1*", "authtoken1", "jsonrequest1", 543.32);
+    user = new MockUser("authtoken1", "username1", "user__id1*", null, "jsonrequest1", 543.32);
     DBA.insertNewUser(user);
-    user = new MockUser("username2", "user__id2*", "authtoken1", "jsonrequest2", 544.32);
+    user = new MockUser("authtoken1", "username2", "user__id2*", null, "jsonrequest2", 544.32);
     DBA.insertNewUser(user);
-    user = new MockUser("username3", "user__id3*", "authtoken1", "jsonrequest3", 545.32);
+    user = new MockUser("authtoken1", "username3", "user__id3*", null, "jsonrequest3", 545.32);
     DBA.insertNewUser(user);
-    user = new MockUser("username4", "user__id4*", "authtoken1", "jsonrequest4", 546.32);
+    user = new MockUser("authtoken1", "username4", "user__id4*", null, "jsonrequest4", 546.32);
     DBA.insertNewUser(user);
 
     doesUserExist = requestHandler.handleCheckUserExists("user__id0*");

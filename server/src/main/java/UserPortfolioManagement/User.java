@@ -3,22 +3,25 @@ import java.util.ArrayList;
 
 public class User {
 
-  protected String username;
-  protected String userId;
-  protected String authToken;
-  protected String jsonRequest;
-  protected double portfolioValueUsd = 0;
+  protected String  username;
+  protected String  userId;
+  protected String  authToken;
+  protected String  jsonRequest;
+  protected double  portfolioValueUsd = 0;
+  protected Boolean doesUserExist;
   protected ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
-  public User(String authToken) {
+  public User(String authToken, String username, String userId, Boolean doesUserExist, String jsonRequest) {
     this.setAuthToken(authToken);
-  }
-
-  public void setInfo(String username, String userId, String jsonRequest) {
     this.setUsername(username);
     this.setUserId(userId);
+    this.setStatus(doesUserExist);
     this.setJsonRequest(jsonRequest);
+  }
+
+  protected void setAuthToken(String authToken) {
+    this.authToken = authToken;
   }
 
   protected void setUsername(String username) {
@@ -29,8 +32,8 @@ public class User {
     this.userId = userId;
   }
 
-  protected void setAuthToken(String authToken) {
-    this.authToken = authToken;
+  protected void setStatus(Boolean doesUserExist) {
+    this.doesUserExist = doesUserExist;
   }
 
   protected void setJsonRequest(String jsonRequest) {
@@ -41,6 +44,10 @@ public class User {
     (this.coins).add(coin);
   }
 
+  public String getAuthToken() {
+    return authToken;
+  }
+
   public String getUsername() {
     return username;
   }
@@ -49,8 +56,8 @@ public class User {
     return userId;
   }
 
-  public String getAuthToken() {
-    return authToken;
+  public Boolean getStatus() {
+    return doesUserExist;
   }
 
   public String getJsonRequest() {
@@ -68,10 +75,10 @@ public class User {
   public void calculatePortfolioValue() {
     this.portfolioValueUsd = 0;
 
-    for(int currentCoin = 0; currentCoin < coins.size(); currentCoin++) {
-      double currentCoinHoldingValue = coins.get(currentCoin).getHoldingValueUsd();
+    for(Coin currentCoin: coins) {
+      double currentCoinHoldingValue = currentCoin.getHoldingValueUsd();
       this.portfolioValueUsd += currentCoinHoldingValue;
-    }
+		}
 
   }
 
