@@ -39,6 +39,26 @@ public class JsonCheckerTest {
     isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
 
+    // bad JSON, coins not from site
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTP\",\"coinAmount\":\"1s23\"},{\"coinTicker\":\"NEO\",\"coinAmount\":\"23.41\"},{\"coinTicker\":\"LTC\",\"coinAmount\":\"31.49123\"}]}";
+    isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, coins not from site
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":\"1s23\"},{\"coinTicker\":\"NIO\",\"coinAmount\":\"23.41\"},{\"coinTicker\":\"LTC\",\"coinAmount\":\"31.49123\"}]}";
+    isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, empty string coin ticker
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":\"1s23\"},{\"coinTicker\":\"NEO\",\"coinAmount\":\"23.41\"},{\"coinTicker\":\"\",\"coinAmount\":\"31.49123\"}]}";
+    isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, empty string coin ticker
+    mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"\",\"coinAmount\":\"1s23\"},{\"coinTicker\":\"NEO\",\"coinAmount\":\"23.41\"},{\"coinTicker\":\"BAT\",\"coinAmount\":\"31.49123\"}]}";
+    isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
     // bad JSON, coinAmount values are strings
     mockJsonRequest = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":\"1s23\"},{\"coinTicker\":\"NEO\",\"coinAmount\":\"23.41\"},{\"coinTicker\":\"LTC\",\"coinAmount\":\"31.49123\"}]}";
     isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);

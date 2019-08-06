@@ -18,14 +18,14 @@ public class RequestHandler {
   private final int USERNAME = 0;
   private final int USER_ID  = 1;
 
-
+  /*TEST!!*/
   public String handleAddCoins(String authToken, String jsonRequest) {
 
     boolean isRequestAuthorized = tokenChecker.checkAuthTokenValid(authToken);
     if(!isRequestAuthorized) return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
 
-    boolean isJsonRequestValid  = jsonChecker.checkJsonRequestValid(jsonRequest);
-    if(!isJsonRequestValid)  return resultCodes.ERROR_JSON_REQUEST_INVALID;
+    boolean isJsonRequestValid = jsonChecker.checkJsonRequestValid(jsonRequest);
+    if(!isJsonRequestValid) return resultCodes.ERROR_JSON_REQUEST_INVALID;
 
     String[] userInfoPayload = tokenChecker.getAuthTokenInfo(authToken);
     String username          = userInfoPayload[USERNAME];
@@ -38,10 +38,9 @@ public class RequestHandler {
 
     if(doesUserExist) DBA.updateUser(user);
     else DBA.insertNewUser(user);
-
     DBA.closeConnection();
 
-    return "Good";
+    return resultCodes.SUCCESS;
   }
 
   public void handleGetCoins() {

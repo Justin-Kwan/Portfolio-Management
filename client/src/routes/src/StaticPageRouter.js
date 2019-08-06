@@ -42,8 +42,8 @@ function onGetPortfolio(request, response) {
     response.redirect('http://127.0.0.1:8000/createPortfolio');
   else if(doesUserExist == 'true')
     response.sendFile(getPortfolioPagePath);
-
-  response.send("500 Internal Error");
+  else
+    response.send("500 Internal Error, Oops (¯―¯٥)");
 }
 
 function onCreatePortfolio(request, response) {

@@ -38,14 +38,13 @@ public class Index {
       String authToken   = request.cookie("auth_token");
       String jsonRequest = request.body();
 
-      System.out.println("AUTH TOKEN: " + authToken);
-      System.out.println("JSON REQUEST: " + jsonRequest);
+      String processResult = requestHandler.handleAddCoins(authToken, jsonRequest);
 
-      String result = requestHandler.handleAddCoins(authToken, jsonRequest);
-
-      System.out.println("RESULT: " + result);
-
-      return result;
+      //if(processResult == resultCodes.ERROR_REQUEST_UNAUTHORIZED)
+      // else if(processResult == resultCodes.ERROR_JSON_REQUEST_INVALID)
+      //else if(processResult == resultCodes.SUCCESS)
+      //else
+      return "GOOD";
     });
 
     get("/checkUserExists/", "application/json", (request, response) -> {

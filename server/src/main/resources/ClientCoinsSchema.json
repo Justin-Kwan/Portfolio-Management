@@ -1,5 +1,7 @@
 {
-   "definitions":{},
+   "definitions":{
+
+   },
    "type":"object",
    "additionalProperties":false,
    "title":"The Root Schema",
@@ -23,6 +25,17 @@
                "coinTicker":{
                   "$id":"#/properties/coins/items/properties/coinTicker",
                   "type":"string",
+                  "oneOf":[
+                     {
+                        "enum":[
+                           "BTC",
+                           "LTC",
+                           "ETH",
+                           "NEO",
+                           "BAT"
+                        ]
+                     }
+                  ],
                   "title":"The Cointicker Schema",
                   "examples":[
                      "BTC"

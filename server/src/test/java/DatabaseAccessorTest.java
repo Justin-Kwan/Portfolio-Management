@@ -14,6 +14,10 @@ public class DatabaseAccessorTest {
 
   Gson gson = new Gson();
 
+  final int FIRST_COIN  = 0;
+  final int SECOND_COIN = 1;
+  final int THIRD_COIN  = 2;
+
   private DatabaseAccessor beforeTest() {
     DatabaseAccessor DBA = new DatabaseAccessor();
     try {
@@ -56,29 +60,81 @@ public class DatabaseAccessorTest {
     doesUserExist = DBA.checkUserExists(user.getUserId());
     assertEquals(true, doesUserExist);
 
-    this.afterTest(DBA);
+    afterTest(DBA);
   }
 
   @Test
   public void test_updateUser() {
     DatabaseAccessor DBA = this.beforeTest();
     User user;
+    Coin coin;
+    JSONArray coinsJsonArray;
     User newUser;
     boolean doesUserExist;
 
     user = new MockUser("authtoken1", "username1", "userid1", false, "jsonrequest", 543.32);
+
+    coin = new MockCoin("BTC", 3.132, 334, 8.231);
+    user.addCoin(coin);
+    coin = new MockCoin("ETH", 3.131, 331, 8.211);
+    user.addCoin(coin);
+    coin = new MockCoin("BPT", 3.532, 354, 8.235);
+    user.addCoin(coin);
+
     DBA.insertNewUser(user);
 
     newUser = new MockUser("new_authtoken", "username1", "userid1", false, "new_jsonrequest", 543.32);
+
+    coin = new MockCoin("LTC", 3.192, 934, 8.291);
+    newUser.addCoin(coin);
+    coin = new MockCoin("BTH", 3.191, 931, 8.291);
+    newUser.addCoin(coin);
+    coin = new MockCoin("PPT", 9.532, 954, 8.295);
+    newUser.addCoin(coin);
+
     DBA.updateUser(newUser);
-
     doesUserExist = DBA.checkUserExists(newUser.getUserId());
-
     assertEquals(true, doesUserExist);
 
+    coinsJsonArray = DBA.selectUserCoins(newUser);
+    JSONAssert.assertEquals("{coinTicker:\"LTC\", coinAmount:3.192, latestCoinPrice:934, coinHoldingValueUsd:8.291}", coinsJsonArray.get(FIRST_COIN).toString(), true);
+    JSONAssert.assertEquals("{coinTicker:\"BTH\", coinAmount:3.191, latestCoinPrice:931, coinHoldingValueUsd:8.291}", coinsJsonArray.get(SECOND_COIN).toString(), true);
+    JSONAssert.assertEquals("{coinTicker:\"PPT\", coinAmount:9.532, latestCoinPrice:954, coinHoldingValueUsd:8.295}", coinsJsonArray.get(THIRD_COIN).toString(), true);
+    assertEquals(3, coinsJsonArray.length());
+
+
+
+    user = new MockUser("authtoken2", "username2", "userid2", false, "jsonrequest", 543.32);
+
+    coin = new MockCoin("HTC", 3.932, 9934, 8.9991);
+    user.addCoin(coin);
+    coin = new MockCoin("HTH", 3.191, 391, 8.911);
+    user.addCoin(coin);
+    coin = new MockCoin("HPT", 3.932, 954, 8.239);
+    user.addCoin(coin);
+
+    DBA.insertNewUser(user);
+
+    newUser = new MockUser("new_authtoken", "username1", "userid1", false, "new_jsonrequest", 543.32);
+
+    coin = new MockCoin("EON", 32.292, 92234, 8.22291);
+    newUser.addCoin(coin);
+    coin = new MockCoin("TRON", 32.291, 92231, 228.291);
+    newUser.addCoin(coin);
+    coin = new MockCoin("PPI", 92532, 92254, 8.22295);
+    newUser.addCoin(coin);
+
+    DBA.updateUser(newUser);
+    doesUserExist = DBA.checkUserExists(newUser.getUserId());
+    assertEquals(true, doesUserExist);
+
+    coinsJsonArray = DBA.selectUserCoins(newUser);
+    JSONAssert.assertEquals("{coinTicker:\"EON\", coinAmount:32.292, latestCoinPrice:92234, coinHoldingValueUsd:8.22291}", coinsJsonArray.get(FIRST_COIN).toString(), true);
+    JSONAssert.assertEquals("{coinTicker:\"TRON\", coinAmount:32.291, latestCoinPrice:92231, coinHoldingValueUsd:228.291}", coinsJsonArray.get(SECOND_COIN).toString(), true);
+    JSONAssert.assertEquals("{coinTicker:\"PPI\", coinAmount:92532, latestCoinPrice:92254, coinHoldingValueUsd:8.22295}", coinsJsonArray.get(THIRD_COIN).toString(), true);
+    assertEquals(3, coinsJsonArray.length());
+
     afterTest(DBA);
-
-
   }
 
   @Test
@@ -87,10 +143,6 @@ public class DatabaseAccessorTest {
     User user;
     Coin coin;
     JSONArray coinsJsonArray;
-
-    final int FIRST_COIN  = 0;
-    final int SECOND_COIN = 1;
-    final int THIRD_COIN  = 2;
 
     user = new MockUser("authtoken___1", "username___1", "userid___1", null, "jsonrequest___1", 543.32);
     coin = new MockCoin("BTC", 0.34, 234, 50);
@@ -117,7 +169,7 @@ public class DatabaseAccessorTest {
     JSONAssert.assertEquals("{coinTicker:\"STRAT\", coinAmount:123.2, latestCoinPrice:231, coinHoldingValueUsd:89}", coinsJsonArray.get(SECOND_COIN).toString(), true);
     assertEquals(2, coinsJsonArray.length());
 
-    this.afterTest(DBA);
+    afterTest(DBA);
   }
 
   @Test
@@ -135,8 +187,6 @@ public class DatabaseAccessorTest {
     doesUserExist = DBA.checkUserExists("id#123*");
     assertEquals(true, doesUserExist);
 
-    //bec55608-3ad1-42df-bdf1-1a6785969d83
-
     user = new MockUser("authtoken_821", "John91", "id#901%", null, "jsonrequest___123", 20999);
     DBA.insertNewUser(user);
     doesUserExist = DBA.checkUserExists("id#901%");
@@ -148,7 +198,7 @@ public class DatabaseAccessorTest {
     doesUserExist = DBA.checkUserExists("");
     assertEquals(false, doesUserExist);
 
-    this.afterTest(DBA);
+    afterTest(DBA);
   }
 
 
