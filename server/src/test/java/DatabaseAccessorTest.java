@@ -138,6 +138,82 @@ public class DatabaseAccessorTest {
   }
 
   @Test
+  public void test_selectUser() {
+    DatabaseAccessor DBA = this.beforeTest();
+    User mockUserInsertion;
+    User mockUserClient;
+    User user;
+    JSONObject jsonUserObj;
+    Coin mockCoin;
+    ArrayList<Coin> userCoins;
+
+    // first user selection test
+    mockUserInsertion = new MockUser("authtoken1", "username1", "userid12", false, "jsonrequest1", 543.32);
+    mockCoin = new MockCoin("BTC", 0.231, 23, 1);
+    mockUserInsertion.addCoin(mockCoin);
+    mockCoin = new MockCoin("LTC", 0.531, 53, 5);
+    mockUserInsertion.addCoin(mockCoin);
+    mockCoin = new MockCoin("ETH", 0.931, 93, 9);
+    mockUserInsertion.addCoin(mockCoin);
+    DBA.insertNewUser(mockUserInsertion);
+
+    jsonUserObj = DBA.selectUser("userid12");
+    user = gson.fromJson(jsonUserObj.toString(), User.class);
+
+    assertEquals("authtoken1", user.getAuthToken());
+    assertEquals("username1", user.getUsername());
+    assertEquals("userid12", user.getUserId());
+    assertEquals(false, user.getStatus());
+    assertEquals("jsonrequest1", user.getJsonRequest());
+    assertEquals(543.32, user.getPortfolioValueUsd(), 1e-8);
+    assertEquals(3, user.getCoins().size());
+
+    userCoins = user.getCoins();
+    // first coin assertions
+    assertEquals("BTC", userCoins.get(FIRST_COIN).getTicker());
+    assertEquals(0.231, userCoins.get(FIRST_COIN).getAmount(), 1e-8);
+    assertEquals(23, userCoins.get(FIRST_COIN).getLatestPrice(), 1e-8);
+    assertEquals(1, userCoins.get(FIRST_COIN).getHoldingValueUsd(), 1e-8);
+    // second coin assertions
+    assertEquals("LTC", userCoins.get(SECOND_COIN).getTicker());
+    assertEquals(0.531, userCoins.get(SECOND_COIN).getAmount(), 1e-8);
+    assertEquals(53, userCoins.get(SECOND_COIN).getLatestPrice(), 1e-8);
+    assertEquals(5, userCoins.get(SECOND_COIN).getHoldingValueUsd(), 1e-8);
+    // third coin assertions
+    assertEquals("ETH", userCoins.get(THIRD_COIN).getTicker());
+    assertEquals(0.931, userCoins.get(THIRD_COIN).getAmount(), 1e-8);
+    assertEquals(93, userCoins.get(THIRD_COIN).getLatestPrice(), 1e-8);
+    assertEquals(9, userCoins.get(THIRD_COIN).getHoldingValueUsd(), 1e-8);
+
+
+    // second user selection test
+    mockUserInsertion = new MockUser("authtoken2", "username2", "userid13", true, "jsonrequest2", 544.3777312);
+    mockCoin = new MockCoin("NEO", 0.223211, 21.323, 14);
+    mockUserInsertion.addCoin(mockCoin);
+    DBA.insertNewUser(mockUserInsertion);
+
+    jsonUserObj = DBA.selectUser("userid13");
+    user = gson.fromJson(jsonUserObj.toString(), User.class);
+
+    assertEquals("authtoken2", user.getAuthToken());
+    assertEquals("username2", user.getUsername());
+    assertEquals("userid13", user.getUserId());
+    assertEquals(true, user.getStatus());
+    assertEquals("jsonrequest2", user.getJsonRequest());
+    assertEquals(544.3777312, user.getPortfolioValueUsd(), 1e-8);
+    assertEquals(1, user.getCoins().size());
+
+    userCoins = user.getCoins();
+    // first coin assertions
+    assertEquals("NEO", userCoins.get(FIRST_COIN).getTicker());
+    assertEquals(0.223211, userCoins.get(FIRST_COIN).getAmount(), 1e-8);
+    assertEquals(21.323, userCoins.get(FIRST_COIN).getLatestPrice(), 1e-8);
+    assertEquals(14, userCoins.get(FIRST_COIN).getHoldingValueUsd(), 1e-8);
+
+    this.afterTest(DBA);
+  }
+
+  @Test
   public void test_selectUserCoins() {
     DatabaseAccessor DBA = this.beforeTest();
     User user;
@@ -169,7 +245,7 @@ public class DatabaseAccessorTest {
     JSONAssert.assertEquals("{coinTicker:\"STRAT\", coinAmount:123.2, latestCoinPrice:231, coinHoldingValueUsd:89}", coinsJsonArray.get(SECOND_COIN).toString(), true);
     assertEquals(2, coinsJsonArray.length());
 
-    afterTest(DBA);
+    this.afterTest(DBA);
   }
 
   @Test

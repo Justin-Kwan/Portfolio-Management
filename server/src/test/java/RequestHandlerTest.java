@@ -32,7 +32,7 @@ public class RequestHandlerTest {
     User user;
     Coin coin;
 
-    String processResult;
+    String resultCode;
 
     String mockGoodJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"BAT\",\"coinAmount\":3.41}]}";
     String mockGoodJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"NEO\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"BAT\",\"coinAmount\":3.41},{\"coinTicker\":\"BTC\",\"coinAmount\":3.41}]}";
@@ -43,38 +43,38 @@ public class RequestHandlerTest {
     String mockGoodAuthToken1   = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJhbmRvbXVzZXIxMjMiLCJ1c2VyIGlkIjoiZmY0NDA2ZmMtNjdiMi00Zjg2LWIyZGQtNGY5YjM1YzY0MjAyIn0.i2jAkld6y2KkRtgpzFYK449E1EGScB3DeZpLi4BqxVs";
     String mockBadAuthToken1    = "eyJ0eXAiOiJKV1QiLCJhbkGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJhbmRvbXVzZXIxMjMiLCJ1c2VyIGlkIjoiZmY0NDA2ZmMtNjdiMi00Zjg2LWIyZGQtNGY5YjM1YzY0MjAyIn0.i2jAkld6y2KkRtgpzFYK449E1EGScB3DeZpLi4BqxVs";
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, mockGoodJsonRequest1);
-    assertEquals("SUCCESS", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, mockGoodJsonRequest1);
+    assertEquals("SUCCESS", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest1);
-    assertEquals("REQUEST_INVALID", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest1);
+    assertEquals("REQUEST_INVALID", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest2);
-    assertEquals("REQUEST_INVALID", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest2);
+    assertEquals("REQUEST_INVALID", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest3);
-    assertEquals("REQUEST_INVALID", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest3);
+    assertEquals("REQUEST_INVALID", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest4);
-    assertEquals("REQUEST_INVALID", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, mockBadJsonRequest4);
+    assertEquals("REQUEST_INVALID", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, "123");
-    assertEquals("REQUEST_INVALID", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, "123");
+    assertEquals("REQUEST_INVALID", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockBadAuthToken1, mockGoodJsonRequest1);
-    assertEquals("REQUEST_UNAUTHORIZED", processResult);
+    resultCode = requestHandler.handleAddCoins(mockBadAuthToken1, mockGoodJsonRequest1);
+    assertEquals("REQUEST_UNAUTHORIZED", resultCode);
 
-    processResult = requestHandler.handleAddCoins(mockBadAuthToken1, mockBadJsonRequest1);
-    assertEquals("REQUEST_UNAUTHORIZED", processResult);
+    resultCode = requestHandler.handleAddCoins(mockBadAuthToken1, mockBadJsonRequest1);
+    assertEquals("REQUEST_UNAUTHORIZED", resultCode);
 
-    processResult = requestHandler.handleAddCoins("", mockGoodJsonRequest1);
-    assertEquals("REQUEST_UNAUTHORIZED", processResult);
+    resultCode = requestHandler.handleAddCoins("", mockGoodJsonRequest1);
+    assertEquals("REQUEST_UNAUTHORIZED", resultCode);
 
-    processResult = requestHandler.handleAddCoins("123", mockGoodJsonRequest1);
-    assertEquals("REQUEST_UNAUTHORIZED", processResult);
+    resultCode = requestHandler.handleAddCoins("123", mockGoodJsonRequest1);
+    assertEquals("REQUEST_UNAUTHORIZED", resultCode);
 
-    processResult = requestHandler.handleAddCoins(null, mockGoodJsonRequest1);
-    assertEquals("REQUEST_UNAUTHORIZED", processResult);
+    resultCode = requestHandler.handleAddCoins(null, mockGoodJsonRequest1);
+    assertEquals("REQUEST_UNAUTHORIZED", resultCode);
 
     user = new MockUser("authtoken___2", "randomuser123", "ff4406fc-67b2-4f86-b2dd-4f9b35c64202", null, "", 543.33);
     coin = new MockCoin("NEO", 0.202331231231, 88291, 201);
@@ -83,8 +83,8 @@ public class RequestHandlerTest {
     user.addCoin(coin);
     DBA.insertNewUser(user);
 
-    processResult = requestHandler.handleAddCoins(mockGoodAuthToken1, mockGoodJsonRequest2);
-    assertEquals("SUCCESS", processResult);
+    resultCode = requestHandler.handleAddCoins(mockGoodAuthToken1, mockGoodJsonRequest2);
+    assertEquals("SUCCESS", resultCode);
 
     this.afterTest(DBA);
   }
@@ -125,10 +125,6 @@ public class RequestHandlerTest {
 
     this.afterTest(DBA);
   }
-
-
-
-
 
 
 }

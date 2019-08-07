@@ -1,6 +1,5 @@
 package UserPortfolioManagement;
 import java.net.UnknownHostException;
-import java.util.logging.Logger;
 import java.util.Arrays;
 import java.util.ArrayList;
 import com.mongodb.MongoException;
@@ -48,29 +47,34 @@ public class DatabaseAccessor {
   }
 
   public void insertNewUser(User user) {
-    String jsonUserObj = gson.toJson(user);
-    Document userDocument = Document.parse(jsonUserObj.toString());
+    String jsonUserStr = gson.toJson(user);
+    Document userDocument = Document.parse(jsonUserStr);
     userCollection.insertOne(userDocument);
   }
 
   public void updateUser(User user) {
     ArrayList<Coin> userCoins = user.getCoins();
-    String jsonUserObj = gson.toJson(user);
-    Document userDocument = Document.parse(jsonUserObj.toString());
-
+    String jsonUserStr = gson.toJson(user);
+    Document userDocument = Document.parse(jsonUserStr);
     Bson filter = eq(USER_ID_FIELD, user.getUserId());
-    // replaces user object at the specified field with new user object
+    // replaces user object at the specified field with new user document
     userCollection.replaceOne(filter, userDocument);
+  }
+
+  public JSONObject selectUser(String userId) {
+    Document userFieldsDocument = new Document(USER_ID_FIELD, userId);
+    Document userDocument = userCollection.find(userFieldsDocument).first();
+    JSONObject jsonUserObj = new JSONObject(userDocument);
+    return jsonUserObj;
   }
 
   public JSONArray selectUserCoins(User user) {
     String userId = user.getUserId();
-
+    BasicDBObject userFieldsDocument = new BasicDBObject(USER_ID_FIELD, userId);
     // get single field from document
-    Document coinsDocument = userCollection
-    .find(new BasicDBObject(USER_ID_FIELD, userId))
-    .projection(Projections.fields(Projections.include(USER_COINS_FIELD), Projections.excludeId()))
-    .first();
+    Document coinsDocument = userCollection.find(userFieldsDocument)
+    .projection(Projections.fields(Projections.include(USER_COINS_FIELD),
+    Projections.excludeId())).first();
 
     JSONObject jsonCoinsObj = new JSONObject(coinsDocument);
     JSONArray jsonCoins = jsonCoinsObj.getJSONArray("coins");
@@ -78,8 +82,9 @@ public class DatabaseAccessor {
   }
 
   public boolean checkUserExists(String userId) {
+    Document userFieldsDocument = new Document(USER_ID_FIELD, userId);
     FindIterable<Document> iterable = userPortfoliosDb.getCollection("Users")
-                                    .find(new Document(USER_ID_FIELD, userId));
+    .find(userFieldsDocument);
 
     boolean doesUserExist = iterable.first() != null;
     return doesUserExist;

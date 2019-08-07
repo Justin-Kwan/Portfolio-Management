@@ -14,7 +14,8 @@ public class Index {
   private static final String LOCAL_HOST = "127.0.0.1";
   private static final int    PORT       = 8001;
 
-  private static RequestHandler requestHandler = new RequestHandler();
+  private static final RequestHandler requestHandler = new RequestHandler();
+  private static final IndexResponseDecider IRD = new IndexResponseDecider();
 
   private static void initServer() {
     ipAddress(LOCAL_HOST);
@@ -24,9 +25,13 @@ public class Index {
   }
 
   private static void enableCors() {
+
     after((Filter) (request, response) -> {
       response.header("Access-Control-Allow-Origin", "*");
       response.header("Access-Control-Allow-Credentials", "true");
+
+      response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+      response.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,");
     });
   }
 
@@ -37,14 +42,22 @@ public class Index {
     post("/addCoinsToPortfolio", (request, response) -> {
       String authToken   = request.cookie("auth_token");
       String jsonRequest = request.body();
+      String resultCode = requestHandler.handleAddCoins(authToken, jsonRequest);
+      String indexResponse = IRD.determineAddCoinsResponse(resultCode);
+      return indexResponse;
+    });
 
-      String processResult = requestHandler.handleAddCoins(authToken, jsonRequest);
+    get("/getPortfolio", (request, response) -> {
+      String authToken   = request.cookie("auth_token");
+      // would be returning JSON
+      String resultCode = requestHandler.handleGetCoins(authToken);
+      //String indexResponse = IRD.determineAddCoinsResponse(resultCode);
 
-      //if(processResult == resultCodes.ERROR_REQUEST_UNAUTHORIZED)
-      // else if(processResult == resultCodes.ERROR_JSON_REQUEST_INVALID)
-      //else if(processResult == resultCodes.SUCCESS)
-      //else
-      return "GOOD";
+      System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+      System.out.println("Auth Token: " + authToken);
+      System.out.println("INDEX RESPONSE: " + resultCode);
+
+      return resultCode;
     });
 
     get("/checkUserExists/", "application/json", (request, response) -> {
@@ -54,7 +67,5 @@ public class Index {
     });
 
   }
-
-
 
 }

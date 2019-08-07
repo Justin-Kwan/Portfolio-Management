@@ -72,6 +72,15 @@ public class User {
     return portfolioValueUsd;
   }
 
+  public void calculateCoinHoldingValues() {
+
+    for(Coin currentCoin: coins) {
+      currentCoin.fetchAndSetLatestPrice();
+      currentCoin.calculateAndSetHoldingValue();
+    }
+
+  }
+
   public void calculatePortfolioValue() {
     this.portfolioValueUsd = 0;
 

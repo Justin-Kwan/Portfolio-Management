@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import UserPortfolioManagement.User;
 import UserPortfolioManagement.Coin;
@@ -205,6 +206,50 @@ public class UserTest {
     }
     user.calculatePortfolioValue();
     assertEquals(6, user.getPortfolioValueUsd(), 1e-8);
+  }
+
+  @Test
+  public void test_calculateCoinHoldingValues() {
+    User user;
+    Coin mockCoin;
+    ArrayList<Coin> coins;
+
+    // test 1
+    user = new User("", "", "", null, "");
+    mockCoin = new MockCoin("BTC", 2.445, 0, 0);
+    user.addCoin(mockCoin);
+    mockCoin = new MockCoin("ETH", 1, 0, 0);
+    user.addCoin(mockCoin);
+    mockCoin = new MockCoin("LTC", 0.5, 0, 0);
+    user.addCoin(mockCoin);
+    mockCoin = new MockCoin("BAT", 32, 0, 0);
+    user.addCoin(mockCoin);
+
+    user.calculateCoinHoldingValues();
+    coins = user.getCoins();
+
+    for(int i = 0; i < coins.size(); i++) {
+      assertNotNull(coins.get(i).getHoldingValueUsd());
+    }
+
+    // test 2
+    user = new User("", "", "", null, "");
+    mockCoin = new MockCoin("NEO", 1.445, 0, 0);
+    user.addCoin(mockCoin);
+    mockCoin = new MockCoin("BAT", 11, 0, 0);
+    user.addCoin(mockCoin);
+    mockCoin = new MockCoin("LTC", 1.5, 0, 0);
+    user.addCoin(mockCoin);
+    mockCoin = new MockCoin("BTC", 31, 0, 0);
+    user.addCoin(mockCoin);
+
+    user.calculateCoinHoldingValues();
+    coins = user.getCoins();
+
+    for(int i = 0; i < coins.size(); i++) {
+      assertNotNull(coins.get(i).getHoldingValueUsd());
+    }
+
   }
 
   @Test

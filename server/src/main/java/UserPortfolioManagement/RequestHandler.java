@@ -1,4 +1,6 @@
 package UserPortfolioManagement;
+import com.google.gson.Gson;
+import org.json.JSONObject;
 
 /**
  *  class responsible for handling interpreted client/user portfolio requests
@@ -18,9 +20,10 @@ public class RequestHandler {
   private final int USERNAME = 0;
   private final int USER_ID  = 1;
 
+  Gson gson = new Gson();
+
   /*TEST!!*/
   public String handleAddCoins(String authToken, String jsonRequest) {
-
     boolean isRequestAuthorized = tokenChecker.checkAuthTokenValid(authToken);
     if(!isRequestAuthorized) return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
 
@@ -43,7 +46,21 @@ public class RequestHandler {
     return resultCodes.SUCCESS;
   }
 
-  public void handleGetCoins() {
+  public String handleGetCoins(String authToken) {
+    boolean isRequestAuthorized = tokenChecker.checkAuthTokenValid(authToken);
+    if(!isRequestAuthorized) return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
+
+    String[] userInfoPayload = tokenChecker.getAuthTokenInfo(authToken);
+    String username          = userInfoPayload[USERNAME];
+    String userId            = userInfoPayload[USER_ID];
+
+    JSONObject jsonUserObj = DBA.selectUser(userId);
+    User user = gson.fromJson(jsonUserObj.toString(), User.class);
+    user.calculateCoinHoldingValues();
+    user.calculatePortfolioValue();
+
+    String jsonUserStr = gson.toJson(user);
+    return jsonUserStr.toString();
   }
 
   public void handleUpdateCoins() {

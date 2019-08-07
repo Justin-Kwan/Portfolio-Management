@@ -1,1 +1,33 @@
 <h1>Get Portfolio</h1>
+
+<head>
+   <meta charset="utf-8">
+   <!--optomize for mobile-->
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <!--bootstrap include-->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+   <!--main CSS file link-->
+   <link href="./css/main.css" type="text/css" rel="stylesheet">
+   <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
+   <title>Create Portfolio - CryptoCost.live</title>
+</head>
+
+
+<script>
+
+  $.ajax({
+    url: "http://127.0.0.1:8001/getPortfolio",
+    type: "GET",
+    xhrFields: {
+         withCredentials: true
+    }
+  });
+
+  $.get("http://127.0.0.1:8001/getPortfolio", function(data, status) {
+
+    console.log("CRUD server response: " + data);
+
+  });
+
+</script>
