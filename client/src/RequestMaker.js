@@ -25,18 +25,6 @@ class RequestMaker {
     });
 
   }
-  
-  getUserCoinsFromServer() {
 
-    console.log("Getting Coins!");
-
-    var httpRequest = new XMLHttpRequest();
-    httpRequest.open('GET', 'http://127.0.0.1:8001/getPortfolio', true);
-    httpRequest.withCredentials = true;
-    httpRequest.send(null);
-
-    console.log("Server User Json: " + httpRequest.responseText);
-
-  }
 
 }

@@ -27,7 +27,7 @@ public class Index {
   private static void enableCors() {
 
     after((Filter) (request, response) -> {
-      response.header("Access-Control-Allow-Origin", "*");
+      response.header("Access-Control-Allow-Origin", "http://127.0.0.1:8000/getPortfolio");
       response.header("Access-Control-Allow-Credentials", "true");
 
       response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -40,7 +40,8 @@ public class Index {
     initServer();
 
     post("/addCoinsToPortfolio", (request, response) -> {
-      String authToken   = request.cookie("auth_token");
+      String authToken = request.cookie("auth_token");
+      System.out.println("Auth Token: " + request.cookie("auth_token"));
       String jsonRequest = request.body();
       String resultCode = requestHandler.handleAddCoins(authToken, jsonRequest);
       String indexResponse = IRD.determineAddCoinsResponse(resultCode);
@@ -49,18 +50,25 @@ public class Index {
 
     get("/getPortfolio", (request, response) -> {
       String authToken   = request.cookie("auth_token");
+
       // would be returning JSON
       String resultCode = requestHandler.handleGetCoins(authToken);
       //String indexResponse = IRD.determineAddCoinsResponse(resultCode);
 
       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      System.out.println("Auth Token: " + authToken);
+      System.out.println("Auth Token: " + request.cookie("auth_token"));
+
+      System.out.println("REQUEST HEADER: " + request.headers());
+      System.out.println("REQUEST HEADER: " + request.host());
+        System.out.println("REQUEST HEADER: " + request.ip());
+
       System.out.println("INDEX RESPONSE: " + resultCode);
 
       return resultCode;
     });
 
     get("/checkUserExists/", "application/json", (request, response) -> {
+      System.out.println("Auth Token: " + request.cookie("auth_token"));
       String userId = request.queryParams("userId");
       boolean doesUserExist = requestHandler.handleCheckUserExists(userId);
       return doesUserExist;
