@@ -31,7 +31,7 @@ public class DatabaseAccessor {
   private final String              MONGODB_HOST     = "127.0.0.1";
   private final int                 MONGODB_PORT     = 27017;
 
-  private final String              USER_ID_FIELD    = "userId";
+  private final String              USER_ID_FIELD    = "user_id";
   private final String              USER_COINS_FIELD = "coins";
 
   private MongoClient               mongoClient;
@@ -39,6 +39,8 @@ public class DatabaseAccessor {
   private MongoCollection<Document> userCollection;
 
   Gson gson = new Gson();
+  JsonMapper jsonMapper = new JsonMapper();
+  ObjectMapper objectMapper = new ObjectMapper();
 
   public void createConnection() {
     this.mongoClient = new MongoClient(MONGODB_HOST, MONGODB_PORT);
@@ -46,39 +48,43 @@ public class DatabaseAccessor {
     this.userCollection = userPortfoliosDb.getCollection("Users");
   }
 
-  public void insertNewUser(User user) {
-    String jsonUserStr = gson.toJson(user);
-    Document userDocument = Document.parse(jsonUserStr);
+  /**
+   * db write operations are single threaded
+   */
+  public synchronized void insertNewUser(User user) {
+    JSONObject userJsonMap = jsonMapper.mapUserJsonForDb(user);
+    Document userDocument = Document.parse(userJsonMap.toString());
     userCollection.insertOne(userDocument);
   }
 
-  public void updateUser(User user) {
-    ArrayList<Coin> userCoins = user.getCoins();
-    String jsonUserStr = gson.toJson(user);
-    Document userDocument = Document.parse(jsonUserStr);
+  public synchronized void updateUser(User user) {
+    JSONObject userJson = jsonMapper.mapUserJsonForDb(user);
+    Document userDocument = Document.parse(userJson.toString());
     Bson filter = eq(USER_ID_FIELD, user.getUserId());
-    // replaces user object at the specified field with new user document
     userCollection.replaceOne(filter, userDocument);
   }
 
-  public JSONObject selectUser(String userId) {
+  public User selectUser(String userId) {
     Document userFieldsDocument = new Document(USER_ID_FIELD, userId);
     Document userDocument = userCollection.find(userFieldsDocument).first();
     JSONObject jsonUserObj = new JSONObject(userDocument);
-    return jsonUserObj;
+    User user = objectMapper.mapUserObjForApp(jsonUserObj);
+    return user;
   }
 
-  public JSONArray selectUserCoins(User user) {
+  public ArrayList<Coin> selectUserCoins(User user) {
     String userId = user.getUserId();
     BasicDBObject userFieldsDocument = new BasicDBObject(USER_ID_FIELD, userId);
-    // get single field from document
+
     Document coinsDocument = userCollection.find(userFieldsDocument)
     .projection(Projections.fields(Projections.include(USER_COINS_FIELD),
     Projections.excludeId())).first();
 
     JSONObject jsonCoinsObj = new JSONObject(coinsDocument);
     JSONArray jsonCoins = jsonCoinsObj.getJSONArray("coins");
-    return jsonCoins;
+
+    ArrayList<Coin> coins = objectMapper.mapCoinsObjForApp(jsonCoins);
+    return coins;
   }
 
   public boolean checkUserExists(String userId) {

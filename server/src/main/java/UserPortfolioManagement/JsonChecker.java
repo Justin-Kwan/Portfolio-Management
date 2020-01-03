@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
  *  @version 1.0.0
  */
 
+
 public class JsonChecker {
 
   private final String       CLIENT_ADD_JSON_COINS_SCHEMA = "/ClientCoinsSchema.json";
@@ -26,6 +27,7 @@ public class JsonChecker {
 
   // use strategy pattern for schema loading and json validation?
   public boolean checkJsonRequestValid(String jsonRequest) {
+
     JsonNode jsonClientSchemaObj = getJsonClientSchema();
 
     try {
@@ -37,17 +39,23 @@ public class JsonChecker {
       if(!validationReport.isSuccess()) return JSON_REQUEST_INVALID;
 
     }catch(Exception error) {
+
       return JSON_REQUEST_INVALID;
+
     }
 
     return JSON_REQUEST_VALID;
   }
 
+  // split into loadSchema and getSchema!
   private JsonNode getJsonClientSchema() {
+
     InputStream inputStream = getClass().getResourceAsStream(CLIENT_ADD_JSON_COINS_SCHEMA);
     String jsonClientSchema = IOUtils.toString(inputStream, "utf-8");
     JsonNode jsonClientSchemaObj = mapper.readTree(jsonClientSchema);
+
     return jsonClientSchemaObj;
+
   }
 
 }

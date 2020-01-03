@@ -18,12 +18,12 @@
             "type":"object",
             "title":"The Items Schema",
             "required":[
-               "coinTicker",
-               "coinAmount"
+               "coin_ticker",
+               "coin_amount"
             ],
             "properties":{
-               "coinTicker":{
-                  "$id":"#/properties/coins/items/properties/coinTicker",
+               "coin_ticker":{
+                  "$id":"#/properties/coins/items/properties/coin_ticker",
                   "type":"string",
                   "oneOf":[
                      {
@@ -42,8 +42,8 @@
                   ],
                   "pattern":"^(.*)$"
                },
-               "coinAmount":{
-                  "$id":"#/properties/coins/items/properties/coinAmount",
+               "coin_amount":{
+                  "$id":"#/properties/coins/items/properties/coin_amount",
                   "type":"number",
                   "minimum":0.0001,
                   "title":"The Coinamount Schema",

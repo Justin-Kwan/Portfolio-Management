@@ -3,29 +3,23 @@ import java.util.ArrayList;
 
 public class User {
 
-  protected String  username;
   protected String  userId;
   protected String  authToken;
-  protected String  jsonRequest;
+  protected String  requestJson;
   protected double  portfolioValueUsd = 0;
   protected Boolean doesUserExist;
   protected ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
-  public User(String authToken, String username, String userId, Boolean doesUserExist, String jsonRequest) {
+  public User(String authToken, String userId, Boolean doesUserExist, String requestJson) {
     this.setAuthToken(authToken);
-    this.setUsername(username);
     this.setUserId(userId);
     this.setStatus(doesUserExist);
-    this.setJsonRequest(jsonRequest);
+    this.setJsonRequest(requestJson);
   }
 
   protected void setAuthToken(String authToken) {
     this.authToken = authToken;
-  }
-
-  protected void setUsername(String username) {
-    this.username = username;
   }
 
   protected void setUserId(String userId) {
@@ -36,20 +30,16 @@ public class User {
     this.doesUserExist = doesUserExist;
   }
 
-  protected void setJsonRequest(String jsonRequest) {
-    this.jsonRequest = jsonRequest;
+  protected void setJsonRequest(String requestJson) {
+    this.requestJson = requestJson;
   }
 
-  public void addCoin(Coin coin) {
-    (this.coins).add(coin);
+  public void setCoins(ArrayList<Coin> coins) {
+    this.coins = coins;
   }
 
   public String getAuthToken() {
     return authToken;
-  }
-
-  public String getUsername() {
-    return username;
   }
 
   public String getUserId() {
@@ -61,7 +51,7 @@ public class User {
   }
 
   public String getJsonRequest() {
-    return jsonRequest;
+    return requestJson;
   }
 
   public ArrayList getCoins() {

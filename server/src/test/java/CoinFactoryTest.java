@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import java.util.ArrayList;
+import java.util.Arrays;
 import manifold.ext.api.Jailbreak;
 import UserPortfolioManagement.CoinFactory;
 import UserPortfolioManagement.DatabaseAccessor;
@@ -8,6 +9,8 @@ import UserPortfolioManagement.User;
 import UserPortfolioManagement.Coin;
 
 public class CoinFactoryTest {
+
+  // jailbreak used to void private function state for tests
 
   CoinFactory coinFactory = new CoinFactory();
 
@@ -38,104 +41,85 @@ public class CoinFactoryTest {
   @Test
   public void test_getCoinsFromLocation() {
     DatabaseAccessor DBA = this.beforeTest();
-    ArrayList<Coin>  dbCoins;
-    ArrayList<Coin>  requestCoins;
-    User             mockUser;
-    Coin             mockCoin;
+    ArrayList<Coin>  coins;
+    User             user;
 
-    String mockJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"EOS\",\"coinAmount\":1223},{\"coinTicker\":\"BAS\",\"coinAmount\":3.42}]}";
-    String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.42},{\"coinTicker\":\"LTC\",\"coinAmount\":35.49123}]}";
-    String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"XRP\",\"coinAmount\":12.23}]}";
+    String mockJsonRequest1 = "{\"coins\":[{\"coin_ticker\":\"EOS\",\"coin_amount\":1223},{\"coin_ticker\":\"BAS\",\"coin_amount\":3.42}]}";
+    String mockJsonRequest2 = "{\"coins\":[{\"coin_ticker\":\"BAT\",\"coin_amount\":123},{\"coin_ticker\":\"NEO\",\"coin_amount\":23.42},{\"coin_ticker\":\"LTC\",\"coin_amount\":35.49123}]}";
+    String mockJsonRequest3 = "{\"coins\":[{\"coin_ticker\":\"XRP\",\"coin_amount\":12.23}]}";
 
     /**
      *  database location tests
      */
+    user = new User("authtoken1", "userid1", null, "jsonrequest1");
+    Coin coin1 = new Coin("BTC", 23); // holding value usd
+    Coin coin2 = new Coin("ETH", 0.5);
+    Coin coin3 = new Coin("ZTC", 9812.3);
+    coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
+    user.jailbreak().coins = coins;
 
-    // test 1
-    mockUser = new MockUser("authtoken1", "username1", "userid1", null, "jsonrequest1", 0);
+    DBA.insertNewUser(user);
+    coins = coinFactory.jailbreak().getCoinsFromLocation(user, "DATABASE");
 
-    mockCoin = new MockCoin("BTC", 23, 0.5, 66.98); // holding value usd
-    mockUser.addCoin(mockCoin);
-    mockCoin = new MockCoin("ETH", 0.5, 0.03, 9.00000123);
-    mockUser.addCoin(mockCoin);
-    mockCoin = new MockCoin("ZTC", 9812.3, -941, 1);
-    mockUser.addCoin(mockCoin);
+    assertEquals("BTC", coins.get(FIRST_COIN).getTicker());
+    assertEquals(23, coins.get(FIRST_COIN).getAmount(), 1e-8);
 
-    DBA.insertNewUser(mockUser);
-    dbCoins = coinFactory.jailbreak().getCoinsFromLocation(mockUser, "DATABASE");
+    assertEquals("ETH", coins.get(SECOND_COIN).getTicker());
+    assertEquals(0.5, coins.get(SECOND_COIN).getAmount(), 1e-8);
 
-    assertEquals("BTC", dbCoins.get(FIRST_COIN).getTicker());
-    assertEquals(23, dbCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals(0.5, dbCoins.get(FIRST_COIN).getLatestPrice(), 1e-8);
-    assertEquals(66.98, dbCoins.get(FIRST_COIN).getHoldingValueUsd(), 1e-8);
+    assertEquals("ZTC", coins.get(THIRD_COIN).getTicker());
+    assertEquals(9812.3, coins.get(THIRD_COIN).getAmount(), 1e-8);
 
-    assertEquals("ETH", dbCoins.get(SECOND_COIN).getTicker());
-    assertEquals(0.5, dbCoins.get(SECOND_COIN).getAmount(), 1e-8);
-    assertEquals(0.03, dbCoins.get(SECOND_COIN).getLatestPrice(), 1e-8);
-    assertEquals(9.00000123, dbCoins.get(SECOND_COIN).getHoldingValueUsd(), 1e-8);
 
-    assertEquals("ZTC", dbCoins.get(THIRD_COIN).getTicker());
-    assertEquals(9812.3, dbCoins.get(THIRD_COIN).getAmount(), 1e-8);
-    assertEquals(-941, dbCoins.get(THIRD_COIN).getLatestPrice(), 1e-8);
-    assertEquals(1, dbCoins.get(THIRD_COIN).getHoldingValueUsd(), 1e-8);
 
-    // test 2
-    mockUser = new MockUser("authtoken2", "username2", "userid2", null, "jsonrequest1", 0);
+    user = new User("authtoken2", "userid2", null, "jsonrequest1");
+    coin1 = new Coin("NEO", 24); // holding value usd
+    coin2 = new Coin("XRP", 0.6);
+    coin3 = new Coin("BTP", 9813.3);
+    coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
+    user.jailbreak().coins = coins;
 
-    mockCoin = new MockCoin("NEO", 24, 0.6, 66.99); // holding value usd
-    mockUser.addCoin(mockCoin);
-    mockCoin = new MockCoin("XRP", 0.6, 0.05, 9.00200123);
-    mockUser.addCoin(mockCoin);
-    mockCoin = new MockCoin("BTP", 9813.3, -9121, 3);
-    mockUser.addCoin(mockCoin);
+    DBA.insertNewUser(user);
+    coins = coinFactory.jailbreak().getCoinsFromLocation(user, "DATABASE");
 
-    DBA.insertNewUser(mockUser);
-    dbCoins = coinFactory.jailbreak().getCoinsFromLocation(mockUser, "DATABASE");
+    assertEquals("NEO", coins.get(FIRST_COIN).getTicker());
+    assertEquals(24, coins.get(FIRST_COIN).getAmount(), 1e-8);
 
-    assertEquals("NEO", dbCoins.get(FIRST_COIN).getTicker());
-    assertEquals(24, dbCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals(0.6, dbCoins.get(FIRST_COIN).getLatestPrice(), 1e-8);
-    assertEquals(66.99, dbCoins.get(FIRST_COIN).getHoldingValueUsd(), 1e-8);
+    assertEquals("XRP", coins.get(SECOND_COIN).getTicker());
+    assertEquals(0.6, coins.get(SECOND_COIN).getAmount(), 1e-8);
 
-    assertEquals("XRP", dbCoins.get(SECOND_COIN).getTicker());
-    assertEquals(0.6, dbCoins.get(SECOND_COIN).getAmount(), 1e-8);
-    assertEquals(0.05, dbCoins.get(SECOND_COIN).getLatestPrice(), 1e-8);
-    assertEquals(9.00200123, dbCoins.get(SECOND_COIN).getHoldingValueUsd(), 1e-8);
+    assertEquals("BTP", coins.get(THIRD_COIN).getTicker());
+    assertEquals(9813.3, coins.get(THIRD_COIN).getAmount(), 1e-8);
 
-    assertEquals("BTP", dbCoins.get(THIRD_COIN).getTicker());
-    assertEquals(9813.3, dbCoins.get(THIRD_COIN).getAmount(), 1e-8);
-    assertEquals(-9121, dbCoins.get(THIRD_COIN).getLatestPrice(), 1e-8);
-    assertEquals(3, dbCoins.get(THIRD_COIN).getHoldingValueUsd(), 1e-8);
 
     /**
      *  json request location tests
      */
+    user = new User("authtoken3", "userid3", null, mockJsonRequest1);
+    coins = coinFactory.jailbreak().getCoinsFromLocation(user, "JSON_REQUEST");
+    assertEquals(2, coins.size());
+    assertEquals("EOS", coins.get(FIRST_COIN).getTicker());
+    assertEquals(1223,coins.get(FIRST_COIN).getAmount(), 1e-8);
+    assertEquals("BAS", coins.get(SECOND_COIN).getTicker());
+    assertEquals(3.42, coins.get(SECOND_COIN).getAmount(), 1e-8);
 
-    mockUser = new MockUser("authtoken3", "username3", "userid3", null, mockJsonRequest1, 0);
-    requestCoins = coinFactory.jailbreak().getCoinsFromLocation(mockUser, "JSON_REQUEST");
-    assertEquals(2, requestCoins.size());
-    assertEquals("EOS", requestCoins.get(FIRST_COIN).getTicker());
-    assertEquals(1223,requestCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals("BAS", requestCoins.get(SECOND_COIN).getTicker());
-    assertEquals(3.42, requestCoins.get(SECOND_COIN).getAmount(), 1e-8);
+    user = new User("authtoken4", "userid4", null, mockJsonRequest2);
+    coins = coinFactory.jailbreak().getCoinsFromLocation(user, "JSON_REQUEST");
+    assertEquals(3, coins.size());
+    assertEquals("BAT", coins.get(FIRST_COIN).getTicker());
+    assertEquals(123, coins.get(FIRST_COIN).getAmount(), 1e-8);
+    assertEquals("NEO", coins.get(SECOND_COIN).getTicker());
+    assertEquals(23.42, coins.get(SECOND_COIN).getAmount(), 1e-8);
+    assertEquals("LTC", coins.get(THIRD_COIN).getTicker());
+    assertEquals(35.49123, coins.get(THIRD_COIN).getAmount(), 1e-8);
 
-    mockUser = new MockUser("authtoken4", "username4", "userid4", null, mockJsonRequest2, 0);
-    requestCoins = coinFactory.jailbreak().getCoinsFromLocation(mockUser, "JSON_REQUEST");
-    assertEquals(3, requestCoins.size());
-    assertEquals("BAT", requestCoins.get(FIRST_COIN).getTicker());
-    assertEquals(123, requestCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals("NEO", requestCoins.get(SECOND_COIN).getTicker());
-    assertEquals(23.42, requestCoins.get(SECOND_COIN).getAmount(), 1e-8);
-    assertEquals("LTC", requestCoins.get(THIRD_COIN).getTicker());
-    assertEquals(35.49123, requestCoins.get(THIRD_COIN).getAmount(), 1e-8);
+    user = new User("authtoken5", "userid5", null, mockJsonRequest3);
+    coins = coinFactory.jailbreak().getCoinsFromLocation(user, "JSON_REQUEST");
+    assertEquals(1, coins.size());
+    assertEquals("XRP", coins.get(FIRST_COIN).getTicker());
+    assertEquals(12.23, coins.get(FIRST_COIN).getAmount(), 1e-8);
 
-    mockUser = new MockUser("authtoken5", "username5", "userid5", null, mockJsonRequest3, 0);
-    requestCoins = coinFactory.jailbreak().getCoinsFromLocation(mockUser, "JSON_REQUEST");
-    assertEquals(1, requestCoins.size());
-    assertEquals("XRP", requestCoins.get(FIRST_COIN).getTicker());
-    assertEquals(12.23, requestCoins.get(FIRST_COIN).getAmount(), 1e-8);
-
-    afterTest(DBA);
+    this.afterTest(DBA);
   }
 
   @Test
@@ -144,27 +128,25 @@ public class CoinFactoryTest {
     ArrayList<Coin>  dbCoins      = new ArrayList<Coin>();
     ArrayList<Coin>  requestCoins = new ArrayList<Coin>();
     ArrayList<Coin>  mergedCoins  = new ArrayList<Coin>();
-    Coin             mockCoin;
+    Coin             coin4;
+    Coin             coin5;
+    User user;
 
     /**
      *  merge coin test with no duplicate coins
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("HIVE", 23);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("DMG", 0.26);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("TRON", 98113.3);
-    dbCoins.add(mockCoin);
+    Coin coin1 = new Coin("HIVE", 23);
+    Coin coin2 = new Coin("DMG", 0.26);
+    Coin coin3 = new Coin("TRON", 98113.3);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("EOS", 29);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("IOTA", 0.29);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("QTUM", 98913.3);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("EOS", 29);
+    coin2 = new Coin("IOTA", 0.29);
+    coin3 = new Coin("QTUM", 98913.3);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -191,20 +173,16 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("HIVE", 23);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("DMG", 0.26);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("TRON", 98113.3);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("HIVE", 23);
+    coin2 = new Coin("DMG", 0.26);
+    coin3 = new Coin("TRON", 98113.3);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("EOS", 29);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("HIVE", 0.29);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("QTUM", 98913.3);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("EOS", 29);
+    coin2 = new Coin("HIVE", 0.29);
+    coin3 = new Coin("QTUM", 98913.3);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -229,20 +207,16 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("HIVE", 20);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("DMG", 0.26);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("TRON", 98113.3);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("HIVE", 20);
+    coin2 = new Coin("DMG", 0.26);
+    coin3 = new Coin("TRON", 98113.3);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("HIVE", 59);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("HIVE", 8.4123);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("QTUM", 98913.3);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("HIVE", 59);
+    coin2 = new Coin("HIVE", 8.4123);
+    coin3 = new Coin("QTUM", 98913.3);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -266,20 +240,16 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("HIVE", 20);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("DMG", 0.26);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("TRON", 98113.9);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("HIVE", 20);
+    coin2 = new Coin("DMG", 0.26);
+    coin3 = new Coin("TRON", 98113.9);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("BTC", 79);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("BTC", 8.4723);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("BTC", 97913.3);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("BTC", 79);
+    coin2 = new Coin("BTC", 8.4723);
+    coin3 = new Coin("BTC", 97913.3);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -302,12 +272,10 @@ public class CoinFactoryTest {
      */
 
     // mock coins for json request coin list
-    mockCoin = new Coin("LTC", 78);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("LTC", 8.476);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("LTC", 47913.3);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("LTC", 78);
+    coin2 = new Coin("LTC", 8.476);
+    coin3 = new Coin("LTC", 47913.3);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -324,14 +292,11 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("HIVE", 20);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("DMG", 0.26);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("TRON", 98113.9);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("NEO", 1);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("HIVE", 20);
+    coin2 = new Coin("DMG", 0.26);
+    coin3 = new Coin("TRON", 98113.9);
+    coin4 = new Coin("NEO", 1);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3, coin4));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -354,12 +319,10 @@ public class CoinFactoryTest {
      */
 
     // mock coins for json request coin list
-    mockCoin = new Coin("LTC", 99);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("BTC", 9.99);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("ETH", 999.999);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("LTC", 99);
+    coin2 = new Coin("BTC", 9.99);
+    coin3 = new Coin("ETH", 999.999);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -380,20 +343,16 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("LTC", 93);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("BTC", 9.39);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("ETH", 993.999);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("LTC", 93);
+    coin2 = new Coin("BTC", 9.39);
+    coin3 = new Coin("ETH", 993.999);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("XRP", 20);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("LTC", 0.26);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("LTC", 98113.9);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("XRP", 20);
+    coin2 = new Coin("LTC", 0.26);
+    coin3 = new Coin("LTC", 98113.9);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -416,20 +375,16 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("STM", 20);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("HYI", 0.26);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("ETH", 58113.9);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("STM", 20);
+    coin2 = new Coin("HYI", 0.26);
+    coin3 = new Coin("ETH", 58113.9);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("LTC", 93);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("BTC", 9.39);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("ETH", 997.999);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("LTC", 93);
+    coin2 = new Coin("BTC", 9.39);
+    coin3 = new Coin("ETH", 997.999);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -454,24 +409,18 @@ public class CoinFactoryTest {
      */
 
     // mock coins for database coin list
-    mockCoin = new Coin("TRON", 63);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("XRP", 63.1);
-    dbCoins.add(mockCoin);
-    mockCoin = new Coin("EON", 56.7532);
-    dbCoins.add(mockCoin);
+    coin1 = new Coin("TRON", 63);
+    coin2 = new Coin("XRP", 63.1);
+    coin3 = new Coin("EON", 56.7532);
+    dbCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
 
     // mock coins for json request coin list
-    mockCoin = new Coin("XRP", 12.23);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("XRP", 13.23);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("BTC", 132.23);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("EON", 142.23);
-    requestCoins.add(mockCoin);
-    mockCoin = new Coin("LTC", 132.24);
-    requestCoins.add(mockCoin);
+    coin1 = new Coin("XRP", 12.23);
+    coin2 = new Coin("XRP", 13.23);
+    coin3 = new Coin("BTC", 132.23);
+    coin4 = new Coin("EON", 142.23);
+    coin5 = new Coin("LTC", 132.24);
+    requestCoins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3, coin4, coin5));
 
     mergedCoins = coinFactory.jailbreak().mergeCoins(dbCoins, requestCoins);
 
@@ -489,79 +438,27 @@ public class CoinFactoryTest {
   }
 
   @Test
-  public void test_loadCoinsToUser() {
-    ArrayList<Coin> coins = new ArrayList<Coin>();
-    ArrayList<Coin> pulledUserCoins = new ArrayList<Coin>();
-    User mockUser;
-    Coin mockCoin;
-
-    mockUser = new MockUser("authtoken1", "username1", "userid1", null, "jsonrequest1", 0);
-    mockCoin = new Coin("LTC", 93);
-    coins.add(mockCoin);
-    mockCoin = new Coin("BTC", 33);
-    coins.add(mockCoin);
-    mockCoin = new Coin("PTC", 53.7532);
-    coins.add(mockCoin);
-    coinFactory.jailbreak().loadCoinsToUser(mockUser, coins);
-    pulledUserCoins = mockUser.getCoins();
-
-    assertEquals(3, pulledUserCoins.size());
-    assertEquals("LTC", pulledUserCoins.get(FIRST_COIN).getTicker());
-    assertEquals(93, pulledUserCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals("BTC", pulledUserCoins.get(SECOND_COIN).getTicker());
-    assertEquals(33, pulledUserCoins.get(SECOND_COIN).getAmount(), 1e-8);
-    assertEquals("PTC", pulledUserCoins.get(THIRD_COIN).getTicker());
-    assertEquals(53.7532, pulledUserCoins.get(THIRD_COIN).getAmount(), 1e-8);
-
-    coins.clear();
-
-    mockUser = new MockUser("authtoken2", "username2", "userid2", null, "jsonrequest2", 0);
-    mockCoin = new Coin("NEO", 13);
-    coins.add(mockCoin);
-    mockCoin = new Coin("BAT", 31);
-    coins.add(mockCoin);
-    mockCoin = new Coin("XRP", 53.7512);
-    coins.add(mockCoin);
-    mockCoin = new Coin("NSR", 52.7512);
-    coins.add(mockCoin);
-    coinFactory.jailbreak().loadCoinsToUser(mockUser, coins);
-    pulledUserCoins = mockUser.getCoins();
-
-    assertEquals(4, pulledUserCoins.size());
-    assertEquals("NEO", pulledUserCoins.get(FIRST_COIN).getTicker());
-    assertEquals(13, pulledUserCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals("BAT", pulledUserCoins.get(SECOND_COIN).getTicker());
-    assertEquals(31, pulledUserCoins.get(SECOND_COIN).getAmount(), 1e-8);
-    assertEquals("XRP", pulledUserCoins.get(THIRD_COIN).getTicker());
-    assertEquals(53.7512, pulledUserCoins.get(THIRD_COIN).getAmount(), 1e-8);
-    assertEquals("NSR", pulledUserCoins.get(FOURTH_COIN).getTicker());
-    assertEquals(52.7512, pulledUserCoins.get(FOURTH_COIN).getAmount(), 1e-8);
-  }
-
-  @Test
   public void test_createUserCoinCollection() {
     DatabaseAccessor DBA = this.beforeTest();
     ArrayList<Coin> coins = new ArrayList<Coin>();
     ArrayList<Coin> pulledUserCoins = new ArrayList<Coin>();
-    User mockUserInsertion;
-    User mockUserClient;
-    Coin mockCoin;
+    User userInsertion;
+    User userClient;
+    Coin coin;
 
-    String mockJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.42},{\"coinTicker\":\"LTC\",\"coinAmount\":35.49123}]}";
-    String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"XRP\",\"coinAmount\":12.23},{\"coinTicker\":\"XRP\",\"coinAmount\":13.23},{\"coinTicker\":\"BTC\",\"coinAmount\":132.23},{\"coinTicker\":\"EON\",\"coinAmount\":142.23},{\"coinTicker\":\"LTC\",\"coinAmount\":132.23}]}";
+    String mockJsonRequest1 = "{\"coins\":[{\"coin_ticker\":\"BAT\",\"coin_amount\":123},{\"coin_ticker\":\"NEO\",\"coin_amount\":23.42},{\"coin_ticker\":\"LTC\",\"coin_amount\":35.49123}]}";
+    String mockJsonRequest2 = "{\"coins\":[{\"coin_ticker\":\"XRP\",\"coin_amount\":12.23},{\"coin_ticker\":\"XRP\",\"coin_amount\":13.23},{\"coin_ticker\":\"BTC\",\"coin_amount\":132.23},{\"coin_ticker\":\"EON\",\"coin_amount\":142.23},{\"coin_ticker\":\"LTC\",\"coin_amount\":132.23}]}";
 
-    mockUserInsertion = new MockUser("authtoken1", "username1", "userid1", null, "", 0);
-    mockCoin = new Coin("TRON", 63);
-    mockUserInsertion.addCoin(mockCoin);
-    mockCoin = new Coin("XRP", 63.1);
-    mockUserInsertion.addCoin(mockCoin);
-    mockCoin = new Coin("EON", 56.7532);
-    mockUserInsertion.addCoin(mockCoin);
-    DBA.insertNewUser(mockUserInsertion);
+    userInsertion = new User("authtoken1", "userid1", null, "");
+    Coin coin1 = new Coin("TRON", 63);
+    Coin coin2 = new Coin("XRP", 63.1);
+    Coin coin3 = new Coin("EON", 56.7532);
+    coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
+    userInsertion.setCoins(coins);
+    DBA.insertNewUser(userInsertion);
 
-    mockUserClient = new MockUser("authtoken1", "username1", "userid1", true, mockJsonRequest1, 0);
-    coinFactory.createUserCoinCollection(mockUserClient); // true means user exists
-    pulledUserCoins = mockUserClient.getCoins();
+    userClient = new User("authtoken1", "userid1", true, mockJsonRequest1);
+    pulledUserCoins = coinFactory.createUserCoinCollection(userClient); // true means user exists
 
     assertEquals(6, pulledUserCoins.size());
     assertEquals("TRON", pulledUserCoins.get(FIRST_COIN).getTicker());
@@ -581,19 +478,16 @@ public class CoinFactoryTest {
     coins.clear();
     pulledUserCoins.clear();
 
+    userInsertion = new User("authtoken2", "userid2", null, "");
+    coin1 = new Coin("TRON", 63);
+    coin2 = new Coin("XRP", 63.1);
+    coin3 = new Coin("EON", 56.7532);
+    coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
+    userInsertion.setCoins(coins);
+    DBA.insertNewUser(userInsertion);
 
-    mockUserInsertion = new MockUser("authtoken2", "username2", "userid2", null, "", 0);
-    mockCoin = new Coin("TRON", 63);
-    mockUserInsertion.addCoin(mockCoin);
-    mockCoin = new Coin("XRP", 63.1);
-    mockUserInsertion.addCoin(mockCoin);
-    mockCoin = new Coin("EON", 56.7532);
-    mockUserInsertion.addCoin(mockCoin);
-    DBA.insertNewUser(mockUserInsertion);
-
-    mockUserClient = new MockUser("authtoken2", "username2", "userid2", true, mockJsonRequest2, 0);
-    coinFactory.createUserCoinCollection(mockUserClient); // true means user exists
-    pulledUserCoins = mockUserClient.getCoins();
+    userClient = new User("authtoken2", "userid2", true, mockJsonRequest2);
+    pulledUserCoins = coinFactory.createUserCoinCollection(userClient); // true means user exists
 
     assertEquals(5, pulledUserCoins.size());
     assertEquals("TRON", pulledUserCoins.get(FIRST_COIN).getTicker());
@@ -607,7 +501,7 @@ public class CoinFactoryTest {
     assertEquals("LTC", pulledUserCoins.get(FIFTH_COIN).getTicker());
     assertEquals(132.23, pulledUserCoins.get(FIFTH_COIN).getAmount(), 1e-8);
 
-    afterTest(DBA);
+    this.afterTest(DBA);
   }
 
 

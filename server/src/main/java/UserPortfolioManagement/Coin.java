@@ -36,8 +36,8 @@ public class Coin {
 
     try {
       HttpResponse<JsonNode> response = Unirest.get(fetchCoinPriceUrl)
-                                     .header("accept", "application/json")
-                                     .asJson();
+                                 .header("accept", "application/json")
+                                 .asJson();
 
       JSONObject jsonCoin  = response.getBody().getObject();
       this.latestCoinPrice = jsonCoin.getJSONObject("RAW").getJSONObject(getTicker())
@@ -57,7 +57,6 @@ public class Coin {
 
     String coinTicker = this.getTicker();
     String fetchCoinPriceUrl = urlStart + coinTicker + urlEnd;
-
     return fetchCoinPriceUrl;
   }
 

@@ -24,14 +24,15 @@ public class TokenChecker {
     }catch(Exception error) {
       return REQUEST_UNAUTHORIZED;
     }
+
     return REQUEST_AUTHORIZED;
   }
 
   public String[] getAuthTokenInfo(String authToken) {
     DecodedJWT decodedAuthToken = decodeAuthToken(authToken);
-    String username = decodedAuthToken.getClaim("username").asString();
     String userId = decodedAuthToken.getClaim("user id").asString();
-    String[] userInfoPayload = {username, userId};
+    String[] userInfoPayload = {userId};
+
     return userInfoPayload;
   }
 
@@ -39,6 +40,7 @@ public class TokenChecker {
     Algorithm algorithm = Algorithm.HMAC256("fake_secret_key");
     JWTVerifier verifier = JWT.require(algorithm).build();
     DecodedJWT decodedAuthToken = verifier.verify(authToken);
+
     return decodedAuthToken;
   }
 

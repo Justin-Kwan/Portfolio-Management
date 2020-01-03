@@ -1,0 +1,40 @@
+.navbar-brand {
+  color: #092557;
+  font-family: PulpDisplay-SemiBold;
+  font-size: xx-large;
+  font-weight: normal;
+}
+
+#navbar-title {
+  color: #092557;
+  font-family: PulpDisplay-SemiBold;
+  font-size: xx-large;
+}
+
+#navbar-home,
+#navbar-login,
+#navbar-signup {
+  color: #092557;
+}
+
+.display-3 {
+  color: white;
+  font-family: PulpDisplay-SemiBold;
+}
+
+.jumbotron {
+  background:
+    linear-gradient(to right, #6C2D87, #23D9D9);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white !important;
+}
+
+.close {
+  margin: auto;
+}
+
+.row.no-gutter {
+  margin-left: 0;
+  margin-right: 0;
+}

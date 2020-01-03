@@ -1,0 +1,39 @@
+.navbar-brand {
+  color: #092557;
+  font-family: PulpDisplay-SemiBold;
+  font-size: xx-large;
+  font-weight: normal;
+}
+
+#navbar-title {
+  color: #092557;
+  font-family: PulpDisplay-SemiBold;
+  font-size: xx-large;
+}
+
+#navbar-home, #navbar-login, #navbar-signup {
+  color: #092557;
+}
+
+.form-control {
+  margin: auto;
+  float: none;
+}
+
+.form-inline {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.form-group {
+  margin: auto;
+}
+
+.close {
+  margin: auto;
+}
+
+.row.no-gutter {
+  margin-left: 0;
+  margin-right: 0;
+}

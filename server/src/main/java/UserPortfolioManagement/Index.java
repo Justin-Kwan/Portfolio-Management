@@ -1,6 +1,8 @@
 package UserPortfolioManagement;
 import static spark.Spark.*;
 import spark.Filter;
+import org.json.JSONObject;
+import org.json.*;
 
 /**
  *  server API routes for user cryptocurrency portfolio management service
@@ -14,7 +16,7 @@ public class Index {
   private static final String LOCAL_HOST = "127.0.0.1";
   private static final int    PORT       = 8001;
 
-  private static final RequestHandler requestHandler = new RequestHandler();
+  private static final RequestHandler reqHandler = new RequestHandler();
   private static final IndexResponseDecider IRD = new IndexResponseDecider();
 
   private static void initServer() {
@@ -25,13 +27,9 @@ public class Index {
   }
 
   private static void enableCors() {
-
-    after((Filter) (request, response) -> {
-      response.header("Access-Control-Allow-Origin", "http://127.0.0.1:8000/getPortfolio");
-      response.header("Access-Control-Allow-Credentials", "true");
-
-      response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-      response.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,");
+    after((Filter) (req, res) -> {
+      res.header("Access-Control-Allow-Origin", "http://127.0.0.1:8000");
+      res.header("Access-Control-Allow-Credentials", "true");
     });
   }
 
@@ -39,38 +37,43 @@ public class Index {
 
     initServer();
 
-    post("/addCoinsToPortfolio", (request, response) -> {
-      String authToken = request.cookie("auth_token");
-      System.out.println("Auth Token: " + request.cookie("auth_token"));
-      String jsonRequest = request.body();
-      String resultCode = requestHandler.handleAddCoins(authToken, jsonRequest);
-      String indexResponse = IRD.determineAddCoinsResponse(resultCode);
+    post("/addCoins", (req, res) -> {
+      String authToken = req.cookie("crypto_cost_session");
+      System.out.println("Auth Token: " + req.cookie("crypto_cost_session"));
+      String requestCoinsJson = req.body();
+
+      System.out.println("Coins: " + requestCoinsJson);
+
+      String responseJson = reqHandler.handleAddCoins(authToken, requestCoinsJson);
+
+      String indexResponse = IRD.determineAddCoinsResponse(responseJson);
       return indexResponse;
     });
 
-    get("/getPortfolio", (request, response) -> {
-      String authToken   = request.cookie("auth_token");
-
-      // would be returning JSON
-      String resultCode = requestHandler.handleGetCoins(authToken);
-      //String indexResponse = IRD.determineAddCoinsResponse(resultCode);
+    // todo: change name to getCoins
+    get("/getCoins", "application/json", (req, res) -> {
 
       System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      System.out.println("Auth Token: " + request.cookie("auth_token"));
+      System.out.println("Auth Token: " + req.cookie("crypto_cost_session"));
 
-      System.out.println("REQUEST HEADER: " + request.headers());
-      System.out.println("REQUEST HEADER: " + request.host());
-        System.out.println("REQUEST HEADER: " + request.ip());
+      String authToken = req.cookie("crypto_cost_session");
 
-      System.out.println("INDEX RESPONSE: " + resultCode);
+      // would be returning JSON
+      String responseJson = reqHandler.handleGetCoins(authToken);
 
-      return resultCode;
+      System.out.println("KKKKKKKK");
+      System.out.println("^^^^^ " + responseJson + " ^^^^^^");
+
+      String indexResponse = IRD.determineAddCoinsResponse(responseJson);
+
+      System.out.println("INDEX RESPONSE: " + responseJson);
+
+      return responseJson;
     });
 
-    get("/checkUserExists/", "application/json", (request, response) -> {
-      System.out.println("Auth Token: " + request.cookie("auth_token"));
-      String userId = request.queryParams("userId");
-      boolean doesUserExist = requestHandler.handleCheckUserExists(userId);
+    get("/checkUserExists/", "application/json", (req, res) -> {
+      String userId = req.queryParams("userId");
+      boolean doesUserExist = reqHandler.handleCheckUserExists(userId);
       return doesUserExist;
     });
 

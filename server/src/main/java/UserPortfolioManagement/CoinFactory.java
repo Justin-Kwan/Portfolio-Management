@@ -15,68 +15,59 @@ import com.google.gson.Gson;
 public class CoinFactory {
 
   DatabaseAccessor DBA = new DatabaseAccessor();
+  ObjectMapper objectMapper = new ObjectMapper();
   Gson gson = new Gson();
 
-  public void createUserCoinCollection(User user) {
+  public ArrayList<Coin> createUserCoinCollection(User user) {
     ArrayList<Coin> dbCoins      = new ArrayList<Coin>();
     ArrayList<Coin> requestCoins = new ArrayList<Coin>();
     ArrayList<Coin> mergedCoins  = new ArrayList<Coin>();
 
     boolean doesUserExist = user.getStatus();
 
-    if(doesUserExist) dbCoins = getCoinsFromLocation(user, "DATABASE");
-    requestCoins = getCoinsFromLocation(user, "JSON_REQUEST");
+    if(doesUserExist)
+      dbCoins = this.getCoinsFromLocation(user, "DATABASE");
 
-    mergedCoins = mergeCoins(dbCoins, requestCoins);
-    loadCoinsToUser(user, mergedCoins);
+    requestCoins = this.getCoinsFromLocation(user, "JSON_REQUEST");
+
+    mergedCoins = this.mergeCoins(dbCoins, requestCoins);
+    return mergedCoins;
   }
 
   private ArrayList<Coin> getCoinsFromLocation(User user, String coinLocation) {
     ArrayList<Coin> coins = new ArrayList<Coin>();
-    JSONArray jsonCoins   = new JSONArray();
+
+    System.out.println("*************COINS JSON***********: " + user.getJsonRequest());
+    System.out.println("*************COIN LOCATION*****"  + coinLocation);
 
     if(coinLocation == "DATABASE") {
       DBA.createConnection();
-      jsonCoins = DBA.selectUserCoins(user);
+      coins = DBA.selectUserCoins(user);
     }
     else if(coinLocation == "JSON_REQUEST") {
-      JSONObject jsonCoinsObj = new JSONObject(user.getJsonRequest());
-      jsonCoins = jsonCoinsObj.getJSONArray("coins");
-    }
-
-    for(int i = 0; i < jsonCoins.length(); i++) {
-      Coin coin = gson.fromJson(jsonCoins.get(i).toString(), Coin.class);
-      coins.add(coin);
+      JSONObject coinsJsonObj = new JSONObject(user.getJsonRequest());
+      JSONArray coinsJson = coinsJsonObj.getJSONArray("coins");
+      coins = objectMapper.mapCoinsObjForApp(coinsJson);
     }
 
     return coins;
   }
 
   private ArrayList<Coin> mergeCoins(ArrayList<Coin> dbCoins, ArrayList<Coin> requestCoins) {
-
     for(Coin currentRequestCoin: requestCoins) {
       // assume each request coin is unique until proven otherwise
       boolean isCoinUnique = true;
 
       for(Coin currentDbCoin: dbCoins) {
-
         if(currentRequestCoin.getTicker().equals(currentDbCoin.getTicker())) {
           currentDbCoin.incrementAmount(currentRequestCoin.getAmount());
           isCoinUnique = false;
           break;
         }
-
       }
       if(isCoinUnique) dbCoins.add(currentRequestCoin);
     }
-    // all coins merged into dbCoins
     return dbCoins;
-  }
-
-  private void loadCoinsToUser(User user, ArrayList<Coin> mergedCoins) {
-    for(Coin currentCoin: mergedCoins) {
-      user.addCoin(currentCoin);
-    }
   }
 
 }
