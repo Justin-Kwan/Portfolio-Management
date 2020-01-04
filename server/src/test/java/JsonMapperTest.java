@@ -3,12 +3,15 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.junit.Test;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import manifold.ext.api.Jailbreak;
+
+import PortfolioManagement.JsonMapper;
+import PortfolioManagement.User;
+import PortfolioManagement.Coin;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import manifold.ext.api.Jailbreak;
-import UserPortfolioManagement.JsonMapper;
-import UserPortfolioManagement.User;
-import UserPortfolioManagement.Coin;
+
 
 public class JsonMapperTest {
 
@@ -54,22 +57,23 @@ public class JsonMapperTest {
   @Test
   public void test_mapResponseJsonForClient() {
     ArrayList<Coin> coins = new ArrayList<Coin>();
+    User user = new User("", "", null, "");
 
-    JSONObject responseJson = jsonMapper.mapResponseJsonForClient(coins, "coins add successful", 201, WITHOUT_COINS);
+    JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "coins add successful", 201, WITHOUT_COINS);
     JSONAssert.assertEquals(
       "{\"response_string\":\"coins add successful\", \"response_code\":201}",
       responseJson,
       true
     );
 
-    responseJson = jsonMapper.mapResponseJsonForClient(coins, "request invalid", 400, WITHOUT_COINS);
+    responseJson = jsonMapper.mapResponseJsonForClient(null, "request invalid", 400, WITHOUT_COINS);
     JSONAssert.assertEquals(
       "{\"response_string\":\"request invalid\", \"response_code\":400}",
       responseJson,
       true
     );
 
-    responseJson = jsonMapper.mapResponseJsonForClient(coins, "request unauthorized", 401, WITHOUT_COINS);
+    responseJson = jsonMapper.mapResponseJsonForClient(null, "request unauthorized", 401, WITHOUT_COINS);
     JSONAssert.assertEquals(
       "{\"response_string\":\"request unauthorized\", \"response_code\":401}",
       responseJson,
@@ -94,10 +98,12 @@ public class JsonMapperTest {
     coin3.jailbreak().coinHoldingValueUsd = 9;
 
     coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
+    user.setCoins(coins);
+    user.jailbreak().portfolioValueUsd = 100.2;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(coins, "coins get successful", 200, WITH_COINS);
+    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
     JSONAssert.assertEquals(
-      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"coins\":" +
+      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\": 100.2, \"coins\":" +
           "[{\"coin_ticker\":\"EOS\",\"coin_amount\":1,\"latest_coin_price\":2,\"coin_holding_value_usd\":3}," +
            "{\"coin_ticker\":\"BTP\",\"coin_amount\":4,\"latest_coin_price\":5,\"coin_holding_value_usd\":6}," +
            "{\"coin_ticker\":\"ETC\",\"coin_amount\":7,\"latest_coin_price\":8,\"coin_holding_value_usd\":9}]}",
@@ -116,10 +122,12 @@ public class JsonMapperTest {
     coin3.jailbreak().coinHoldingValueUsd = 2.6;
 
     coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
+    user.setCoins(coins);
+    user.jailbreak().portfolioValueUsd = 100.3;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(coins, "coins get successful", 200, WITH_COINS);
+    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
     JSONAssert.assertEquals(
-      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"coins\":" +
+      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\": 100.3,\"coins\":" +
           "[{\"coin_ticker\":\"NEO\",\"coin_amount\":0.001,\"latest_coin_price\":0.02,\"coin_holding_value_usd\":2.4}," +
            "{\"coin_ticker\":\"LTC\",\"coin_amount\":1,\"latest_coin_price\":0.03,\"coin_holding_value_usd\":2.5}," +
            "{\"coin_ticker\":\"ETH\",\"coin_amount\":1.023,\"latest_coin_price\":0.04,\"coin_holding_value_usd\":2.6}]}",
@@ -132,20 +140,24 @@ public class JsonMapperTest {
     coin1.jailbreak().coinHoldingValueUsd = 10.1;
 
     coins = new ArrayList<>(Arrays.asList(coin1));
+    user.setCoins(coins);
+    user.jailbreak().portfolioValueUsd = 100.4;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(coins, "coins get successful", 200, WITH_COINS);
+    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
     JSONAssert.assertEquals(
-      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"coins\":" +
+      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\": 100.4,\"coins\":" +
           "[{\"coin_ticker\":\"NEO\",\"coin_amount\":8,\"latest_coin_price\":9,\"coin_holding_value_usd\":10.1}]}",
       responseJson,
       true
     );
 
     coins = new ArrayList<>(Arrays.asList());
+    user.setCoins(coins);
+    user.jailbreak().portfolioValueUsd = 0;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(coins, "coins get successful", 200, WITH_COINS);
+    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
     JSONAssert.assertEquals(
-      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"coins\":" +
+      "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\":0,\"coins\":" +
           "[]}",
       responseJson,
       true

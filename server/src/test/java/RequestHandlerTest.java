@@ -3,17 +3,20 @@ import static org.junit.Assert.assertTrue;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.junit.Test;
 import org.junit.Rule;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.json.JSONObject;
-import org.json.JSONArray;
+
+import PortfolioManagement.RequestHandler;
+import PortfolioManagement.DatabaseAccessor;
+import PortfolioManagement.User;
+import PortfolioManagement.Coin;
+
 import java.util.Arrays;
 import java.util.ArrayList;
-import UserPortfolioManagement.RequestHandler;
-import UserPortfolioManagement.DatabaseAccessor;
-import UserPortfolioManagement.User;
-import UserPortfolioManagement.Coin;
 
 public class RequestHandlerTest {
 
@@ -215,6 +218,7 @@ public class RequestHandlerTest {
 
     assertEquals("coins get successful", responseJsonGetCoins.getString("response_string"));
     assertEquals(200, responseJsonGetCoins.getInt("response_code"));
+    assertTrue(0 <= responseJsonGetCoins.getDouble("portfolio_value_usd"));
     assertEquals(3, coinsJson.length(), 1e-8);
     assertEquals("BTC", coinsJson.getJSONObject(0).getString("coin_ticker"));
     assertEquals(123, coinsJson.getJSONObject(0).getDouble("coin_amount"), 1e-8);
@@ -237,6 +241,7 @@ public class RequestHandlerTest {
 
     assertEquals("coins get successful", responseJsonGetCoins.getString("response_string"));
     assertEquals(200, responseJsonGetCoins.getInt("response_code"));
+    assertTrue(0 <= responseJsonGetCoins.getDouble("portfolio_value_usd"));
     assertEquals(3, coinsJson.length(), 1e-8);
     assertEquals("NEO", coinsJson.getJSONObject(0).getString("coin_ticker"));
     assertEquals(146.41, coinsJson.getJSONObject(0).getDouble("coin_amount"), 1e-8);

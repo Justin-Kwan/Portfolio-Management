@@ -1,7 +1,4 @@
-package UserPortfolioManagement;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.ArrayList;
+package PortfolioManagement;
 import com.mongodb.MongoException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
@@ -9,14 +6,21 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
-import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Projections;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import static com.mongodb.client.model.Filters.eq;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.mongodb.ServerAddress;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Projections.*;
+
+import java.net.UnknownHostException;
+
+import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  *  database accessing and interaction class for mongodb

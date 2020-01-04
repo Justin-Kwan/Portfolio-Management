@@ -1,7 +1,9 @@
-package UserPortfolioManagement;
-import java.util.ArrayList;
+package PortfolioManagement;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 
 public class ObjectMapper {
 
@@ -9,7 +11,6 @@ public class ObjectMapper {
     String userId = userJson.getString("user_id");
 
     JSONArray coinsJson = userJson.getJSONArray("coins");
-
     ArrayList<Coin> coins = mapCoinsObjForApp(coinsJson);
 
     User user = new User("", userId, null, "");

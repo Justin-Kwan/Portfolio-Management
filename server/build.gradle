@@ -12,14 +12,13 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'UserPortfolioManagement.Index'
+mainClassName = 'PortfolioManagement.Index'
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
-
 
 // this turns logging on in tests:
 test.testLogging.showStandardStreams = true
@@ -30,9 +29,6 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:27.1-jre'
-
-    // Use JWT library
-    implementation 'com.auth0:java-jwt:3.8.1'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

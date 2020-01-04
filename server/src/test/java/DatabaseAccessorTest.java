@@ -1,10 +1,12 @@
-import java.util.Arrays;
-import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import UserPortfolioManagement.DatabaseAccessor;
-import UserPortfolioManagement.User;
-import UserPortfolioManagement.Coin;
+
+import PortfolioManagement.DatabaseAccessor;
+import PortfolioManagement.User;
+import PortfolioManagement.Coin;
+
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class DatabaseAccessorTest {
 

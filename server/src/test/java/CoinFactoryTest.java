@@ -3,10 +3,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import manifold.ext.api.Jailbreak;
-import UserPortfolioManagement.CoinFactory;
-import UserPortfolioManagement.DatabaseAccessor;
-import UserPortfolioManagement.User;
-import UserPortfolioManagement.Coin;
+import PortfolioManagement.CoinFactory;
+import PortfolioManagement.DatabaseAccessor;
+import PortfolioManagement.User;
+import PortfolioManagement.Coin;
 
 public class CoinFactoryTest {
 

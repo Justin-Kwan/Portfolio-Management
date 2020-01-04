@@ -1,4 +1,4 @@
-import UserPortfolioManagement.Coin;
+import PortfolioManagement.Coin;
 import manifold.ext.api.Jailbreak;
 
 class MockCoin extends Coin {

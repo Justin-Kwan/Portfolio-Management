@@ -1,4 +1,4 @@
-package UserPortfolioManagement;
+package PortfolioManagement;
 import java.util.ArrayList;
 
 public class User {
@@ -63,22 +63,18 @@ public class User {
   }
 
   public void calculateCoinHoldingValues() {
-
     for(Coin currentCoin: coins) {
       currentCoin.fetchAndSetLatestPrice();
       currentCoin.calculateAndSetHoldingValue();
     }
-
   }
 
   public void calculatePortfolioValue() {
     this.portfolioValueUsd = 0;
-
     for(Coin currentCoin: coins) {
       double currentCoinHoldingValue = currentCoin.getHoldingValueUsd();
       this.portfolioValueUsd += currentCoinHoldingValue;
 		}
-
   }
 
 }

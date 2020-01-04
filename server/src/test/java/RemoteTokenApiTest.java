@@ -1,11 +1,13 @@
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.Rule;
+import org.json.JSONObject;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.json.JSONObject;
-import UserPortfolioManagement.RemoteTokenApi;
+
+import PortfolioManagement.RemoteTokenApi;
 
 
 public class RemoteTokenApiTest {
@@ -35,7 +37,7 @@ public class RemoteTokenApiTest {
     String mockAuthServerResponse = "{\"is user authorized\": true, \"user id\":\"user_id_1\", \"response code\":200}";
 
     this.setMockAuthServer(mockAuthToken, mockAuthServerResponse);
-    
+
     Object[] authTokenPayload = remoteTokenApi.fetchAuthCheck(mockAuthToken);
     assertEquals(true, authTokenPayload[0]);
     assertEquals("user_id_1", authTokenPayload[1]);

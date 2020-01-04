@@ -1,12 +1,14 @@
+package PortfolioManagement;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+
 /**
  * utility class that maps User and Coin objects to JSON format for DB storage
  * and responses to client
  */
-
-package UserPortfolioManagement;
-import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class JsonMapper {
 
@@ -20,14 +22,16 @@ public class JsonMapper {
     return userJsonMap;
   }
 
-  // TEST!
-  public JSONObject mapResponseJsonForClient(ArrayList<Coin> coins, String responseString, int responseCode, boolean withCoins) {
+  public JSONObject mapResponseJsonForClient(User user, String responseString, int responseCode, boolean withCoins) {
     JSONObject responseJsonMap = new JSONObject();
 
     if(withCoins) {
+      ArrayList<Coin> coins = user.getCoins();
+      double portfolioValueUsd = user.getPortfolioValueUsd();
       JSONArray coinsJsonMap = this.mapCoinsJson(coins, "CLIENT");
       responseJsonMap.put("response_string", responseString);
       responseJsonMap.put("response_code", responseCode);
+      responseJsonMap.put("portfolio_value_usd", portfolioValueUsd);
       responseJsonMap.put("coins", coinsJsonMap);
     }
     else {

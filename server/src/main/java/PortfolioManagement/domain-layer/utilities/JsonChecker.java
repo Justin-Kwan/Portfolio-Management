@@ -1,5 +1,4 @@
-package UserPortfolioManagement;
-import java.io.InputStream;
+package PortfolioManagement;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -7,7 +6,10 @@ import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
+
 import org.apache.commons.io.IOUtils;
+
+import java.io.InputStream;
 
 /**
  *  class responsible for checking and validating received client json requests
@@ -45,13 +47,10 @@ public class JsonChecker {
 
   // todo: split into loadSchema and getSchema
   private JsonNode getJsonClientSchema() {
-
     InputStream inputStream = getClass().getResourceAsStream(CLIENT_ADD_JSON_COINS_SCHEMA);
     String jsonClientSchema = IOUtils.toString(inputStream, "utf-8");
     JsonNode jsonClientSchemaObj = jacksonMapper.readTree(jsonClientSchema);
-
     return jsonClientSchemaObj;
-
   }
 
 }

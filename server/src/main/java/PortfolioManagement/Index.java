@@ -1,4 +1,4 @@
-package UserPortfolioManagement;
+package PortfolioManagement;
 import static spark.Spark.*;
 import spark.Filter;
 import org.json.JSONObject;
@@ -39,10 +39,8 @@ public class Index {
     post("/addCoins", (req, res) -> {
       String authToken = req.cookie("crypto_cost_session");
       String requestCoinsJson = req.body();
-      System.out.println("Coins: " + requestCoinsJson);
       JSONObject responseJson = requestHandler.handleAddCoins(authToken, requestCoinsJson);
       System.out.println("Response: " + responseJson);
-
       return responseJson;
     });
 
@@ -53,7 +51,7 @@ public class Index {
 
       JSONObject responseJson = requestHandler.handleGetCoins(authToken);
       System.out.println("INDEX RESPONSE: " + responseJson);
-      
+
       return responseJson;
     });
 

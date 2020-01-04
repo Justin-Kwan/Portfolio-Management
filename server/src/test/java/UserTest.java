@@ -1,10 +1,12 @@
-import java.util.ArrayList;
-import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
-import UserPortfolioManagement.User;
-import UserPortfolioManagement.Coin;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import PortfolioManagement.User;
+import PortfolioManagement.Coin;
 
 public class UserTest {
 

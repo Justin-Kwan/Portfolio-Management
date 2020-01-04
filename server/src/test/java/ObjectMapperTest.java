@@ -2,13 +2,15 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import manifold.ext.api.Jailbreak;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import manifold.ext.api.Jailbreak;
-import UserPortfolioManagement.ObjectMapper;
-import UserPortfolioManagement.User;
-import UserPortfolioManagement.Coin;
-import UserPortfolioManagement.DatabaseAccessor;
+
+import PortfolioManagement.ObjectMapper;
+import PortfolioManagement.User;
+import PortfolioManagement.Coin;
+import PortfolioManagement.DatabaseAccessor;
 
 
 public class ObjectMapperTest {

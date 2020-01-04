@@ -1,7 +1,8 @@
-package UserPortfolioManagement;
-import java.util.ArrayList;
+package PortfolioManagement;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  *  factory class responsible for creating the coin objects in the user's coin
@@ -23,8 +24,9 @@ public class CoinFactory {
 
     boolean doesUserExist = user.getStatus();
 
-    if(doesUserExist)
+    if(doesUserExist) {
       dbCoins = this.getCoinsFromLocation(user, "DATABASE");
+    }
 
     requestCoins = this.getCoinsFromLocation(user, "JSON_REQUEST");
 
@@ -34,9 +36,6 @@ public class CoinFactory {
 
   private ArrayList<Coin> getCoinsFromLocation(User user, String coinLocation) {
     ArrayList<Coin> coins = new ArrayList<Coin>();
-
-    System.out.println("*************COINS JSON***********: " + user.getJsonRequest());
-    System.out.println("*************COIN LOCATION*****"  + coinLocation);
 
     if(coinLocation == "DATABASE") {
       DBA.createConnection();
