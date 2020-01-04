@@ -12,7 +12,7 @@ public class JsonMapper {
 
   public JSONObject mapUserJsonForDb(User user) {
     ArrayList<Coin> coins = user.getCoins();
-    JSONArray coinsJsonMap = mapCoinsJsonForDb(coins);
+    JSONArray coinsJsonMap = this.mapCoinsJson(coins, "DATABASE");
 
     JSONObject userJsonMap = new JSONObject();
     userJsonMap.put("user_id", user.getUserId());
@@ -20,44 +20,47 @@ public class JsonMapper {
     return userJsonMap;
   }
 
-  protected JSONArray mapCoinsJsonForDb(ArrayList<Coin> coins) {
+  // TEST!
+  public JSONObject mapResponseJsonForClient(ArrayList<Coin> coins, String responseString, int responseCode, boolean withCoins) {
+    JSONObject responseJsonMap = new JSONObject();
+
+    if(withCoins) {
+      JSONArray coinsJsonMap = this.mapCoinsJson(coins, "CLIENT");
+      responseJsonMap.put("response_string", responseString);
+      responseJsonMap.put("response_code", responseCode);
+      responseJsonMap.put("coins", coinsJsonMap);
+    }
+    else {
+      responseJsonMap.put("response_string", responseString);
+      responseJsonMap.put("response_code", responseCode);
+    }
+
+    return responseJsonMap;
+  }
+
+  private JSONArray mapCoinsJson(ArrayList<Coin> coins, String coinDestination) {
     JSONArray coinsJsonMap = new JSONArray();
 
-    for(int i = 0; i < coins.size(); i++) {
+    for(Coin currentCoin: coins) {
       JSONObject coinJson = new JSONObject();
-      coinJson.put("coin_ticker", coins.get(i).getTicker());
-      coinJson.put("coin_amount", coins.get(i).getAmount());
+      coinJson.put("coin_ticker", currentCoin.getTicker());
+      coinJson.put("coin_amount", currentCoin.getAmount());
+
+      if(coinDestination.equals("CLIENT")) {
+        coinJson.put("latest_coin_price", currentCoin.getLatestPrice());
+        coinJson.put("coin_holding_value_usd", currentCoin.getHoldingValueUsd());
+      }
+
       coinsJsonMap.put(coinJson);
     }
 
     return coinsJsonMap;
   }
 
-  // TEST!
-  public JSONObject mapResponseJsonForClient(User user, String responseString, Int responseCode, String route) {
-    JSONObect responseJson = new JSONObject();
-
-    if(route == "handleAddCoins") {
-      responseJson.addProperty("response_string", responseString);
-      responseJson.addProperty("response_code", responseCode);
-    }
-    else if(route == "handleGetCoins") {
-      responseJson.addProperty("response_string", responseString);
-      responseJson.addProperty("response_code", responseCode);
-      responseJson.addProperty("coins", responseCode);
-    }
-    return responseJson;
-  }
-
-  // TEST!
   public JSONObject mapRequestJsonForAuthServer(String authToken) {
-    JSONObect requestJson = new JSONObject();
-    requestJson.addProperty('crypto_cost_session', authToken);
-    return requestJson;
+    JSONObject requestJsonMap = new JSONObject();
+    requestJsonMap.put("crypto_cost_session", authToken);
+    return requestJsonMap;
   }
-
-
-
-
 
 }

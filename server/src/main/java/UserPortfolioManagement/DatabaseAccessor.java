@@ -14,7 +14,6 @@ import com.mongodb.client.model.Projections;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import static com.mongodb.client.model.Filters.eq;
-import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.mongodb.ServerAddress;
@@ -38,7 +37,6 @@ public class DatabaseAccessor {
   private MongoDatabase             userPortfoliosDb;
   private MongoCollection<Document> userCollection;
 
-  Gson gson = new Gson();
   JsonMapper jsonMapper = new JsonMapper();
   ObjectMapper objectMapper = new ObjectMapper();
 

@@ -51,9 +51,9 @@ public class UserTest {
   public void test_setJsonRequest() {
     User user;
 
-    String mockJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"BTC\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"BAT\",\"coinAmount\":3.41}]}";
-    String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.41},{\"coinTicker\":\"LTC\",\"coinAmount\":31.49123}]}";
-    String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"LTC\",\"coinAmount\":1223}]}";
+    String mockJsonRequest1 = "{\"coins\":[{\"coin_ticker\":\"BTC\",\"coin_amount\":123},{\"coin_ticker\":\"NEO\",\"coin_amount\":23.41},{\"coin_ticker\":\"BAT\",\"coin_amount\":3.41}]}";
+    String mockJsonRequest2 = "{\"coins\":[{\"coin_ticker\":\"BAT\",\"coin_amount\":123},{\"coin_ticker\":\"NEO\",\"coin_amount\":23.41},{\"coin_ticker\":\"LTC\",\"coin_amount\":31.49123}]}";
+    String mockJsonRequest3 = "{\"coins\":[{\"coin_ticker\":\"LTC\",\"coin_amount\":1223}]}";
 
     user = new User("", "", null, mockJsonRequest1);
     assertEquals(mockJsonRequest1, user.getJsonRequest());
@@ -108,9 +108,9 @@ public class UserTest {
   public void test_getJsonRequest() {
     User user;
 
-    String mockJsonRequest1 = "{\"coins\":[{\"coinTicker\":\"EOS\",\"coinAmount\":1223},{\"coinTicker\":\"BAS\",\"coinAmount\":3.42}]}";
-    String mockJsonRequest2 = "{\"coins\":[{\"coinTicker\":\"BAT\",\"coinAmount\":123},{\"coinTicker\":\"NEO\",\"coinAmount\":23.42},{\"coinTicker\":\"LTC\",\"coinAmount\":35.49123}]}";
-    String mockJsonRequest3 = "{\"coins\":[{\"coinTicker\":\"XRP\",\"coinAmount\":12.23}]}";
+    String mockJsonRequest1 = "{\"coins\":[{\"coin_ticker\":\"EOS\",\"coin_amount\":1223},{\"coin_ticker\":\"BAS\",\"coin_amount\":3.42}]}";
+    String mockJsonRequest2 = "{\"coins\":[{\"coin_ticker\":\"BAT\",\"coin_amount\":123},{\"coin_ticker\":\"NEO\",\"coin_amount\":23.42},{\"coin_ticker\":\"LTC\",\"coin_amount\":35.49123}]}";
+    String mockJsonRequest3 = "{\"coins\":[{\"coin_ticker\":\"XRP\",\"coin_amount\":12.23}]}";
 
     user = new User("", "", null, mockJsonRequest1);
     assertEquals(mockJsonRequest1, user.getJsonRequest());

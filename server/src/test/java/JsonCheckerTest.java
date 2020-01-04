@@ -198,6 +198,16 @@ public class JsonCheckerTest {
     mockJsonRequest = "{\"coins\":[{\"coin_ticker\":\"BTC\",\"coin_amount\":2},{\"coin_ticker\":\"NEO\",:23.41},{\"coin_ticker\":\"ETH\",\"coin_amount\":1}]}";
     isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
     assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, number given as coin list
+    mockJsonRequest = "{\"coins\":123}";
+    isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
+
+    // bad JSON, null coin list
+    mockJsonRequest = "{\"coins\":null}";
+    isJsonRequestValid = jsonChecker.checkJsonRequestValid(mockJsonRequest);
+    assertEquals(false, isJsonRequestValid);
   }
 
 }

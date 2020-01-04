@@ -1,5 +1,4 @@
 package UserPortfolioManagement;
-import com.google.gson.Gson;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
@@ -12,37 +11,40 @@ import java.util.ArrayList;
 
 public class RequestHandler {
 
-  private final ResultCodes      resultCodes    = new ResultCodes();
-  private final JsonChecker      jsonChecker    = new JsonChecker();
-  private final TokenChecker     tokenChecker   = new TokenChecker();
-  private final CoinFactory      coinFactory    = new CoinFactory();
-  private final DatabaseAccessor DBA            = new DatabaseAccessor();
-  private final RemoteTokenApi   remoteTokenApi = new RemoteTokenApi();
+  private final static ResultCodes      resultCodes    = new ResultCodes();
+  private final static JsonChecker      jsonChecker    = new JsonChecker();
+  private final static TokenChecker     tokenChecker   = new TokenChecker();
+  private final static CoinFactory      coinFactory    = new CoinFactory();
+  private final static DatabaseAccessor DBA            = new DatabaseAccessor();
+  private final static RemoteTokenApi   remoteTokenApi = new RemoteTokenApi();
+  private final static JsonMapper       jsonMapper     = new JsonMapper();
 
-  private final int USERNAME = 0;
-  private final int USER_ID  = 1;
-
-  Gson gson = new Gson();
-
-
-
-
-
+  private final static boolean          WITH_COINS     = true;
+  private final static boolean          WITHOUT_COINS  = false;
 
   /**
    * add coin process is single threaded
    */
-  public synchronized String handleAddCoins(String authToken, String requestCoinsJson) {
-    boolean isRequestAuthorized = tokenChecker.checkAuthTokenValid(authToken);
-    if(!isRequestAuthorized) return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
+  public synchronized JSONObject handleAddCoins(String authToken, String requestCoinsJson) {
+    Object[] authTokenPayload   = remoteTokenApi.fetchAuthCheck(authToken);
+    boolean  isUserAuthorized   = (Boolean) authTokenPayload[0];
+    String   userId             = (String) authTokenPayload[1];
+    boolean  isJsonRequestValid = jsonChecker.checkJsonRequestValid(requestCoinsJson);
 
-    boolean isJsonRequestValid = jsonChecker.checkJsonRequestValid(requestCoinsJson);
-    if(!isJsonRequestValid) return resultCodes.ERROR_JSON_REQUEST_INVALID;
+    System.out.println("IS USER AUTHORIZED? " + isUserAuthorized);
 
-    String[] userInfoPayload = tokenChecker.getAuthTokenInfo(authToken);
-    String userId            = userInfoPayload[0];
+    if(!isUserAuthorized) {
+      JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "request unauthorized", 401, WITHOUT_COINS);
+      return responseJson;
+    }
+
+    if(!isJsonRequestValid) {
+      JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "request invalid", 400, WITHOUT_COINS);
+      return responseJson;
+    }
+
     DBA.createConnection();
-    boolean doesUserExist    = DBA.checkUserExists(userId);
+    boolean doesUserExist = DBA.checkUserExists(userId);
 
     User user = new User(authToken, userId, doesUserExist, requestCoinsJson);
     ArrayList<Coin> coins = coinFactory.createUserCoinCollection(user);
@@ -52,20 +54,32 @@ public class RequestHandler {
     else DBA.insertNewUser(user);
     DBA.closeConnection();
 
-    return resultCodes.SUCCESS;
+    JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "coins add successful", 201, WITHOUT_COINS);
+    return responseJson;
   }
 
-  /*TEST!!*/
-  // todo: if user DNE yet, return empty
-  public String handleGetCoins(String authToken) {
-    boolean isRequestAuthorized = tokenChecker.checkAuthTokenValid(authToken);
-    if(!isRequestAuthorized) return resultCodes.ERROR_REQUEST_UNAUTHORIZED;
+  public JSONObject handleGetCoins(String authToken) {
+    Object[] authTokenPayload   = remoteTokenApi.fetchAuthCheck(authToken);
+    boolean  isUserAuthorized   = (Boolean) authTokenPayload[0];
+    String   userId             = (String) authTokenPayload[1];
 
-    String[] userInfoPayload = tokenChecker.getAuthTokenInfo(authToken);
-    String username          = userInfoPayload[USERNAME];
-    String userId            = userInfoPayload[USER_ID];
+    System.out.println("IS USER AUTHORIZED? " + isUserAuthorized);
+
+    if(!isUserAuthorized) {
+      JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "request unauthorized", 401, WITHOUT_COINS);
+      return responseJson;
+    }
 
     System.out.println("User id: " + userId);
+
+    DBA.createConnection();
+    boolean doesUserExist = DBA.checkUserExists(userId);
+    DBA.closeConnection();
+
+    if(!doesUserExist) {
+      JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "no coins to get", 400, WITHOUT_COINS);
+      return responseJson;
+    }
 
     DBA.createConnection();
     User user = DBA.selectUser(userId);
@@ -73,9 +87,10 @@ public class RequestHandler {
 
     user.calculateCoinHoldingValues();
     user.calculatePortfolioValue();
+    ArrayList<Coin> coins = user.getCoins();
 
-    String jsonUser = gson.toJson(user);
-    return jsonUser;
+    JSONObject responseJson = jsonMapper.mapResponseJsonForClient(coins, "coins get successful", 200, WITH_COINS);
+    return responseJson;
   }
 
   public boolean handleCheckUserExists(String userId) {

@@ -1,30 +1,4 @@
 $("#add-coin-button").click(function(event) {
-  const newCoinInputRow = `<tr id='new-coin-forms-'>
-                              <td class='text-center'>
-                                  <form class='form-inline' id='select-coin-input-'>
-                                    <select class='form-control' id='select-coin-input'>
-                                        <option>BTC</option>
-                                        <option>ETH</option>
-                                        <option>LTC</option>
-                                        <option>NEO</option>
-                                        <option>BAT</option>
-                                    </select>
-                                  </form>
-                              </td>
-                              <td class='text-center'>
-                                  <form class='form-inline' id='coin-amount-input-'>
-                                      <div class='form-group'>
-                                        <input class='form-control' id='coin-amount-input' placeholder='Coin Amount'>
-                                      </div>
-                                  </form>
-                              </td>
-                              <td class="row no-gutter">
-                                <button type='button' class='close' aria-label='Close'>
-                                  <span aria-hidden='true'>&times;</span>
-                                </button>
-                              </td>
-                              </tr>`;
-
   $("#coin-input-table tbody").append(newCoinInputRow);
 });
 
@@ -91,3 +65,29 @@ function postCoinsToServer(requestJson) {
 
   return promise;
 }
+
+const newCoinInputRow = `<tr id='new-coin-forms-'>
+                            <td class='text-center'>
+                                <form class='form-inline' id='select-coin-input-'>
+                                  <select class='form-control' id='select-coin-input'>
+                                      <option>BTC</option>
+                                      <option>ETH</option>
+                                      <option>LTC</option>
+                                      <option>NEO</option>
+                                      <option>BAT</option>
+                                  </select>
+                                </form>
+                            </td>
+                            <td class='text-center'>
+                                <form class='form-inline' id='coin-amount-input-'>
+                                    <div class='form-group'>
+                                      <input class='form-control' id='coin-amount-input' placeholder='Coin Amount'>
+                                    </div>
+                                </form>
+                            </td>
+                            <td class="row no-gutter">
+                              <button type='button' class='close' aria-label='Close'>
+                                <span aria-hidden='true'>&times;</span>
+                              </button>
+                            </td>
+                            </tr>`;

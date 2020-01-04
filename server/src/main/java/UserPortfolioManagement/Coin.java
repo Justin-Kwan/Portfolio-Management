@@ -8,10 +8,10 @@ import org.json.JSONObject;
 
 public class Coin {
 
-  protected String coinTicker;
-  protected double coinAmount          = 0;
-  protected double latestCoinPrice     = 0;
-  protected double coinHoldingValueUsd = 0;
+  private String coinTicker;
+  private double coinAmount          = 0;
+  private double latestCoinPrice     = 0;
+  private double coinHoldingValueUsd = 0;
 
   // ctor
   public Coin(String coinTicker, double coinAmount) {
@@ -19,11 +19,11 @@ public class Coin {
     this.setAmount(coinAmount);
   }
 
-  protected void setTicker(String coinTicker) {
+  private void setTicker(String coinTicker) {
     this.coinTicker = coinTicker;
   }
 
-  protected void setAmount(double coinAmount) {
+  private void setAmount(double coinAmount) {
     this.coinAmount = coinAmount;
   }
 
@@ -33,7 +33,6 @@ public class Coin {
 
   public void fetchAndSetLatestPrice() {
     String fetchCoinPriceUrl = generateFetchPriceUrl();
-
     try {
       HttpResponse<JsonNode> response = Unirest.get(fetchCoinPriceUrl)
                                  .header("accept", "application/json")

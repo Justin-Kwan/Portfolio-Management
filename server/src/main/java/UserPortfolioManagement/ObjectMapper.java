@@ -18,7 +18,7 @@ public class ObjectMapper {
     return user;
   }
 
-  protected ArrayList<Coin> mapCoinsObjForApp(JSONArray coinsJson) {
+  public ArrayList<Coin> mapCoinsObjForApp(JSONArray coinsJson) {
     ArrayList<Coin> coins = new ArrayList<Coin>();
 
     for(int i = 0; i < coinsJson.length(); i++) {
@@ -35,9 +35,11 @@ public class ObjectMapper {
     return coins;
   }
 
-  // TEST!
-  public String[] mapTokenServerResponseObjForApp(JSONObject authServerResponse) {
-
+  public Object[] mapTokenServerResponseObjForApp(JSONObject responseJson) {
+    boolean isUserAuthorized = responseJson.getBoolean("is user authorized");
+    String userId = responseJson.getString("user id");
+    Object[] authTokenPayload = {isUserAuthorized, userId};
+    return authTokenPayload;
   }
 
 }

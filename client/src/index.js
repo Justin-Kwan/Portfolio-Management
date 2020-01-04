@@ -1,16 +1,15 @@
-
 'use strict';
 
-const RemoteCrudApi      = require('./RemoteCrudApi.js');
-const express            = require('express');
-const app                = express();
-const cors               = require('cors')
-const path               = require('path');
-const cookieParser       = require('cookie-parser');
+const RemoteTokenApi = require('./RemoteTokenApi.js');
+const express = require('express');
+const cors = require('cors')
+const path = require('path');
+const cookieParser = require('cookie-parser');
 
-const LOCAL_HOST         = '127.0.0.1';
-const PORT               = 8000;
+const LOCAL_HOST = '127.0.0.1';
+const PORT = 8000;
 
+const app = express();
 app.use(cors());
 
 // static page paths
@@ -29,49 +28,45 @@ app.use(getPortfolioFolderPath);
 app.use(fontsFolderPath);
 app.use(imagesFolderPath);
 
-const remoteCrudApi = new RemoteCrudApi();
+const remoteTokenApi = new RemoteTokenApi();
 
-function onGetPortfolio(req, res) {
+async function onGetPortfolio(req, res) {
+  const authToken = req.cookies['crypto_cost_session'];
 
-  const authToken = req.cookies['auth_token'];
-  // const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
+  if(authToken == undefined)
+    res.send("403 Unauthorized Access");
+  else {
+    const isRequestAuthorized = await remoteTokenApi.fetchAuthCheck(authToken);
 
-  // if(isRequestAuthorized == false)
-  //   res.send("403 Unauthorized Access");
-  //
-  // const doesUserExist = handleUserStatusCheck(authToken);
-  //
-  // if(doesUserExist == 'false')
-  //   res.redirect('http://127.0.0.1:8000/createPortfolio');
-  // else if(doesUserExist == 'true')
-    res.sendFile(getPortfolioPagePath);
-  // else
-  //   res.send("500 Internal Error, Oops (¯―¯٥)");
+    console.log("REQ AUTHED? " + isRequestAuthorized);
+
+    if (isRequestAuthorized === false)
+      res.send("403 Unauthorized Access");
+    else
+      res.sendFile(getPortfolioPagePath);
+  }
 }
 
-function onUpdatePortfolio(req, res) {
-  const authToken = req.cookies['auth_token'];
+async function onUpdatePortfolio(req, res) {
+  const authToken = req.cookies['crypto_cost_session'];
 
-  // Todo: call shared_services or a token checking lib
-  // const isRequestAuthorized = tokenChecker.checkAuthToken(authToken);
-  //
-  // if(isRequestAuthorized == false)
-  //   res.send("403 Unauthorized Access");
+  if(authToken == undefined)
+    res.send("403 Unauthorized Access");
+  else {
+    const isRequestAuthorized = await remoteTokenApi.fetchAuthCheck(authToken);
 
-  res.sendFile(updatePortfolioPagePath);
+    console.log("REQ AUTHED? " + isRequestAuthorized);
+
+    if (isRequestAuthorized === false)
+      res.send("403 Unauthorized Access");
+    else
+      res.sendFile(updatePortfolioPagePath);
+  }
 }
 
-function handleUserStatusCheck(authToken) {
-  //const userId = tokenChecker.getAuthTokenUserId(authToken);
-  const userStatusUrl = remoteCrudApi.generateUserStatusUrl(userId);
-  const doesUserExist = remoteCrudApi.fetchUserStatus(userStatusUrl);
-  return doesUserExist;
-}
-
-// routes
 app.get('/getPortfolio', onGetPortfolio);
 app.get('/updatePortfolio', onUpdatePortfolio);
 
 app.listen(PORT, function() {
-  console.log('Frontend server started at ' + LOCAL_HOST + ':' + PORT + '...');
+  console.log('Portfolio management frontend server started at ' + LOCAL_HOST + ':' + PORT + '...');
 });

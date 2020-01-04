@@ -2,7 +2,6 @@ package UserPortfolioManagement;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.google.gson.Gson;
 
 /**
  *  factory class responsible for creating the coin objects in the user's coin
@@ -14,9 +13,8 @@ import com.google.gson.Gson;
 
 public class CoinFactory {
 
-  DatabaseAccessor DBA = new DatabaseAccessor();
-  ObjectMapper objectMapper = new ObjectMapper();
-  Gson gson = new Gson();
+  private static DatabaseAccessor DBA = new DatabaseAccessor();
+  private static ObjectMapper objectMapper = new ObjectMapper();
 
   public ArrayList<Coin> createUserCoinCollection(User user) {
     ArrayList<Coin> dbCoins      = new ArrayList<Coin>();

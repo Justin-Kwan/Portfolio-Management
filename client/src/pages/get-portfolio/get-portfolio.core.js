@@ -1,4 +1,5 @@
 
+getPortfolioCoins();
 
 async function getPortfolioCoins() {
   const authToken = getTokenByCookieName("crypto_cost_session");
@@ -10,9 +11,9 @@ async function getPortfolioCoins() {
 function fetchCoinsFromServer(authToken) {
   var promise = new Promise(function(resolve, reject) {
     $.ajaxSetup({
-      contentType: "application/json; charset=utf-8",
-      headers: {
-        "crypto_cost_session": authToken
+      crossDomain: true,
+      xhrFields: {
+        withCredentials: true
       }
     });
 

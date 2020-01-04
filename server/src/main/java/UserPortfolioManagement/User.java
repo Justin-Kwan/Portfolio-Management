@@ -3,12 +3,12 @@ import java.util.ArrayList;
 
 public class User {
 
-  protected String  userId;
-  protected String  authToken;
-  protected String  requestJson;
-  protected double  portfolioValueUsd = 0;
-  protected Boolean doesUserExist;
-  protected ArrayList<Coin> coins = new ArrayList<Coin>();
+  private static String  userId;
+  private static String  authToken;
+  private static String  requestJson;
+  private static double  portfolioValueUsd = 0;
+  private static Boolean doesUserExist;
+  private static ArrayList<Coin> coins = new ArrayList<Coin>();
 
   // ctor
   public User(String authToken, String userId, Boolean doesUserExist, String requestJson) {
@@ -18,19 +18,19 @@ public class User {
     this.setJsonRequest(requestJson);
   }
 
-  protected void setAuthToken(String authToken) {
+  private void setAuthToken(String authToken) {
     this.authToken = authToken;
   }
 
-  protected void setUserId(String userId) {
+  private void setUserId(String userId) {
     this.userId = userId;
   }
 
-  protected void setStatus(Boolean doesUserExist) {
+  private void setStatus(Boolean doesUserExist) {
     this.doesUserExist = doesUserExist;
   }
 
-  protected void setJsonRequest(String requestJson) {
+  private void setJsonRequest(String requestJson) {
     this.requestJson = requestJson;
   }
 

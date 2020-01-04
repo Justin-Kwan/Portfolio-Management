@@ -1,18 +1,12 @@
 import java.util.Arrays;
 import java.util.ArrayList;
-import org.skyscreamer.jsonassert.JSONAssert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import UserPortfolioManagement.DatabaseAccessor;
 import UserPortfolioManagement.User;
 import UserPortfolioManagement.Coin;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import com.google.gson.Gson;
 
 public class DatabaseAccessorTest {
-
-  Gson gson = new Gson();
 
   final int FIRST_COIN  = 0;
   final int SECOND_COIN = 1;
@@ -233,12 +227,12 @@ public class DatabaseAccessorTest {
     doesUserExist = DBA.checkUserExists("id12345");
     assertEquals(false, doesUserExist);
 
-    user = new MockUser("authtoken_123", "id#123*", null, "jsonrequest___123", 231321);
+    user = new User("authtoken_123", "id#123*", null, "jsonrequest___123");
     DBA.insertNewUser(user);
     doesUserExist = DBA.checkUserExists("id#123*");
     assertEquals(true, doesUserExist);
 
-    user = new MockUser("authtoken_821", "id#901%", null, "jsonrequest___123", 20999);
+    user = new User("authtoken_821", "id#901%", null, "jsonrequest___123");
     DBA.insertNewUser(user);
     doesUserExist = DBA.checkUserExists("id#901%");
     assertEquals(true, doesUserExist);

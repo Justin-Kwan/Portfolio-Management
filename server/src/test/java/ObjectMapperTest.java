@@ -1,5 +1,4 @@
 import static org.junit.Assert.assertEquals;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.junit.Test;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -92,7 +91,6 @@ public class ObjectMapperTest {
 
   @Test
   public void test_mapCoinsObjForApp() {
-
     String coinsStr = "[{coin_ticker:\"BTC\", coin_amount:1},{coin_ticker:\"LTC\", coin_amount:2.34},{coin_ticker:\"ETH\", coin_amount:0.001}]";
     JSONArray coinsJson = new JSONArray(coinsStr);
     ArrayList<Coin> coins = objectMapper.jailbreak().mapCoinsObjForApp(coinsJson);
@@ -118,4 +116,22 @@ public class ObjectMapperTest {
     assertEquals("ETH", coins.get(2).getTicker());
     assertEquals(-1.023, coins.get(2).getAmount(), 1e-8);
   }
+
+  @Test
+  public void test_mapTokenServerResponseObjForApp() {
+    String response = "{ \"is user authorized\": true, \"user id\":\"user_id_1\", \"response code\":200}";
+    JSONObject responseJson = new JSONObject(response);
+    Object[] authTokenPayload = objectMapper.mapTokenServerResponseObjForApp(responseJson);
+    assertEquals(true, authTokenPayload[0]);
+    assertEquals("user_id_1", authTokenPayload[1]);
+
+
+    response = "{ \"is user authorized\": false, \"user id\":\"user_id_2\", \"response code\":200}";
+    responseJson = new JSONObject(response);
+    authTokenPayload = objectMapper.mapTokenServerResponseObjForApp(responseJson);
+    assertEquals(false, authTokenPayload[0]);
+    assertEquals("user_id_2", authTokenPayload[1]);
+  }
+
+
 }

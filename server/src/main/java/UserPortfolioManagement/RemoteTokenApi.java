@@ -3,38 +3,26 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONObject;
 
 public class RemoteTokenApi {
 
-  JsonMapper jsonMapper = new JsonMapper();
-  ObjectMapper objectMapper = new ObjectMapper();
+  private static JsonMapper jsonMapper = new JsonMapper();
+  private static ObjectMapper objectMapper = new ObjectMapper();
 
-  public String[] requestAuthCheck(String authToken) {
-
+  public Object[] fetchAuthCheck(String authToken) {
     JSONObject requestJson = jsonMapper.mapRequestJsonForAuthServer(authToken);
 
-    HttpResponse<JsonNode> authServerResponse = Unirest.post("http://localhost:5000/authorizeUser")
+    System.out.println("Auth token: " + authToken);
+
+    HttpResponse<JsonNode> serverResponse = Unirest.post("http://localhost:5000/authorizeUser")
           .header("accept", "application/json")
           .body(requestJson)
           .asJson();
 
-    objectMapper.mapTokenServerResponseObjForApp(authServerResponse);
-
-    JSONObject = response.getBody().getObject();
-
-    return authServerResponse;
-
-
+    JSONObject responseJson = serverResponse.getBody().getObject();
+    Object[] authTokenPayload = objectMapper.mapTokenServerResponseObjForApp(responseJson);
+    return authTokenPayload;
   }
-
-}
-
-
-
-
-
-
-
-
 
 }
