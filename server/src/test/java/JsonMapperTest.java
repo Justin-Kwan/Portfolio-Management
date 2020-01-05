@@ -8,6 +8,7 @@ import manifold.ext.api.Jailbreak;
 import PortfolioManagement.JsonMapper;
 import PortfolioManagement.User;
 import PortfolioManagement.Coin;
+import PortfolioManagement.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,28 +60,52 @@ public class JsonMapperTest {
     ArrayList<Coin> coins = new ArrayList<Coin>();
     User user = new User("", "", null, "");
 
-    JSONObject responseJson = jsonMapper.mapResponseJsonForClient(null, "coins add successful", 201, WITHOUT_COINS);
+    Response response = new Response.Builder()
+                  .withResponseString("coins add successful")
+                  .withResponseCode(201)
+                  .withCoins(false)
+                  .build();
+
+    JSONObject responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\":\"coins add successful\", \"response_code\":201}",
       responseJson,
       true
     );
 
-    responseJson = jsonMapper.mapResponseJsonForClient(null, "request invalid", 400, WITHOUT_COINS);
+    response = new Response.Builder()
+                  .withResponseString("request invalid")
+                  .withResponseCode(400)
+                  .withCoins(false)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\":\"request invalid\", \"response_code\":400}",
       responseJson,
       true
     );
 
-    responseJson = jsonMapper.mapResponseJsonForClient(null, "request unauthorized", 401, WITHOUT_COINS);
+    response = new Response.Builder()
+                  .withResponseString("request unauthorized")
+                  .withResponseCode(401)
+                  .withCoins(false)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\":\"request unauthorized\", \"response_code\":401}",
       responseJson,
       true
     );
 
-    responseJson = jsonMapper.mapResponseJsonForClient(null, "request unauthorized", 401, WITHOUT_COINS);
+    response = new Response.Builder()
+                  .withResponseString("request unauthorized")
+                  .withResponseCode(401)
+                  .withCoins(false)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\":\"request unauthorized\", \"response_code\":401}",
       responseJson,
@@ -101,7 +126,14 @@ public class JsonMapperTest {
     user.setCoins(coins);
     user.jailbreak().portfolioValueUsd = 100.2;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
+    response = new Response.Builder()
+                  .withUser(user)
+                  .withResponseString("coins get successful")
+                  .withResponseCode(200)
+                  .withCoins(true)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\": 100.2, \"coins\":" +
           "[{\"coin_ticker\":\"EOS\",\"coin_amount\":1,\"latest_coin_price\":2,\"coin_holding_value_usd\":3}," +
@@ -125,7 +157,14 @@ public class JsonMapperTest {
     user.setCoins(coins);
     user.jailbreak().portfolioValueUsd = 100.3;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
+    response = new Response.Builder()
+                  .withUser(user)
+                  .withResponseString("coins get successful")
+                  .withResponseCode(200)
+                  .withCoins(true)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\": 100.3,\"coins\":" +
           "[{\"coin_ticker\":\"NEO\",\"coin_amount\":0.001,\"latest_coin_price\":0.02,\"coin_holding_value_usd\":2.4}," +
@@ -143,7 +182,14 @@ public class JsonMapperTest {
     user.setCoins(coins);
     user.jailbreak().portfolioValueUsd = 100.4;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
+    response = new Response.Builder()
+                  .withUser(user)
+                  .withResponseString("coins get successful")
+                  .withResponseCode(200)
+                  .withCoins(true)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\": 100.4,\"coins\":" +
           "[{\"coin_ticker\":\"NEO\",\"coin_amount\":8,\"latest_coin_price\":9,\"coin_holding_value_usd\":10.1}]}",
@@ -155,7 +201,14 @@ public class JsonMapperTest {
     user.setCoins(coins);
     user.jailbreak().portfolioValueUsd = 0;
 
-    responseJson = jsonMapper.mapResponseJsonForClient(user, "coins get successful", 200, WITH_COINS);
+    response = new Response.Builder()
+                  .withUser(user)
+                  .withResponseString("coins get successful")
+                  .withResponseCode(200)
+                  .withCoins(true)
+                  .build();
+
+    responseJson = jsonMapper.mapResponseJsonForClient(response);
     JSONAssert.assertEquals(
       "{\"response_string\": \"coins get successful\",\"response_code\":200,\"portfolio_value_usd\":0,\"coins\":" +
           "[]}",

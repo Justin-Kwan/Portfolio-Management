@@ -12,7 +12,8 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 
 /**
- *  class responsible for checking and validating received client json requests
+ *  class responsible for checking and validating received client json request
+ *  bodies
  *
  *  @author justin kwan
  *  @version 1.0.0
@@ -20,37 +21,36 @@ import java.io.InputStream;
 
 public class JsonChecker {
 
-  private static final String       CLIENT_ADD_JSON_COINS_SCHEMA = "/ClientCoinsSchema.json";
-  private static final ObjectMapper jacksonMapper                = new ObjectMapper();
+	private static final String CLIENT_ADD_JSON_COINS_SCHEMA = "/ClientCoinsSchema.json";
+	private static final ObjectMapper jacksonMapper = new ObjectMapper();
 
-  private static final boolean JSON_REQUEST_VALID   = true;
-  private static final boolean JSON_REQUEST_INVALID = false;
+	private static final boolean JSON_REQUEST_VALID = true;
+	private static final boolean JSON_REQUEST_INVALID = false;
 
-  // todo: use strategy pattern for schema loading and json validation?
-  public boolean checkJsonRequestValid(String jsonRequest) {
+	public boolean checkJsonRequestValid(String jsonRequest) {
 
-    JsonNode jsonClientSchemaObj = getJsonClientSchema();
+		JsonNode jsonClientSchemaObj = getJsonClientSchema();
 
-    try {
-      JsonNode jsonRequestObj           = jacksonMapper.readTree(jsonRequest);
-      final JsonSchemaFactory factory   = JsonSchemaFactory.byDefault();
-      final JsonSchema metaSchema       = factory.getJsonSchema(jsonClientSchemaObj);
-      ProcessingReport validationReport = metaSchema.validate(jsonRequestObj);
+		try {
+			JsonNode jsonRequestObj = jacksonMapper.readTree(jsonRequest);
+			final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
+			final JsonSchema metaSchema = factory.getJsonSchema(jsonClientSchemaObj);
+			ProcessingReport validationReport = metaSchema.validate(jsonRequestObj);
 
-      if(!validationReport.isSuccess()) return JSON_REQUEST_INVALID;
+			if (!validationReport.isSuccess()) return JSON_REQUEST_INVALID;
 
-    }catch(Exception error) {
-      return JSON_REQUEST_INVALID;
-    }
-    return JSON_REQUEST_VALID;
-  }
+		} catch(Exception error) {
+			return JSON_REQUEST_INVALID;
+		}
+		return JSON_REQUEST_VALID;
+	}
 
-  // todo: split into loadSchema and getSchema
-  private JsonNode getJsonClientSchema() {
-    InputStream inputStream = getClass().getResourceAsStream(CLIENT_ADD_JSON_COINS_SCHEMA);
-    String jsonClientSchema = IOUtils.toString(inputStream, "utf-8");
-    JsonNode jsonClientSchemaObj = jacksonMapper.readTree(jsonClientSchema);
-    return jsonClientSchemaObj;
-  }
+	// todo: split into loadSchema and getSchema
+	private JsonNode getJsonClientSchema() {
+		InputStream inputStream = getClass().getResourceAsStream(CLIENT_ADD_JSON_COINS_SCHEMA);
+		String jsonClientSchema = IOUtils.toString(inputStream, "utf-8");
+		JsonNode jsonClientSchemaObj = jacksonMapper.readTree(jsonClientSchema);
+		return jsonClientSchemaObj;
+	}
 
 }

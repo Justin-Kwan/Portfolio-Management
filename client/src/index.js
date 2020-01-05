@@ -34,14 +34,14 @@ async function onGetPortfolio(req, res) {
   const authToken = req.cookies['crypto_cost_session'];
 
   if(authToken == undefined)
-    res.send("403 Unauthorized Access");
+    res.redirect("http://127.0.0.1:5001/login");
   else {
     const isRequestAuthorized = await remoteTokenApi.fetchAuthCheck(authToken);
 
     console.log("REQ AUTHED? " + isRequestAuthorized);
 
     if (isRequestAuthorized === false)
-      res.send("403 Unauthorized Access");
+      res.redirect("http://127.0.0.1:5001/login");
     else
       res.sendFile(getPortfolioPagePath);
   }
@@ -51,14 +51,11 @@ async function onUpdatePortfolio(req, res) {
   const authToken = req.cookies['crypto_cost_session'];
 
   if(authToken == undefined)
-    res.send("403 Unauthorized Access");
+    res.redirect("http://127.0.0.1:5001/login");
   else {
     const isRequestAuthorized = await remoteTokenApi.fetchAuthCheck(authToken);
-
-    console.log("REQ AUTHED? " + isRequestAuthorized);
-
     if (isRequestAuthorized === false)
-      res.send("403 Unauthorized Access");
+      res.redirect("http://127.0.0.1:5001/login");
     else
       res.sendFile(updatePortfolioPagePath);
   }

@@ -16,7 +16,8 @@ public class Index {
   private static final String LOCAL_HOST = "127.0.0.1";
   private static final int    PORT       = 8001;
 
-  private static final RequestHandler requestHandler = new RequestHandler();
+  private static final AddCoinsHandler addCoinsHandler = new AddCoinsHandler();
+  private static final GetCoinsHandler getCoinsHandler = new GetCoinsHandler();
 
   private static void initServer() {
     ipAddress(LOCAL_HOST);
@@ -33,34 +34,21 @@ public class Index {
   }
 
   public static void main(String[] args) {
-
     initServer();
 
     post("/addCoins", (req, res) -> {
       String authToken = req.cookie("crypto_cost_session");
       String requestCoinsJson = req.body();
-      JSONObject responseJson = requestHandler.handleAddCoins(authToken, requestCoinsJson);
-      System.out.println("Response: " + responseJson);
+      JSONObject responseJson = addCoinsHandler.handleAddCoins(authToken, requestCoinsJson);
       return responseJson;
     });
 
     get("/getCoins", "application/json", (req, res) -> {
       System.out.println("Auth Token: " + req.cookie("crypto_cost_session"));
-
       String authToken = req.cookie("crypto_cost_session");
-
-      JSONObject responseJson = requestHandler.handleGetCoins(authToken);
-      System.out.println("INDEX RESPONSE: " + responseJson);
-
+      JSONObject responseJson = getCoinsHandler.handleGetCoins(authToken);
       return responseJson;
     });
-
-    get("/checkUserExists/", "application/json", (req, res) -> {
-      String userId = req.queryParams("userId");
-      boolean doesUserExist = requestHandler.handleCheckUserExists(userId);
-      return doesUserExist;
-    });
-
   }
 
 }

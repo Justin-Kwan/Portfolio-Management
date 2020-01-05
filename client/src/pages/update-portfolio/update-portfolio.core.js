@@ -12,7 +12,6 @@ $("#submit-portfolio-button").click(function(event) {
 
 async function onSubmitClick() {
   const coins = getCoinsFromFields();
-  //const authToken = getTokenByCookieName("crypto_cost_session");
   const requestJson = getRequestJson(coins);
   const serverResponse = await postCoinsToServer(requestJson);
   console.log("server response: " + serverResponse);
