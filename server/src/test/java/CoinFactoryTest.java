@@ -439,69 +439,40 @@ public class CoinFactoryTest {
 
   @Test
   public void test_createUserCoinCollection() {
-    DatabaseAccessor DBA = this.beforeTest();
-    ArrayList<Coin> coins = new ArrayList<Coin>();
     ArrayList<Coin> pulledUserCoins = new ArrayList<Coin>();
-    User userInsertion;
     User userClient;
     Coin coin;
 
     String mockJsonRequest1 = "{\"coins\":[{\"coin_ticker\":\"BAT\",\"coin_amount\":123},{\"coin_ticker\":\"NEO\",\"coin_amount\":23.42},{\"coin_ticker\":\"LTC\",\"coin_amount\":35.49123}]}";
     String mockJsonRequest2 = "{\"coins\":[{\"coin_ticker\":\"XRP\",\"coin_amount\":12.23},{\"coin_ticker\":\"XRP\",\"coin_amount\":13.23},{\"coin_ticker\":\"BTC\",\"coin_amount\":132.23},{\"coin_ticker\":\"EON\",\"coin_amount\":142.23},{\"coin_ticker\":\"LTC\",\"coin_amount\":132.23}]}";
 
-    userInsertion = new User("authtoken1", "userid1", null, "");
-    Coin coin1 = new Coin("TRON", 63);
-    Coin coin2 = new Coin("XRP", 63.1);
-    Coin coin3 = new Coin("EON", 56.7532);
-    coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
-    userInsertion.setCoins(coins);
-    DBA.insertNewUser(userInsertion);
 
     userClient = new User("authtoken1", "userid1", true, mockJsonRequest1);
-    pulledUserCoins = coinFactory.createUserCoinCollection(userClient); // true means user exists
+    pulledUserCoins = coinFactory.createUserCoinCollection(userClient);
 
-    assertEquals(6, pulledUserCoins.size());
-    assertEquals("TRON", pulledUserCoins.get(FIRST_COIN).getTicker());
-    assertEquals(63, pulledUserCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals("XRP", pulledUserCoins.get(SECOND_COIN).getTicker());
-    assertEquals(63.1, pulledUserCoins.get(SECOND_COIN).getAmount(), 1e-8);
-    assertEquals("EON", pulledUserCoins.get(THIRD_COIN).getTicker());
-    assertEquals(56.7532, pulledUserCoins.get(THIRD_COIN).getAmount(), 1e-8);
-    assertEquals("BAT", pulledUserCoins.get(FOURTH_COIN).getTicker());
-    assertEquals(123, pulledUserCoins.get(FOURTH_COIN).getAmount(), 1e-8);
-    assertEquals("NEO", pulledUserCoins.get(FIFTH_COIN).getTicker());
-    assertEquals(23.42, pulledUserCoins.get(FIFTH_COIN).getAmount(), 1e-8);
-    assertEquals("LTC", pulledUserCoins.get(SIXTH_COIN).getTicker());
-    assertEquals(35.49123, pulledUserCoins.get(SIXTH_COIN).getAmount(), 1e-8);
+    assertEquals(3, pulledUserCoins.size());
+    assertEquals("BAT", pulledUserCoins.get(FIRST_COIN).getTicker());
+    assertEquals(123, pulledUserCoins.get(FIRST_COIN).getAmount(), 1e-8);
+    assertEquals("NEO", pulledUserCoins.get(SECOND_COIN).getTicker());
+    assertEquals(23.42, pulledUserCoins.get(SECOND_COIN).getAmount(), 1e-8);
+    assertEquals("LTC", pulledUserCoins.get(THIRD_COIN).getTicker());
+    assertEquals(35.49123, pulledUserCoins.get(THIRD_COIN).getAmount(), 1e-8);
 
-
-    coins.clear();
     pulledUserCoins.clear();
-
-    userInsertion = new User("authtoken2", "userid2", null, "");
-    coin1 = new Coin("TRON", 63);
-    coin2 = new Coin("XRP", 63.1);
-    coin3 = new Coin("EON", 56.7532);
-    coins = new ArrayList<>(Arrays.asList(coin1, coin2, coin3));
-    userInsertion.setCoins(coins);
-    DBA.insertNewUser(userInsertion);
 
     userClient = new User("authtoken2", "userid2", true, mockJsonRequest2);
     pulledUserCoins = coinFactory.createUserCoinCollection(userClient); // true means user exists
 
-    assertEquals(5, pulledUserCoins.size());
-    assertEquals("TRON", pulledUserCoins.get(FIRST_COIN).getTicker());
-    assertEquals(63, pulledUserCoins.get(FIRST_COIN).getAmount(), 1e-8);
-    assertEquals("XRP", pulledUserCoins.get(SECOND_COIN).getTicker());
-    assertEquals(88.56, pulledUserCoins.get(SECOND_COIN).getAmount(), 1e-8);
+    assertEquals(4, pulledUserCoins.size());
+    assertEquals("XRP", pulledUserCoins.get(FIRST_COIN).getTicker());
+    assertEquals(25.46, pulledUserCoins.get(FIRST_COIN).getAmount(), 1e-8);
+    assertEquals("BTC", pulledUserCoins.get(SECOND_COIN).getTicker());
+    assertEquals(132.23, pulledUserCoins.get(SECOND_COIN).getAmount(), 1e-8);
     assertEquals("EON", pulledUserCoins.get(THIRD_COIN).getTicker());
-    assertEquals(198.9832, pulledUserCoins.get(THIRD_COIN).getAmount(), 1e-8);
-    assertEquals("BTC", pulledUserCoins.get(FOURTH_COIN).getTicker());
+    assertEquals(142.23, pulledUserCoins.get(THIRD_COIN).getAmount(), 1e-8);
+    assertEquals("LTC", pulledUserCoins.get(FOURTH_COIN).getTicker());
     assertEquals(132.23, pulledUserCoins.get(FOURTH_COIN).getAmount(), 1e-8);
-    assertEquals("LTC", pulledUserCoins.get(FIFTH_COIN).getTicker());
-    assertEquals(132.23, pulledUserCoins.get(FIFTH_COIN).getAmount(), 1e-8);
 
-    this.afterTest(DBA);
   }
 
 

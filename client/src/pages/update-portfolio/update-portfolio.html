@@ -15,7 +15,6 @@
   <link href="./update-portfolio.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="pulp-display-semi-bold.css">
 
-
   <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
 
   <title>Update Portfolio - CryptoCost.live</title>
@@ -39,65 +38,48 @@
               <span id="navbar-home">Home</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://cryptocost.live/pages/exchanges.html">
-              <span id="navbar-login">Login</span>
+          <li class="nav-item active">
+            <a class="nav-link" href="http://127.0.0.1:8000/getPortfolio">
+              <span id="navbar-update-portfolio">Show Portfolio</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="http://cryptocost.live/pages/wallets.html">
-              <span id="navbar-signup">Signup</span>
-            </a>
+
+              <button id="navbar-logout" type="button" class="btn btn-outline-danger">Logout</button>
+  
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <table class="table" id="coin-input-table">
-    <thead class="thead-dark">
-      <tr>
-        <th class="text-center" scope="col" id="coin-th">Coin</th>
-        <th class="text-center" scope="col" id="amount-th">Amount</th>
-        <th class="text-center" scope="col"></th>
-      </tr>
-    </thead>
+  <div class="jumbotron jumbotron-fluid">
+    <div class="text-center">
+      <h3>Update Your Portfolio</h3>
+      <h1 id="portfolio_value_usd" class="display-3"></h1>
+    </div>
+  </div>
 
-    <tbody>
+  <span id="submit-result-bar">
+  </span>
 
-      <tr id="new-coin-forms-1">
 
-        <td class="text-center">
-          <form class="form-inline" id="select-coin-input">
-            <select class="form-control" id="select-coin-input">
-              <option>BTC</option>
-              <option>ETH</option>
-              <option>LTC</option>
-              <option>NEO</option>
-              <option>BAT</option>
-            </select>
-          </form>
-        </td>
 
-        <td class="text-center">
-          <form class="form-inline" id="coin-amount-input">
-            <div class="form-group">
-              <input class="form-control" placeholder="Coin Amount">
-            </div>
-          </form>
-        </td>
+  <div class="table-wrap" id="add-coins-table">
+    <table class="table table-borderless" id="coin-input-table">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center" scope="col" id="coin-th">Coin</th>
+          <th class="text-center" scope="col" id="amount-th">Amount</th>
+          <th class="text-center" scope="col"></th>
+        </tr>
+      </thead>
 
-        <td class="row no-gutter">
-          <button type='button' class='close' aria-label='Close'>
-            <span aria-hidden='true'>&times;</span>
-          </button>
-        </td>
+      <tbody>
+      </tbody>
 
-      </tr>
-
-    </tbody>
-
-  </table>
+    </table>
+  </div>
 
   <div class="text-center">
     <button id="add-coin-button" class="btn btn-dark">+ Coin</button>

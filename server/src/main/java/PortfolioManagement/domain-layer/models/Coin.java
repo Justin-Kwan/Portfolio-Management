@@ -43,8 +43,6 @@ public class Coin {
       .getJSONObject("USD")
       .getDouble("PRICE");
 
-			System.out.println("LATEST PRICE: " + getLatestPrice());
-
 		} catch(UnirestException error) {
 			error.printStackTrace();
 		}

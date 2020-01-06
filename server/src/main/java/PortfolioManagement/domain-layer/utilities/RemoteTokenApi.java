@@ -13,10 +13,8 @@ public class RemoteTokenApi {
 
 	public Object[] fetchAuthCheck(String authToken) {
 		JSONObject requestJson = jsonMapper.mapRequestJsonForAuthServer(authToken);
-
-		System.out.println("Auth token: " + authToken);
-
-		HttpResponse < JsonNode > serverResponse = Unirest.post("http://localhost:5000/authorizeUser")
+		
+		HttpResponse < JsonNode > serverResponse = Unirest.post("http://127.0.0.1:5000/authorizeUser")
     .header("accept", "application/json")
     .body(requestJson)
     .asJson();

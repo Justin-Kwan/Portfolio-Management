@@ -20,6 +20,11 @@ public class AddCoinsHandler {
 	private final static JsonMapper jsonMapper = new JsonMapper();
 	private final static Response response = new Response();
 
+
+	public AddCoinsHandler() {
+		this.DBA.createConnection();
+	}
+
 	/**
    * add coin process is single threaded so database access is qeued
    */
@@ -49,16 +54,15 @@ public class AddCoinsHandler {
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
 
-		DBA.createConnection();
 		boolean doesUserExist = DBA.checkUserExists(userId);
 
 		User user = new User(authToken, userId, doesUserExist, requestCoinsJson);
-		ArrayList < Coin > coins = coinFactory.createUserCoinCollection(user);
+
+		ArrayList <Coin> coins = coinFactory.createUserCoinCollection(user);
 		user.setCoins(coins);
 
 		if (user.getStatus()) DBA.updateUser(user);
 		else DBA.insertNewUser(user);
-		DBA.closeConnection();
 
 		Response response = new Response.Builder()
     .withResponseString("coins add successful")

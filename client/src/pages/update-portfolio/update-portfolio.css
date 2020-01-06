@@ -3,6 +3,7 @@
   font-family: PulpDisplay-SemiBold;
   font-size: xx-large;
   font-weight: normal;
+  padding-left: 3%;
 }
 
 #navbar-title {
@@ -11,8 +12,34 @@
   font-size: xx-large;
 }
 
-#navbar-home, #navbar-login, #navbar-signup {
+#navbar-home,
+#navbar-login,
+#navbar-signup {
   color: #092557;
+}
+
+.jumbotron {
+  background:
+    -webkit-linear-gradient(left, #5537ED, #23D9D9);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white !important;
+}
+
+#add-coins-table {
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
+  background-repeat: no-repeat;
+}
+
+th:first-child {
+  border-top-left-radius:15px;
+}
+
+th:last-child {
+  border-top-right-radius:15px;
+  border-right:none;
 }
 
 .form-control {

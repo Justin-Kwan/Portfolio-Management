@@ -38,14 +38,14 @@
               <span id="navbar-home">Home</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://cryptocost.live/pages/exchanges.html">
-              <span id="navbar-login">Login</span>
+          <li class="nav-item active">
+            <a class="nav-link" href="http://127.0.0.1:8000/updatePortfolio">
+              <span id="navbar-update-portfolio">Update Portfolio</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="http://cryptocost.live/pages/wallets.html">
-              <span id="navbar-signup">Signup</span>
+
+              <button id="navbar-logout" type="button" class="btn btn-outline-danger">Logout</button>
             </a>
           </li>
         </ul>
@@ -61,13 +61,39 @@
     </div>
   </div>
 
-  <style>
 
-  </style>
+
+  <div class="table-wrap" id="get-coins-coins-table">
+    <table class="table table-borderless" id="get-coins-table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Ticker</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Coin Price</th>
+          <th scope="col">Your Value</th>
+        </tr>
+      </thead>
+      <tbody>
+
+
+      </tbody>
+    </table>
+  </div>
+
+  <br></br>
 
   <div class="text-center">
-    <button id="add-coin-button" class="btn btn-dark">Update Portfolio</button>
+
+    <a href="http://127.0.0.1:8000/updatePortfolio">
+      <button id="update-portfolio-button" class="btn btn-dark">Update Portfolio</button>
+    </a>
+
   </div>
+
+  <br></br>
+  <br></br>
+
 
   <script src="./get-portfolio.core.js"></script>
 

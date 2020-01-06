@@ -18,6 +18,11 @@ public class GetCoinsHandler {
 	private final static JsonMapper jsonMapper = new JsonMapper();
 	private final static Response response = new Response();
 
+
+	public GetCoinsHandler() {
+		this.DBA.createConnection();
+	}
+
 	public JSONObject handleGetCoins(String authToken) {
 		Object[] authTokenPayload = remoteTokenApi.fetchAuthCheck(authToken);
 		boolean isUserAuthorized = (Boolean) authTokenPayload[0];
@@ -33,9 +38,8 @@ public class GetCoinsHandler {
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
 
-		DBA.createConnection();
+
 		boolean doesUserExist = DBA.checkUserExists(userId);
-		DBA.closeConnection();
 
 		if (!doesUserExist) {
 			Response response = new Response.Builder()
@@ -47,9 +51,7 @@ public class GetCoinsHandler {
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
 
-		DBA.createConnection();
 		User user = DBA.selectUser(userId);
-		DBA.closeConnection();
 
 		user.calculateCoinHoldingValues();
 		user.calculatePortfolioValue();

@@ -13,17 +13,17 @@ import org.json.*;
 
 public class Index {
 
-  private static final String LOCAL_HOST = "127.0.0.1";
+  private static final String LOCAL_IP   = "127.0.0.1";
   private static final int    PORT       = 8001;
 
   private static final AddCoinsHandler addCoinsHandler = new AddCoinsHandler();
   private static final GetCoinsHandler getCoinsHandler = new GetCoinsHandler();
 
   private static void initServer() {
-    ipAddress(LOCAL_HOST);
+    ipAddress(LOCAL_IP);
     port(PORT);
     enableCors();
-    System.out.println("Backend server started at " + LOCAL_HOST + ":" + PORT + "...");
+    System.out.println("Backend server started at " + LOCAL_IP + ":" + PORT + "...");
   }
 
   private static void enableCors() {
