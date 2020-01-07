@@ -37,9 +37,6 @@ async function onGetPortfolio(req, res) {
     res.redirect("http://127.0.0.1:5001/login");
   else {
     const isRequestAuthorized = await remoteTokenApi.fetchAuthCheck(authToken);
-
-    console.log("REQ AUTHED? " + isRequestAuthorized);
-
     if (isRequestAuthorized === false)
       res.redirect("http://127.0.0.1:5001/login");
     else
