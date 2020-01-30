@@ -46,10 +46,10 @@ public class AddCoinsHandler {
 
 		if (!isJsonRequestValid) {
 			Response response = new Response.Builder()
-      .withResponseString("request invalid")
-      .withResponseCode(400)
-      .withCoins(false)
-      .build();
+      			.withResponseString("request invalid")
+      			.withResponseCode(400)
+      			.withCoins(false)
+      			.build();
 
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
