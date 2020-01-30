@@ -26,8 +26,8 @@ public class AddCoinsHandler {
 	}
 
 	/**
-   * add coin process is single threaded so database access is qeued
-   */
+         * add coin process is single threaded so database access is qeued
+         */
 	public synchronized JSONObject handleAddCoins(String authToken, String requestCoinsJson) {
 		Object[] authTokenPayload = remoteTokenApi.fetchAuthCheck(authToken);
 		boolean isUserAuthorized = (Boolean) authTokenPayload[0];
