@@ -39,9 +39,9 @@ public class Coin {
 
 			JSONObject jsonCoin = response.getBody().getObject();
 			this.latestCoinPrice = jsonCoin.getJSONObject("RAW")
-      .getJSONObject(getTicker())
-      .getJSONObject("USD")
-      .getDouble("PRICE");
+      			.getJSONObject(getTicker())
+      			.getJSONObject("USD")
+      			.getDouble("PRICE");
 
 		} catch(UnirestException error) {
 			error.printStackTrace();
