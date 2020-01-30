@@ -15,9 +15,9 @@ public class RemoteTokenApi {
 		JSONObject requestJson = jsonMapper.mapRequestJsonForAuthServer(authToken);
 		
 		HttpResponse < JsonNode > serverResponse = Unirest.post("http://127.0.0.1:5000/authorizeUser")
-    .header("accept", "application/json")
-    .body(requestJson)
-    .asJson();
+    		.header("accept", "application/json")
+    		.body(requestJson)
+    		.asJson();
 
 		JSONObject responseJson = serverResponse.getBody().getObject();
 		Object[] authTokenPayload = objectMapper.mapTokenServerResponseObjForApp(responseJson);
