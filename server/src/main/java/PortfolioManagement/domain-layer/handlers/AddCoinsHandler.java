@@ -36,10 +36,10 @@ public class AddCoinsHandler {
 
 		if (!isUserAuthorized) {
 			Response response = new Response.Builder()
-      .withResponseString("request unauthorized")
-      .withResponseCode(401)
-      .withCoins(false)
-      .build();
+      			.withResponseString("request unauthorized")
+      			.withResponseCode(401)
+      			.withCoins(false)
+      			.build();
 
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
@@ -65,10 +65,10 @@ public class AddCoinsHandler {
 		else DBA.insertNewUser(user);
 
 		Response response = new Response.Builder()
-    .withResponseString("coins add successful")
-    .withResponseCode(201)
-    .withCoins(false)
-    .build();
+    		.withResponseString("coins add successful")
+    		.withResponseCode(201)
+    		.withCoins(false)
+    		.build();
 
 		return jsonMapper.mapResponseJsonForClient(response);
 	}
