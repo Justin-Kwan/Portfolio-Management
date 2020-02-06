@@ -30,10 +30,10 @@ public class GetCoinsHandler {
 
 		if (!isUserAuthorized) {
 			Response response = new Response.Builder()
-      .withResponseString("request unauthorized")
-      .withResponseCode(401)
-      .withCoins(false)
-      .build();
+      			.withResponseString("request unauthorized")
+      			.withResponseCode(401)
+      			.withCoins(false)
+      			.build();
 
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
@@ -43,10 +43,10 @@ public class GetCoinsHandler {
 
 		if (!doesUserExist) {
 			Response response = new Response.Builder()
-      .withResponseString("no coins to get")
-      .withResponseCode(400)
-      .withCoins(false)
-      .build();
+      			.withResponseString("no coins to get")
+      			.withResponseCode(400)
+      			.withCoins(false)
+      			.build();
 
 			return jsonMapper.mapResponseJsonForClient(response);
 		}
@@ -57,11 +57,11 @@ public class GetCoinsHandler {
 		user.calculatePortfolioValue();
 
 		Response response = new Response.Builder()
-    .withUser(user)
-    .withResponseString("coins get successful")
-    .withResponseCode(200)
-    .withCoins(true)
-    .build();
+    		.withUser(user)
+    		.withResponseString("coins get successful")
+    		.withResponseCode(200)
+    		.withCoins(true)
+    		.build();
 
 		return jsonMapper.mapResponseJsonForClient(response);
 	}
